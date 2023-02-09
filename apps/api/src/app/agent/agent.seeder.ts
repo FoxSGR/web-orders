@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { Agent } from './agent.entity';
-import { EntitySeeder } from '../common/entity/entity.seeder';
+import { EntitySeeder } from '../common/entity';
 import { EntitySeederService } from '../common';
 
 @Injectable()

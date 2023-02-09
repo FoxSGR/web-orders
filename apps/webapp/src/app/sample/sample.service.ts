@@ -7,6 +7,10 @@ import { HttpClient } from '@angular/common/http';
 })
 export class SampleService extends EntityService<ShoeSample> {
   constructor(http: HttpClient) {
-    super(http, { route: 'shoe-sample', alwaysLoadRelations: true });
+    super(http, {
+      entityClass: ShoeSample,
+      route: 'shoe-sample',
+      alwaysLoadRelations: true,
+    });
   }
 }

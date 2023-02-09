@@ -1,5 +1,5 @@
 import { Role } from '@web-orders/api-interfaces';
-import { IEntity } from '../common';
+import type { IEntity } from '../common/entity';
 
 export interface IUser extends IEntity {
   firstName: string;

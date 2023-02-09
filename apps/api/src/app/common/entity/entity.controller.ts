@@ -1,11 +1,10 @@
 import { ForbiddenException } from '@nestjs/common';
 
 import { Id } from '@web-orders/api-interfaces';
-import { EntityService } from './entity.service';
 import { Mapper } from '../mapper';
-import { FindParams, IEntity, Page, ResponseFormat } from '../types';
+import { FindParams, Page, ResponseFormat } from '../types';
 import { IUser } from '../../user';
-import { DeepPartial } from 'typeorm';
+import type { EntityService, IEntity } from '.';
 
 export abstract class EntityController<T extends IEntity, D> {
   protected service: EntityService<T>;
@@ -30,6 +29,10 @@ export abstract class EntityController<T extends IEntity, D> {
   ): Promise<Page<D>> {
     if (!this.hasPermission(user, 'findAll')) {
       throw new ForbiddenException();
+    }
+
+    if (params.filter) {
+      params.filter = JSON.parse(params.filter as any);
     }
 
     params.owner = user;

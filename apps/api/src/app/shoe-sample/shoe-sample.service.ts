@@ -13,7 +13,39 @@ export class ShoeSampleService extends EntityService<ShoeSample> {
   ) {
     super(shoeSampleRepository, {
       name: 'shoe_sample',
-      relations: ['baseModel', 'sampleModel', 'client', 'agent', 'brand'],
+      relations: [
+        'baseModel',
+        'sampleModel',
+        'baseModel.components',
+        'sampleModel.components',
+        'sampleModel.components.component',
+        'client',
+        'agent',
+        'brand',
+      ],
+      mapping: {
+        'sampleModel.reference': {
+          prop: 'sampleModel.reference',
+        },
+        'client.name': {
+          prop: 'client.name',
+        },
+        'agent.name': {
+          prop: 'agent.name',
+        },
+        'brand.name': {
+          prop: 'brand.name',
+        },
+        notes: {
+          prop: 'notes',
+        },
+        'components.component.reference': {
+          prop: 'sampleModel.components.component.reference',
+        },
+        'components.component.name': {
+          prop: 'sampleModel.components.component.name',
+        },
+      },
     });
   }
 

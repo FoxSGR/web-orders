@@ -10,6 +10,7 @@ import { AgentModule } from '../agent';
 import { BrandModule } from '../brand';
 import { ClientModule } from '../client';
 import { ShoeModelModule } from '../shoe-model';
+import { ShoeSampleSeeder } from './shoe-sample.seeder';
 
 @Module({
   controllers: [ShoeSampleController],
@@ -21,6 +22,6 @@ import { ShoeModelModule } from '../shoe-model';
     ShoeModelModule,
   ],
   exports: [ShoeSampleMapper, ShoeSampleService],
-  providers: [ShoeSampleMapper, ShoeSampleService],
+  providers: [ShoeSampleMapper, ShoeSampleSeeder, ShoeSampleService],
 })
 export class ShoeSampleModule {}

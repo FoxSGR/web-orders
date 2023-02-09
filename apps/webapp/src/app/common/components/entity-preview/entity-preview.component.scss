@@ -1,0 +1,12 @@
+::ng-deep .entity-preview-modal ion-content {
+  flex: unset;
+
+  .wo-preview-content {
+    padding-bottom: 100px;
+  }
+
+  ion-fab {
+    margin-bottom: 15px;
+    margin-right: 15px;
+  }
+}

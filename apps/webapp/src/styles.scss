@@ -12,6 +12,19 @@ body {
   //font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-ion-icon {
-  color: #525252;
+.flex {
+  display: flex;
+  gap: 10px;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.font-light {
+  font-weight: 300;
 }

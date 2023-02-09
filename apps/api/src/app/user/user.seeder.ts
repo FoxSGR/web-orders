@@ -27,7 +27,5 @@ export class UserSeeder extends EntitySeeder<User> {
     ];
   }
 
-  protected identifier(): keyof User {
-    return 'email';
-  }
+  protected identifier = () => 'email' as keyof User;
 }

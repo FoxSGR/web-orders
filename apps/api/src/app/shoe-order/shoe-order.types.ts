@@ -1,4 +1,4 @@
-import { IEntity } from '../common';
+import type { IEntity } from '../common/entity';
 import { IShoeSample } from '../shoe-sample';
 import { IShoeModel } from '../shoe-model';
 

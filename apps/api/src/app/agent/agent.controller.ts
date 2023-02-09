@@ -8,6 +8,7 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
+import { ApiBody } from '@nestjs/swagger';
 
 import { Id } from '@web-orders/api-interfaces';
 import { AgentService } from './agent.service';
@@ -43,6 +44,7 @@ export class AgentController extends EntityController<IAgent, AgentDTO> {
   }
 
   @Post()
+  @ApiBody({ type: [AgentDTO] })
   public async create(
     @CurrentUser() user: IUser,
     @Body() body: AgentDTO,
@@ -51,6 +53,7 @@ export class AgentController extends EntityController<IAgent, AgentDTO> {
   }
 
   @Put('/:id([0-9]+)')
+  @ApiBody({ type: [AgentDTO] })
   public async update(
     @CurrentUser() user: IUser,
     @Param('id') id: Id,

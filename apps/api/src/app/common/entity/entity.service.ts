@@ -3,18 +3,22 @@ import {
   HttpException,
   NotFoundException,
 } from '@nestjs/common';
-import { FindConditions, In, Repository } from 'typeorm';
+import { FindConditions, FindManyOptions, In, Like, Repository } from 'typeorm';
 import _ from 'lodash';
 
-import { Id } from '@web-orders/api-interfaces';
-import { FindParams, IEntity, Page } from '../types';
+import { Id, IFindFilter } from '@web-orders/api-interfaces';
+import { FindParams, Page } from '../types';
 import type { IUser } from '../../user/user.types';
+import { IEntity, EntityFieldMapping } from '.';
 
 interface EntityServiceConfig {
   name: string;
   owned?: boolean;
   relations?: string[];
   cache: boolean;
+  mapping?: {
+    [key: string]: EntityFieldMapping;
+  };
 }
 
 const defaultConfig: EntityServiceConfig = {
@@ -22,6 +26,7 @@ const defaultConfig: EntityServiceConfig = {
   owned: true,
   relations: undefined,
   cache: false,
+  mapping: {},
 };
 
 export class EntityService<T extends IEntity> {
@@ -34,8 +39,6 @@ export class EntityService<T extends IEntity> {
   }
 
   private _config: EntityServiceConfig;
-
-  protected filterMapping: any = {};
 
   constructor(
     protected repository: Repository<T>,
@@ -158,25 +161,49 @@ export class EntityService<T extends IEntity> {
     entities: T[],
     params: FindParams<T>,
   ): Promise<void> {
-    for (const entity of entities) {
+    // const dirtyFilters =
+    //   params.filter?.filter(
+    //     field => this.fieldMapping(field.prop).filterMode === 'dirty',
+    //   ) || [];
+
+    for (let i = 0; i < entities.length; i++) {
+      const entity = entities[i];
       if (this.config.owned) {
         entity.base.owner = params.owner;
       }
 
       if (params.loadRelations && this.config.relations) {
-        for (const relation of this.config.relations) {
-          entity[relation] = await entity[relation];
-        }
+        await this.loadRelations(entity);
+      }
+
+      // if (
+      //   dirtyFilters.find(
+      //     field =>
+      //       !dirtyFilter(entity, field.value, this.fieldMapping(field.prop)),
+      //   )
+      // ) {
+      //   console.log('remove')
+      //   entities.splice(i, 1);
+      // }
+    }
+  }
+
+  private async loadRelations(entity: any) {
+    for (const relation in entity) {
+      entity[relation] = await entity[relation];
+      if (typeof entity[relation] === 'object') {
+        await this.loadRelations(entity[relation]);
       }
     }
   }
 
-  private buildFindOptions(params: FindParams<T>): any {
+  private buildFindOptions(params: FindParams<T>): FindManyOptions<T> {
     const order: any = {};
     if (!params.sortField) {
       order['id'] = params.sortDirection || 'DESC';
     } else {
-      order[params.sortField] = params.sortField || 'ASC';
+      const mapping = this.fieldMapping(params.sortField);
+      order[mapping.prop] = params.sortDirection || 'ASC';
     }
 
     for (const key of Object.keys(order)) {
@@ -202,21 +229,46 @@ export class EntityService<T extends IEntity> {
     }
 
     if (params.filter) {
-      for (const key of Object.keys(params.filter)) {
-        const mapping = this.filterMapping[key];
-        if (!mapping) {
-          throw new BadRequestException(`Unrecognized filter '${key}'`);
+      for (const field of params.filter) {
+        const mapping = this.fieldMapping(field.prop);
+        if (mapping.filterMode === 'dirty') {
+          continue;
         }
 
-        let value = params.filter[key];
+        let value = field.value;
         if (Array.isArray(value)) {
-          value = In(value);
+          value = In(value.map(v => this.mapFilterValue(field, v)));
+        } else {
+          value = Like(this.mapFilterValue(field, value));
         }
 
-        _.set(where, mapping, value);
+        _.set(where, mapping.prop, value);
       }
     }
 
     return where;
+  }
+
+  private mapFilterValue(field: IFindFilter, value: any) {
+    if (field.type === 'contains') {
+      return `%${value}%`;
+    } else {
+      return value;
+    }
+  }
+
+  private fieldMapping(key: string): EntityFieldMapping {
+    if (key === 'id') {
+      return {
+        prop: 'id',
+      };
+    }
+
+    const mapping = this.config.mapping[key];
+    if (!mapping) {
+      throw new BadRequestException(`No mapping configured for key '${key}'`);
+    }
+
+    return mapping;
   }
 }

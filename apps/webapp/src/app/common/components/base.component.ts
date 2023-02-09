@@ -63,4 +63,8 @@ export class BaseComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.ngDestroyed$.next();
   }
+
+  json(object: any): string {
+    return JSON.stringify(object);
+  }
 }

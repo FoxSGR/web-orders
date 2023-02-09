@@ -9,6 +9,7 @@ import { ShoeModel } from './shoe-model.entity';
 import { ShoeModelMapper } from './shoe-model.mapper';
 import { ShoeModelService } from './shoe-model.service';
 import { ShoeModelComponent } from './shoe-model-component';
+import { ShoeModelSeeder } from './shoe-model.seeder';
 
 @Module({
   controllers: [ShoeModelController],
@@ -18,6 +19,6 @@ import { ShoeModelComponent } from './shoe-model-component';
     ShoeComponentModule,
   ],
   exports: [ShoeModelMapper, ShoeModelService],
-  providers: [ShoeModelMapper, ShoeModelService],
+  providers: [ShoeModelMapper, ShoeModelSeeder, ShoeModelService],
 })
 export class ShoeModelModule {}

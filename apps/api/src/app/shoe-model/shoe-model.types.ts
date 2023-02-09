@@ -1,4 +1,5 @@
-import { IEntity, IPhoto, ISeason } from '../common';
+import type { IEntity } from '../common/entity';
+import { IPhoto, ISeason } from '../common';
 import { IShoeModelComponent } from './shoe-model-component/shoe-model-component.types';
 
 export const shoeModelTypes = ['base', 'sample', 'order'] as const;

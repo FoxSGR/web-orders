@@ -13,7 +13,5 @@ export class ClientSeeder extends EntitySeeder<Client> {
     super(Client, repository);
   }
 
-  protected identifier(): keyof Client {
-    return 'name';
-  }
+  protected identifier = () => 'name' as keyof Client;
 }

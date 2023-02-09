@@ -1,4 +1,4 @@
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicModule } from '@ionic/angular';
 import { StoreModule } from '@ngrx/store';
@@ -31,7 +31,13 @@ import { WebOrdersModule } from './web-orders/web-orders.module';
     IonicModule.forRoot(),
     WebOrdersModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: LOCALE_ID,
+      //      useFactory: (getMyLocale) // can be async
+      useValue: 'pt', // if you want to hardcode it],
+    },
+  ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

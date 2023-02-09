@@ -14,6 +14,7 @@ import { ShoeModel, ShoeModelModule } from './shoe-model';
 import { ShoeModelComponent } from './shoe-model/shoe-model-component';
 import { ShoeOrder, ShoeOrderModule } from './shoe-order';
 import { ShoeSample, ShoeSampleModule } from './shoe-sample';
+import { UILogModule } from './ui-log';
 import { User, UserModule } from './user';
 
 import { AppController } from './app.controller';
@@ -49,6 +50,7 @@ import { SeedService } from './common/service/seed.service';
     ShoeOrderModule,
     ShoeModelModule,
     ShoeSampleModule,
+    UILogModule,
     UserModule,
   ],
   controllers: [AppController],

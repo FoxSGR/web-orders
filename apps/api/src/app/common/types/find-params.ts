@@ -1,9 +1,10 @@
 import { IsBoolean, IsOptional, Matches, Min } from 'class-validator';
 
-import { IEntity } from './entity';
-import { IUser } from '../../user';
+import type { IFindFilter, IFindParams } from '@web-orders/api-interfaces';
+import type { IEntity } from '../entity';
+import type { IUser } from '../../user';
 
-export abstract class FindParams<T extends IEntity> {
+export abstract class FindParams<T extends IEntity> implements IFindParams<T> {
   @IsOptional()
   owner: IUser;
 
@@ -12,7 +13,7 @@ export abstract class FindParams<T extends IEntity> {
   loadRelations?: boolean;
 
   @IsOptional()
-  sortField?: keyof T;
+  sortField?: string;
 
   @IsOptional()
   @Matches(/^(asc|desc)$/i)
@@ -27,5 +28,5 @@ export abstract class FindParams<T extends IEntity> {
   offset?: number;
 
   @IsOptional()
-  filter?: { [key: string]: any };
+  filter?: IFindFilter[];
 }

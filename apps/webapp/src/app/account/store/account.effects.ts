@@ -5,7 +5,7 @@ import { catchError, map, switchMap } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 
 import * as fromAccountActions from './account.actions';
-import * as fromAlertsActions from '../../alerts/store/alerts.actions';
+import { alertActions } from '../../alerts/store/alerts.actions';
 
 import { safeCall } from '../../common/util/safe-call';
 import { AccountService } from '../account.service';
@@ -68,12 +68,12 @@ export class AccountEffects {
     this.actions.pipe(
       ofType(fromAccountActions.loginFailed),
       map(action =>
-        fromAlertsActions.showAlert({
+        alertActions.showAlert({
           alert: {
             message: action.error.error.statusCode
               ? action.error.error.message
               : this.translate.instant('str.account.login.error'),
-            type: 'danger',
+            type: 'error',
           },
         }),
       ),
@@ -88,7 +88,7 @@ export class AccountEffects {
       ofType(fromAccountActions.logout),
       map(() => {
         this.router.navigate(['']);
-        return fromAlertsActions.showAlert({
+        return alertActions.showAlert({
           alert: {
             type: 'success',
             message: this.translate.instant('str.account.loggedOut'),

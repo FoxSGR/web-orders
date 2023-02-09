@@ -1,4 +1,4 @@
-import { IEntity } from '../common';
+import type { IEntity } from '../common/entity';
 import { IAddress } from '../address';
 import { IClient } from '../client';
 
@@ -8,4 +8,5 @@ export interface IAgent extends IEntity {
   vat?: string;
   address?: IAddress;
   clients?: IClient[];
+  notes?: string;
 }

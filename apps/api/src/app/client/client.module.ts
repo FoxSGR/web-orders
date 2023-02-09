@@ -7,6 +7,7 @@ import { Client } from './client.entity';
 import { ClientController } from './client.controller';
 import { ClientMapper } from './client.mapper';
 import { ClientService } from './client.service';
+import { ClientSeeder } from './client.seeder';
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import { ClientService } from './client.service';
     forwardRef(() => AgentModule),
   ],
   exports: [ClientMapper, ClientService],
-  providers: [ClientMapper, ClientService],
+  providers: [ClientMapper, ClientSeeder, ClientService],
   controllers: [ClientController],
 })
 export class ClientModule {}

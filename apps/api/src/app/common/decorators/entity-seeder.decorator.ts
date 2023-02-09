@@ -1,5 +1,4 @@
 export const entitySeeders: { new (): any }[] = [];
 
-export const EntitySeederService = () => target => {
-  entitySeeders.push(target);
-};
+export const EntitySeederService = () => target =>
+  void entitySeeders.push(target);

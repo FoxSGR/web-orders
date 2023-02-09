@@ -1,12 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
-import {
-  Alert,
-  closeAlertsWithPosition,
-  getAlertsWithPosition,
-} from '../../../alerts';
-import { map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { WebOrdersState } from '../../../web-orders/web-orders.types';
 import { login } from '../../store/account.actions';

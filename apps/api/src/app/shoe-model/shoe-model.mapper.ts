@@ -39,11 +39,10 @@ export class ShoeModelMapper extends EntityMapper<IShoeModel, ShoeModelDTO> {
 
       // create the model to component link
       modelComponents = components.map(component => {
-        console.log(component);
         const input = body.components.find(
           c => c.component.id === component.id,
         );
-        console.log(input);
+
         return {
           component,
           amount: input.amount,

@@ -1,0 +1,55 @@
+<ion-grid>
+  <ion-row>
+    <ion-col
+      *ngFor="let item of items; let i = index"
+      [sizeMd]="12 / columns"
+      size-sm="12"
+      size-xs="12"
+    >
+      <ion-item class="ion-no-padding">
+        <ion-icon [name]="icon(item)" class="ion-padding-end"></ion-icon>
+        <ion-label>
+          <p style="display: inline; font-weight: 500">
+            <ng-container *ngIf="!indexed || items.length === 1; else indexTpl">
+              {{ item.label | translate }}
+            </ng-container>
+            <ng-template #indexTpl>
+              {{ item.label | translate }} {{ i + 1 }}
+            </ng-template>
+            <span
+              *ngIf="!isObject(value(item) | async)"
+              style="margin-left: -0.2em"
+              >:</span
+            >
+          </p>
+          <ng-container *ngIf="value(item) | async as val">
+            <p
+              *ngIf="!isObject(val); else valueList"
+              style="white-space: normal"
+              [ngStyle]="{
+                display: item.type === 'text' ? 'block' : 'inline'
+              }"
+            >
+              {{ value(item) | async }}
+            </p>
+            <ng-template #valueList>
+              <div style="margin-top: 5px">
+                <p
+                  *ngFor="let v of objectEntries(val)"
+                  style="white-space: normal"
+                >
+                  <span style="font-weight: 400">
+                    {{ v[0] | translate }}:
+                  </span>
+                  <span style="font-weight: 300">
+                    {{ v[1] | translate }}
+                  </span>
+                </p>
+              </div>
+            </ng-template>
+          </ng-container>
+        </ion-label>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+</ion-grid>

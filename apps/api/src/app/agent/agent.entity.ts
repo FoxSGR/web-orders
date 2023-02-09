@@ -13,6 +13,7 @@ import { IAgent } from './agent.types';
 import { Client } from '../client/client.entity';
 import { Address } from '../address/address.entity';
 import { OwnedEntity } from '../common/entity/entity';
+import { commonColumns } from '../common/entity/common-columns';
 
 @Entity()
 export class Agent implements IAgent {
@@ -38,6 +39,10 @@ export class Agent implements IAgent {
 
   @OneToMany(() => Client, client => client.agent)
   clients?: Client[];
+
+  @Factory(commonColumns.notes.seed)
+  @Column(commonColumns.notes.column)
+  notes?: string;
 
   @Column(() => OwnedEntity, { prefix: '' })
   base: OwnedEntity;

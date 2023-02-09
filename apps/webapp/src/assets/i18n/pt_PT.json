@@ -1,7 +1,15 @@
 {
   "str": {
     "common": {
-      "photo": "Fotografia"
+      "photo": "Fotografia",
+      "notes": "Notas",
+      "unset": "Não definido",
+      "placeholders": {
+        "search": "Pesquisar"
+      },
+      "actions": {
+        "create": "Criar"
+      }
     },
     "menu": {
       "home": "Página Inicial",
@@ -12,15 +20,32 @@
     "sample": {
       "common": {
         "sample": "Amostra",
-        "requestedAt": "Pedida em"
+        "requestedAt": "Pedida em",
+        "season": "Época",
+        "dateAsked": "Pedida em"
       },
       "list": {
         "header": "Amostras"
+      },
+      "season": {
+        "fallWinter": "Outono / Inverno",
+        "springSummer": "Primavera / Verão"
+      },
+      "preview": {
+        "components": {
+          "empty": "Não foram definidos os components do modelo."
+        }
       }
     },
     "model": {
       "common": {
+        "model": "Modelo",
         "reference": "Referência"
+      }
+    },
+    "agent": {
+      "common": {
+        "agent": "Agente"
       }
     },
     "client": {
@@ -28,10 +53,79 @@
         "client": "Cliente"
       }
     },
+    "brand": {
+      "common": {
+        "brand": "Marca"
+      }
+    },
+    "shoeComponent": {
+      "common": {
+        "reference": "Referência",
+        "name": "Descrição",
+        "componentReference": "Referência de Componente",
+        "componentName": "Descrição de Componente"
+      },
+      "types": {
+        "leather": {
+          "label": "Pele"
+        },
+        "last": {
+          "label": "Forma"
+        },
+        "heel": {
+          "label": "Salto"
+        },
+        "sole": {
+          "label": "Sola"
+        },
+        "productionInsole": {
+          "label": "Palmilha de Fabrico"
+        },
+        "finishInsole": {
+          "label": "Palmilha de Acabamento"
+        },
+        "backCounter": {
+          "label": "Contraforte"
+        },
+        "laces": {
+          "label": "Atacadores"
+        },
+        "lining": {
+          "label": "Forro"
+        },
+        "zip": {
+          "label": "Fecho"
+        },
+        "ornament": {
+          "label": "Aplicação",
+          "type": "Tipo",
+          "types": {
+            "zip": {
+              "label": "Fecho"
+            },
+            "buckle": {
+              "label": "Fivela"
+            }
+          }
+        }
+      }
+    },
+    "color": {
+      "common": {
+        "color": "Cor"
+      }
+    },
     "list": {
       "empty": "Sem resultados.",
       "actions": {
-        "delete": "Apagar"
+        "delete": "Apagar",
+        "newFilter": "Novo filtro",
+        "remove": "Remover"
+      },
+      "errors": {
+        "loading": {
+          "message": "Ocorreu um erro ao carregar"
+        }
       }
     },
     "dialogs": {
@@ -39,6 +133,9 @@
         "text": "Tem a certeza que quer apagar?",
         "confirm": "Confirmar",
         "cancel": "Cancelar"
+      },
+      "preview": {
+        "overview": "Visão Geral"
       }
     },
     "account": {

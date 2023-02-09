@@ -1,4 +1,4 @@
-import { IEntity } from '../common';
+import type { IEntity } from '../common/entity';
 
 export interface IColor extends IEntity {
   name: string;

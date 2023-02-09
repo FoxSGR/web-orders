@@ -1,4 +1,4 @@
-import type { IEntity } from '../common';
+import type { IEntity } from '../common/entity';
 import type { IShoeModel } from '../shoe-model';
 import type { IClient } from '../client';
 import type { IAgent } from '../agent';

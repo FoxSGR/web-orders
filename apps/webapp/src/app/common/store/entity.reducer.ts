@@ -22,5 +22,10 @@ export const entityReducer = <T extends EntityState<any>>(
       page,
       status: 'loaded',
     })),
+    on(actions.pageLoadError, state => ({
+      ...state,
+      page: { ...state.page, items: [] },
+      status: 'error',
+    })),
   );
 };

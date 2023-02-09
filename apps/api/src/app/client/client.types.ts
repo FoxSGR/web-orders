@@ -1,4 +1,4 @@
-import { IEntity } from '../common';
+import type { IEntity } from '../common/entity';
 import { IAddress } from '../address';
 import { IAgent } from '../agent/agent.types';
 

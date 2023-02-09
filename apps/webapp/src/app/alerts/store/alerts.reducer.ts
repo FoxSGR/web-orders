@@ -1,8 +1,8 @@
 import { createReducer, on } from '@ngrx/store';
-import * as AlertActions from './alerts.actions';
-import { AlertsState } from './alerts.types';
-
 import * as uuid from 'uuid';
+
+import { AlertsState } from './alerts.types';
+import { alertActions } from './alerts.actions';
 
 /**
  * The initial alerts state.
@@ -16,7 +16,7 @@ export const initialAlertsState: AlertsState = {
  */
 export const alertsReducer = createReducer<AlertsState>(
   initialAlertsState,
-  on(AlertActions.showAlert, (state, { alert }) => ({
+  on(alertActions.showAlert, (state, { alert }) => ({
     ...state,
     collection: [
       ...state.collection,
@@ -27,11 +27,11 @@ export const alertsReducer = createReducer<AlertsState>(
       },
     ],
   })),
-  on(AlertActions.closeAlert, (state, { id }) => ({
+  on(alertActions.closeAlert, (state, { id }) => ({
     ...state,
     collection: state.collection.filter(alert => alert.id !== id),
   })),
-  on(AlertActions.closeAlertsWithPosition, (state, { position }) => ({
+  on(alertActions.closeAlertsWithPosition, (state, { position }) => ({
     ...state,
     collection: state.collection.filter(alert => alert.position !== position),
   })),

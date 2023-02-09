@@ -10,6 +10,8 @@ import { IShoeOrder, ShoeSizes } from './shoe-order.types';
 import { ShoeSample } from '../shoe-sample';
 import { ShoeModel } from '../shoe-model';
 import { OwnedEntity } from '../common/entity';
+import { Factory } from 'nestjs-seeder';
+import { commonColumns } from '../common/entity/common-columns';
 
 @Entity()
 export class ShoeOrder implements IShoeOrder {
@@ -30,7 +32,8 @@ export class ShoeOrder implements IShoeOrder {
   @Column({ default: null })
   dateDelivery?: Date;
 
-  @Column({ default: '' })
+  @Factory(commonColumns.notes.seed)
+  @Column(commonColumns.notes.column)
   notes?: string;
 
   @Column({ default: '{}', type: 'simple-json' })

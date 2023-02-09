@@ -1,8 +1,9 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Factory } from 'nestjs-seeder';
 import { IsNotEmpty, IsString } from 'class-validator';
 
 import { IBrand } from './brand.types';
-import { OwnedEntity } from '../common/entity/entity';
+import { OwnedEntity } from '../common/entity';
 
 @Entity()
 export class Brand implements IBrand {
@@ -11,6 +12,7 @@ export class Brand implements IBrand {
 
   @IsNotEmpty()
   @IsString()
+  @Factory(faker => faker.commerce.product())
   @Column()
   name: string;
 

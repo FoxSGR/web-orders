@@ -1,5 +1,5 @@
 import { Mapper } from '../mapper';
-import { IEntity } from '../types';
+import type { IEntity } from '.';
 import { EntityDTO } from './entity.dto';
 
 export abstract class EntityMapper<

@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { HttpClientModule } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
@@ -10,11 +11,15 @@ import * as pipes from './pipes';
 
 @NgModule({
   declarations: [
-    components.EntityListDropdownComponent,
+    components.EntityPreviewActionComponent,
+    components.EntityPreviewCloseComponent,
+    components.EntityPreviewListComponent,
     directives.AutoFocusDirective,
     pipes.CastPipe,
+    pipes.DatePipe,
   ],
   imports: [
+    CommonModule,
     LoggerModule.forRoot({
       level: NgxLoggerLevel.DEBUG,
       serverLogLevel: NgxLoggerLevel.ERROR,
@@ -24,6 +29,12 @@ import * as pipes from './pipes';
     IonicModule,
     TranslateModule,
   ],
-  exports: [directives.AutoFocusDirective, pipes.CastPipe],
+  exports: [
+    components.EntityPreviewActionComponent,
+    components.EntityPreviewCloseComponent,
+    components.EntityPreviewListComponent,
+    directives.AutoFocusDirective,
+    pipes.CastPipe,
+  ],
 })
 export class WOCommonModule {}

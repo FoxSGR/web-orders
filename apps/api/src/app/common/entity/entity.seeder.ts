@@ -1,11 +1,19 @@
 import { Logger } from '@nestjs/common';
 import { DataFactory, Seeder } from 'nestjs-seeder';
 import { DeepPartial, Repository } from 'typeorm';
+import get from 'lodash/get';
 
+import type { IEntity } from '.';
 import { environment } from '../../../environments/environment';
 
-export abstract class EntitySeeder<T> implements Seeder {
+export abstract class EntitySeeder<T extends IEntity> implements Seeder {
+  static readonly defaultBase = {
+    owner: { id: 1 },
+  };
+
   private logger = new Logger(this.constructor.name);
+
+  protected nested: string[] = [];
 
   protected constructor(
     private readonly entityClass: { new (): T },
@@ -21,21 +29,32 @@ export abstract class EntitySeeder<T> implements Seeder {
 
     const generated: DeepPartial<T>[] = DataFactory.createForClass(
       this.entityClass,
-    ).generate(10) as any;
+    ).generate(100) as any;
     entities.push(...generated);
 
     for (const entity of entities) {
-      entity['base'] = { owner: { id: 1 } };
+      entity.base = EntitySeeder.defaultBase as any;
 
       for (const field of Object.keys(entity)) {
         entity[field] = await entity[field];
       }
+
+      this.nested.forEach(prop => {
+        const nested = get(entity, prop);
+        if (Array.isArray(nested)) {
+          nested.forEach(e => (e.base = EntitySeeder.defaultBase));
+        } else if (nested) {
+          nested.base = EntitySeeder.defaultBase;
+        }
+      });
     }
 
     const created = await this.repository.save(entities as any[]);
 
     created.forEach(entity =>
-      this.logger.log(`Created '${entity.id} - ${entity[this.identifier()]}'`),
+      this.logger.log(
+        `Created '${entity.id} - ${get(entity, this.identifier())}'`,
+      ),
     );
 
     return created;
@@ -49,5 +68,5 @@ export abstract class EntitySeeder<T> implements Seeder {
     return Promise.resolve([]);
   }
 
-  protected abstract identifier(): keyof T;
+  protected abstract identifier(): keyof T | string;
 }

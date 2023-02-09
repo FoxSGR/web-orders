@@ -11,8 +11,10 @@ export class ShoeComponentMapper extends EntityMapper<
 > {
   bodyToEntity(body: ShoeComponentDTO): Partial<IShoeComponent> {
     return {
+      reference: body.reference,
       name: body.name,
       type: body.type,
+      ornamentType: body.ornamentType,
       amount: body.amount,
       price: body.price,
       notes: body.notes,
@@ -22,8 +24,10 @@ export class ShoeComponentMapper extends EntityMapper<
   entityToResponse(component: IShoeComponent): Partial<ShoeComponentDTO> {
     return {
       ...super.entityToResponse(component),
+      reference: component.reference,
       name: component.name,
       type: component.type,
+      ornamentType: component.ornamentType,
       amount: component.amount,
       price: component.price,
       notes: component.notes,

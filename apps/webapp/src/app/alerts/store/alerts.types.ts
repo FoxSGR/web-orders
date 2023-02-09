@@ -6,7 +6,7 @@ export type AlertPosition = 'toast';
 /**
  * The type of an alert.
  */
-export type AlertType = 'success' | 'info' | 'warning' | 'danger';
+export type AlertType = 'success' | 'info' | 'warning' | 'error';
 
 /**
  * Represents an alert.

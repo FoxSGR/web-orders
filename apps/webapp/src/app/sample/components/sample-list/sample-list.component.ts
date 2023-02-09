@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Injector } from '@angular/core';
 
-import { ShoeSample } from '../../../common';
+import { DatePipe, ShoeSample } from '../../../common';
 import { sampleStoreConfig } from '../../store';
 import { SampleService } from '../../sample.service';
 import { EntityListComponent } from '../../../common';
@@ -19,6 +19,28 @@ export class SampleListComponent extends EntityListComponent<ShoeSample> {
   constructor(injector: Injector, entityService: SampleService) {
     super(injector, {
       entityName: sampleStoreConfig.name,
+      searchables: [
+        {
+          label: 'str.model.common.reference',
+          prop: 'sampleModel.reference',
+        },
+        {
+          label: 'str.client.common.client',
+          prop: 'client.name',
+        },
+        {
+          label: 'str.agent.common.agent',
+          prop: 'agent.name',
+        },
+        {
+          label: 'str.brand.common.brand',
+          prop: 'brand.name',
+        },
+        {
+          label: 'str.common.notes',
+          prop: 'notes',
+        },
+      ],
       service: entityService,
       preview: {
         component: SamplePreviewComponent,
@@ -29,32 +51,35 @@ export class SampleListComponent extends EntityListComponent<ShoeSample> {
           prop: 'id',
           sortable: true,
           canAutoResize: false,
-          width: 70,
+          width: 50,
         },
         {
-          name: 'str.model.common.reference',
-          prop: 'baseModel.reference',
+          name: 'str.model.common.model',
+          prop: 'sampleModel.reference',
           sortable: true,
           canAutoResize: false,
+          width: 75,
         },
         {
           name: 'str.client.common.client',
           prop: 'client.name',
           sortable: true,
-          canAutoResize: false,
+          canAutoResize: true,
         },
         {
           name: 'str.sample.common.requestedAt',
           prop: 'dateAsked',
           sortable: true,
-          canAutoResize: true,
           flexGrow: 2,
+          pipe: new DatePipe(),
+          width: 90,
+          canAutoResize: false,
         },
         {
           name: 'str.common.photo',
-          prop: 'dateAsked',
+          prop: 'photo',
           sortable: true,
-          canAutoResize: false,
+          canAutoResize: false
         },
       ],
     });

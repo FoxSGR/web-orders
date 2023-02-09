@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
-import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
-import { WOCommonModule } from '../common/wo-common.module';
+import { WOCommonModule } from '../common';
+import { SampleListModule } from './components/sample-list';
 
 import { SampleEffects, sampleReducer, sampleStoreConfig } from './store';
 import { persistReducer } from '../common/util/persist.reducer';
@@ -16,7 +17,6 @@ import * as cc from './components';
 
 const components = [
   cc.SamplesComponent,
-  cc.SampleListComponent,
   cc.SamplePreviewComponent,
 ];
 
@@ -30,6 +30,7 @@ const components = [
       },
     ]),
     CommonModule,
+    FormsModule,
     StoreModule.forFeature(sampleStoreConfig.name, sampleReducer, {
       initialState: sampleStoreConfig.initialState,
       metaReducers: [
@@ -42,10 +43,10 @@ const components = [
       ],
     }),
     EffectsModule.forFeature([SampleEffects]),
+    SampleListModule,
     TranslateModule,
     WOCommonModule,
     IonicModule,
-    NgxDatatableModule,
   ],
 })
 export class SampleModule {}

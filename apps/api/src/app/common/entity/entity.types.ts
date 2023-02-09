@@ -10,3 +10,9 @@ export interface IEntity {
     deletedAt: Date;
   };
 }
+
+export interface EntityFieldMapping {
+  prop: string;
+  filterMode?: 'auto' | 'dirty';
+}
+

@@ -13,7 +13,5 @@ export class ColorSeeder extends EntitySeeder<Color> {
     super(Color, repository);
   }
 
-  protected identifier(): keyof Color {
-    return 'name';
-  }
+  protected identifier = () => 'name' as keyof Color;
 }

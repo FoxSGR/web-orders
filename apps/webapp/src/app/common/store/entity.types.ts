@@ -1,12 +1,12 @@
+import { IFindParams } from '@web-orders/api-interfaces';
 import { EntityPage } from '../wo-common.types';
-import { FindPageParams } from '../services';
 
 export type EntityName = 'sample';
 
 export interface EntityState<T> {
   loaded: T[];
   page?: EntityPage<T>;
-  filter: FindPageParams;
+  filter: IFindParams<T>;
   status: 'unloaded' | 'loading' | 'loaded';
 }
 

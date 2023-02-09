@@ -1,58 +1,147 @@
-<ngx-datatable
-  class="material"
-  [rows]="page.items"
-  [headerHeight]="50"
-  [footerHeight]="50"
-  rowHeight="auto"
-  [externalPaging]="true"
-  [externalSorting]="true"
-  [columnMode]="ColumnMode.force"
-  [count]="page.total"
-  [offset]="page.offset"
-  [limit]="pageSize"
-  (page)="setPage($event.offset)"
-  [loadingIndicator]="(status | async) === 'loading'"
-  [scrollbarH]="true"
-  [virtualization]="false"
-  [messages]="{ emptyMessage: 'str.list.empty' | translate }"
->
-  <ngx-datatable-column
-    *ngFor="let column of config.columns"
-    [name]="column.name! | translate"
-    [prop]="column.prop!"
-    [sortable]="column.sortable!"
-    [canAutoResize]="column.canAutoResize!"
-    [flexGrow]="column.flexGrow!"
-  ></ngx-datatable-column>
+<ng-template *ngFor="let col of config.columns" #templates let-row="row">
+  <ng-container
+    *ngComponentOutlet="col.template; injector: templateInjector(col, row)"
+  ></ng-container>
+</ng-template>
 
-  <ngx-datatable-column
-    name=""
-    [canAutoResize]="false"
-    [width]="80"
-    [sortable]="false"
-    [cellClass]="'wo-datatable-actions'"
-    [headerClass]="'wo-datatable-actions-header'"
+<div class="entity-list-top flex flex-wrap" *ngIf="showHeader">
+  <div class="entity-list-searches">
+    <div
+      class="entity-list-search flex flex-wrap"
+      *ngFor="let searchbar of searchbars"
+    >
+      <ion-card class="entity-list-search-field">
+        <ion-item lines="none">
+          <ion-select
+            interface="popover"
+            [selectedText]="searchbar.label | translate"
+            (ionChange)="changeSearchbar(searchbar, $event)"
+          >
+            <ion-select-option
+              *ngFor="let searchable of availableSearchables(searchbar)"
+              [value]="searchable"
+            >
+              {{ searchable.label | translate }}
+            </ion-select-option>
+            <ion-select-option
+              *ngIf="searchbars.length > 1"
+              [value]="{ prop: '#remove' }"
+            >
+              — {{ 'str.list.actions.remove' | translate }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-card>
+
+      <ion-searchbar
+        debounce="1000"
+        animated="true"
+        (ionChange)="search()"
+        [(ngModel)]="searchbar.value"
+        [placeholder]="'str.common.placeholders.search' | translate"
+      ></ion-searchbar>
+    </div>
+
+    <ion-text
+      color="medium"
+      class="cursor-pointer"
+      style="margin-top: -5px"
+      *ngIf="remainingSearchables().length !== 0"
+    >
+      <ion-label (click)="newSearchBar()">
+        <small>
+          {{ 'str.list.actions.newFilter' | translate }}
+        </small>
+      </ion-label>
+    </ion-text>
+  </div>
+
+  <div class="entity-list-create">
+    <ion-button>
+      <ion-icon name="create"></ion-icon>
+      {{ 'str.common.actions.create' | translate }}
+    </ion-button>
+  </div>
+</div>
+
+<ion-card class="datatable-card">
+  <ngx-datatable
+    class="material"
+    [rows]="page.items"
+    [headerHeight]="50"
+    [footerHeight]="50"
+    rowHeight="auto"
+    [externalPaging]="true"
+    [externalSorting]="true"
+    [columnMode]="ColumnMode.force"
+    [count]="page.total"
+    [offset]="page.offset"
+    [limit]="pageSize"
+    (page)="load({ page: $event.offset })"
+    [loadingIndicator]="(status | async) === 'loading'"
+    [scrollbarH]="true"
+    [virtualization]="false"
+    [messages]="{ emptyMessage: 'str.list.empty' | translate }"
+    (sort)="changeSort($event)"
+    [sortType]="SortType.single"
   >
-    <ng-template let-row="row" ngx-datatable-cell-template>
-      <ion-buttons slot="end">
-        <ion-button
-          *ngIf="config.preview"
-          class="wo-datatable-icon-button"
-          (click)="preview(row)"
-        >
-          <ion-icon slot="icon-only" icon="eye"></ion-icon>
-        </ion-button>
-        <ion-button
-          class="wo-datatable-icon-button"
-          (click)="actionsDropdown($event, row)"
-        >
-          <ion-icon
-            slot="icon-only"
-            ios="ellipsis-horizontal"
-            md="ellipsis-vertical"
-          ></ion-icon>
-        </ion-button>
-      </ion-buttons>
-    </ng-template>
-  </ngx-datatable-column>
-</ngx-datatable>
+    <ng-container *ngFor="let column of config.columns">
+      <ngx-datatable-column
+        *ngIf="column.width; else noWidth"
+        [name]="column.name! | translate"
+        [prop]="column.prop!"
+        [sortable]="false"
+        [canAutoResize]="column.canAutoResize!"
+        [flexGrow]="column.flexGrow!"
+        [pipe]="column.pipe!"
+        [width]="column.width"
+        [frozenRight]="column.frozenRight"
+        [cellTemplate]="column.cellTemplate"
+      ></ngx-datatable-column>
+      <ng-template #noWidth>
+        <ngx-datatable-column
+          [name]="column.name! | translate"
+          [prop]="column.prop!"
+          [sortable]="false"
+          [canAutoResize]="column.canAutoResize!"
+          [flexGrow]="column.flexGrow!"
+          [pipe]="column.pipe!"
+          [frozenRight]="column.frozenRight"
+          [cellTemplate]="column.cellTemplate"
+        ></ngx-datatable-column>
+      </ng-template>
+    </ng-container>
+
+    <ngx-datatable-column
+      name=""
+      [canAutoResize]="false"
+      [width]="80"
+      [sortable]="false"
+      [cellClass]="'wo-datatable-actions'"
+      [headerClass]="'wo-datatable-actions-header'"
+      [frozenRight]="true"
+    >
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        <ion-buttons slot="end">
+          <ion-button
+            *ngIf="config.preview"
+            class="wo-datatable-icon-button"
+            (click)="preview(row)"
+          >
+            <ion-icon slot="icon-only" icon="eye"></ion-icon>
+          </ion-button>
+          <ion-button
+            class="wo-datatable-icon-button"
+            (click)="actionsDropdown($event, row)"
+          >
+            <ion-icon
+              slot="icon-only"
+              ios="ellipsis-horizontal"
+              md="ellipsis-vertical"
+            ></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ng-template>
+    </ngx-datatable-column>
+  </ngx-datatable>
+</ion-card>
