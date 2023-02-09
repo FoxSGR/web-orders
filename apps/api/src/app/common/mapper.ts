@@ -7,18 +7,18 @@ import { IUser } from '../user';
 export abstract class Mapper<T, D> {
   abstract bodyToEntity(
     body: Partial<D>,
-    user: IUser
+    user: IUser,
   ): Promial<T> | DeepPartial<T>;
 
   abstract entityToResponse(
     input: T,
-    type?: ResponseFormat
+    type?: ResponseFormat,
   ): DeepPartial<D> | Partial<D>;
 
   protected async find(
     service: EntityService<any>,
     user: IUser,
-    key: number
+    key: number,
   ): Promise<any> {
     if (key) {
       return await service.findOne(key, user, true);
@@ -30,7 +30,7 @@ export abstract class Mapper<T, D> {
   protected fieldToResponse(
     mapper: Mapper<any, any>,
     data: any,
-    type?: ResponseFormat
+    type?: ResponseFormat,
   ): any {
     if (data) {
       return mapper.entityToResponse(data, type);
@@ -42,7 +42,7 @@ export abstract class Mapper<T, D> {
   protected fieldToEntity(
     mapper: Mapper<any, any>,
     user: IUser,
-    data: any
+    data: any,
   ): any {
     if (data) {
       return mapper.bodyToEntity(data, user);
@@ -54,7 +54,7 @@ export abstract class Mapper<T, D> {
   protected fieldToEntityAsync(
     mapper: Mapper<any, any>,
     user: IUser,
-    data: any
+    data: any,
   ): Promial<any> {
     if (data) {
       return mapper.bodyToEntity(data, user) as Promial<any>;

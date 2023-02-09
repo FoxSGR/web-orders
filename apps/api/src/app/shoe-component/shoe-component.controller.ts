@@ -32,7 +32,7 @@ export class ShoeComponentController extends EntityController<
   @Get('/:id([0-9]+)')
   public async findOne(
     @CurrentUser() user: IUser,
-    @Param('id') id: Id
+    @Param('id') id: Id,
   ): Promise<ShoeComponentDTO | undefined> {
     return super.findOne(user, id);
   }
@@ -40,7 +40,7 @@ export class ShoeComponentController extends EntityController<
   @Get()
   public async find(
     @CurrentUser() user: IUser,
-    @Query() params?: FindParams<IShoeComponent>
+    @Query() params?: FindParams<IShoeComponent>,
   ): Promise<Page<ShoeComponentDTO>> {
     return super.find(user, params);
   }
@@ -48,7 +48,7 @@ export class ShoeComponentController extends EntityController<
   @Post()
   public async create(
     @CurrentUser() user: IUser,
-    @Body() body: ShoeComponentDTO
+    @Body() body: ShoeComponentDTO,
   ): Promise<ShoeComponentDTO> {
     return super.create(user, body);
   }
@@ -57,7 +57,7 @@ export class ShoeComponentController extends EntityController<
   public async update(
     @CurrentUser() user: IUser,
     @Param('id') id: Id,
-    @Body() body: Partial<ShoeComponentDTO>
+    @Body() body: Partial<ShoeComponentDTO>,
   ): Promise<ShoeComponentDTO> {
     return super.update(user, id, body);
   }
@@ -65,7 +65,7 @@ export class ShoeComponentController extends EntityController<
   @Delete('/:id([0-9]+)')
   public async delete(
     @CurrentUser() user: IUser,
-    @Param('id') id: Id
+    @Param('id') id: Id,
   ): Promise<ShoeComponentDTO> {
     return super.delete(user, id);
   }

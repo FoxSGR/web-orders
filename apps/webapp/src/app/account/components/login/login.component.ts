@@ -59,8 +59,8 @@ export class LoginComponent implements OnInit, OnDestroy {
         password: this.loginForm.controls['password'].value,
         targetRoute: '',
         onSuccess: () => this.reset(),
-        onError: (error) => this.onError(error),
-      })
+        onError: error => this.onError(error),
+      }),
     );
   }
 

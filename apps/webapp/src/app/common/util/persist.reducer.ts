@@ -8,12 +8,14 @@ import { KeyMap } from '../wo-common.types';
  * @param initialState the initial state.
  * @param persistedKeys the state keys to persist.
  */
-export const persistReducer = <T>(
-  initialState: T,
-  persistedKeys: KeyMap<T>,
-): ((reducer: ActionReducer<T>) => ActionReducer<T>) => (reducer) =>
-  localStorageSync({
-    keys: Object.keys(persistedKeys),
-    rehydrate: true, // restore the state when opening the app
-    removeOnUndefined: true, // remove from the storage when the state is undefined
-  })(reducer);
+export const persistReducer =
+  <T>(
+    initialState: T,
+    persistedKeys: KeyMap<T>,
+  ): ((reducer: ActionReducer<T>) => ActionReducer<T>) =>
+  reducer =>
+    localStorageSync({
+      keys: Object.keys(persistedKeys),
+      rehydrate: true, // restore the state when opening the app
+      removeOnUndefined: true, // remove from the storage when the state is undefined
+    })(reducer);

@@ -17,7 +17,7 @@ export class AlertsEffects {
     () =>
       this.actions.pipe(
         ofType(fromAlertsActions.showAlert),
-        tap(async (action) => {
+        tap(async action => {
           const position = action.alert.position || 'toast';
           const timeout = action.alert.timeout || 5;
 

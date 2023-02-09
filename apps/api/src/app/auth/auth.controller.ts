@@ -16,7 +16,7 @@ import { UserMapper } from '../user';
 export class AuthController {
   constructor(
     private authService: AuthService,
-    private userMapper: UserMapper
+    private userMapper: UserMapper,
   ) {}
 
   @UseGuards(LocalAuthGuard)

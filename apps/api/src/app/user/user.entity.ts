@@ -15,17 +15,17 @@ export class User implements IUser {
   id: number;
 
   @IsNotEmpty()
-  @Factory((faker) => faker.name.firstName())
+  @Factory(faker => faker.name.firstName())
   @Column()
   firstName: string;
 
   @IsNotEmpty()
-  @Factory((faker) => faker.name.lastName())
+  @Factory(faker => faker.name.lastName())
   @Column()
   lastName: string;
 
   @IsNotEmpty()
-  @Factory((faker) => faker.internet.email())
+  @Factory(faker => faker.internet.email())
   @Column({ unique: true })
   email: string;
 
@@ -46,7 +46,7 @@ export class User implements IUser {
   @Column(() => EntityBase, { prefix: '' })
   base: EntityBase;
 
-  @OneToMany(() => Client, (client) => client.id)
+  @OneToMany(() => Client, client => client.id)
   clients: Promise<Client[]>;
 
   toString(): string {

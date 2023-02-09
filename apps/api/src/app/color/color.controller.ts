@@ -29,7 +29,7 @@ export class ColorController extends EntityController<IColor, ColorDTO> {
   @Get('/:id([0-9]+)')
   public async findOne(
     @CurrentUser() user: IUser,
-    @Param('id') id: Id
+    @Param('id') id: Id,
   ): Promise<ColorDTO | undefined> {
     return super.findOne(user, id);
   }
@@ -37,7 +37,7 @@ export class ColorController extends EntityController<IColor, ColorDTO> {
   @Get()
   public async find(
     @CurrentUser() user: IUser,
-    @Query() params?: FindParams<IColor>
+    @Query() params?: FindParams<IColor>,
   ): Promise<Page<ColorDTO>> {
     return super.find(user, params);
   }
@@ -45,7 +45,7 @@ export class ColorController extends EntityController<IColor, ColorDTO> {
   @Post()
   public async create(
     @CurrentUser() user: IUser,
-    @Body() body: ColorDTO
+    @Body() body: ColorDTO,
   ): Promise<ColorDTO> {
     return super.create(user, body);
   }
@@ -54,7 +54,7 @@ export class ColorController extends EntityController<IColor, ColorDTO> {
   public async update(
     @CurrentUser() user: IUser,
     @Param('id') id: Id,
-    @Body() body: Partial<ColorDTO>
+    @Body() body: Partial<ColorDTO>,
   ): Promise<ColorDTO> {
     return super.update(user, id, body);
   }
@@ -62,7 +62,7 @@ export class ColorController extends EntityController<IColor, ColorDTO> {
   @Delete('/:id([0-9]+)')
   public async delete(
     @CurrentUser() user: IUser,
-    @Param('id') id: Id
+    @Param('id') id: Id,
   ): Promise<ColorDTO> {
     return super.delete(user, id);
   }

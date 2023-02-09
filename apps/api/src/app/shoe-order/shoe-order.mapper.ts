@@ -12,19 +12,19 @@ import { EntityMapper } from '../common/entity/entity.mapper';
 export class ShoeOrderMapper extends EntityMapper<IShoeOrder, ShoeOrderDTO> {
   constructor(
     private sampleMapper: ShoeSampleMapper,
-    private sampleService: ShoeSampleService
+    private sampleService: ShoeSampleService,
   ) {
     super();
   }
 
   async bodyToEntity(
     body: Partial<ShoeOrderDTO>,
-    user: IUser
+    user: IUser,
   ): Promial<IShoeOrder> {
     const sample: IShoeSample = await this.find(
       this.sampleService,
       user,
-      body.sample?.id
+      body.sample?.id,
     );
 
     return {
@@ -39,7 +39,7 @@ export class ShoeOrderMapper extends EntityMapper<IShoeOrder, ShoeOrderDTO> {
 
   entityToResponse(
     order: IShoeOrder,
-    type?: ResponseFormat
+    type?: ResponseFormat,
   ): Partial<ShoeOrderDTO> {
     return {
       ...super.entityToResponse(order),

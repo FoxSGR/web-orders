@@ -16,32 +16,32 @@ export class ShoeModelMapper extends EntityMapper<IShoeModel, ShoeModelDTO> {
     private colorMapper: ColorMapper,
     private colorService: ColorService,
     private componentMapper: ShoeComponentMapper,
-    private componentService: ShoeComponentService
+    private componentService: ShoeComponentService,
   ) {
     super();
   }
 
   async bodyToEntity(
     body: Partial<ShoeModelDTO>,
-    user: IUser
+    user: IUser,
   ): Promial<IShoeModel> {
     let modelComponents: IShoeModelComponent[];
     if (body.components) {
       const components = await this.componentService.findByIds(
         { owner: user },
-        body.components.map((component) => component.component.id)
+        body.components.map(component => component.component.id),
       );
 
       const colors = await this.colorService.findByIds(
         { owner: user },
-        body.components.filter((c) => c.color).map((c) => c.color.id)
+        body.components.filter(c => c.color).map(c => c.color.id),
       );
 
       // create the model to component link
-      modelComponents = components.map((component) => {
+      modelComponents = components.map(component => {
         console.log(component);
         const input = body.components.find(
-          (c) => c.component.id === component.id
+          c => c.component.id === component.id,
         );
         console.log(input);
         return {
@@ -49,7 +49,7 @@ export class ShoeModelMapper extends EntityMapper<IShoeModel, ShoeModelDTO> {
           amount: input.amount,
           price: input.price,
           color: input.color
-            ? colors.find((c) => c.id === input.color.id)
+            ? colors.find(c => c.id === input.color.id)
             : undefined,
           base: { owner: user },
         };
@@ -76,15 +76,15 @@ export class ShoeModelMapper extends EntityMapper<IShoeModel, ShoeModelDTO> {
 
   entityToResponse(
     shoeModel: IShoeModel,
-    type?: ResponseFormat
+    type?: ResponseFormat,
   ): Partial<ShoeModelDTO> {
     let components: ShoeModelComponentDTO[] = undefined;
     if (type === 'full') {
       components =
-        shoeModel.components?.map((component) => ({
+        shoeModel.components?.map(component => ({
           component: this.fieldToResponse(
             this.componentMapper,
-            component.component
+            component.component,
           ),
           amount: component.amount,
           price: component.price,

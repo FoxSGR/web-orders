@@ -39,14 +39,14 @@ export class EntityService<T extends IEntity> {
 
   constructor(
     protected repository: Repository<T>,
-    config: Partial<EntityServiceConfig>
+    config: Partial<EntityServiceConfig>,
   ) {
     this.config = config;
   }
 
   async findPage(params: FindParams<T>): Promise<Page<T>> {
     const [entities, count] = await this.repository.findAndCount(
-      this.buildFindOptions(params)
+      this.buildFindOptions(params),
     );
 
     await this.setupFoundEntities(entities, params);
@@ -68,7 +68,7 @@ export class EntityService<T extends IEntity> {
   async findByIds(params: FindParams<T>, ids: Id[]): Promise<T[]> {
     const entities = await this.repository.findByIds(
       ids,
-      this.buildFindOptions(params)
+      this.buildFindOptions(params),
     );
 
     if (entities.length !== ids.length) {
@@ -82,12 +82,12 @@ export class EntityService<T extends IEntity> {
   async findOne(
     id: Id,
     user?: IUser,
-    required = false
+    required = false,
   ): Promise<T | undefined> {
     const params: FindParams<T> = { owner: user, loadRelations: true };
     const entity = await this.repository.findOne(
       id,
-      this.buildFindOptions(params)
+      this.buildFindOptions(params),
     );
 
     if (!entity) {
@@ -135,8 +135,8 @@ export class EntityService<T extends IEntity> {
 
     // delete undefined fields to merge with the existing entity
     Object.keys(entity)
-      .filter((key) => entity[key] === undefined)
-      .forEach((key) => delete entity[key]);
+      .filter(key => entity[key] === undefined)
+      .forEach(key => delete entity[key]);
 
     return (await this.repository.save({
       ...found,
@@ -156,7 +156,7 @@ export class EntityService<T extends IEntity> {
 
   protected async setupFoundEntities(
     entities: T[],
-    params: FindParams<T>
+    params: FindParams<T>,
   ): Promise<void> {
     for (const entity of entities) {
       if (this.config.owned) {

@@ -12,6 +12,6 @@ export const entityReducer = <T>(config: EntityStoreConfig<T>) => {
 
   return createReducer<T>(
     config.initialState,
-    on(actions.pageLoaded, (state, { page }) => ({ ...(state as any), page }))
+    on(actions.pageLoaded, (state, { page }) => ({ ...(state as any), page })),
   );
 };

@@ -14,7 +14,7 @@ export class ClientMapper extends EntityMapper<IClient, ClientDTO> {
   constructor(
     @Inject(forwardRef(() => ClientMapper))
     private addressMapper: AddressMapper,
-    private agentService: AgentService
+    private agentService: AgentService,
   ) {
     super();
   }

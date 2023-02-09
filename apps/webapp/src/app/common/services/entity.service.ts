@@ -37,7 +37,7 @@ export class EntityService<T extends { id?: number }> {
         }),
       })
       .pipe(
-        map((page) => ({
+        map(page => ({
           ...page,
           size: page.items.length,
         })),

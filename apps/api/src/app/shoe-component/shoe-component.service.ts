@@ -9,7 +9,7 @@ import { ShoeComponent } from './shoe-component.entity';
 export class ShoeComponentService extends EntityService<ShoeComponent> {
   constructor(
     @InjectRepository(ShoeComponent)
-    shoeComponentRepository: Repository<ShoeComponent>
+    shoeComponentRepository: Repository<ShoeComponent>,
   ) {
     super(shoeComponentRepository, {
       name: 'shoe_component',

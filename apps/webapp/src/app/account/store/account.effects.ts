@@ -24,9 +24,9 @@ export class AccountEffects {
   login$ = createEffect(() =>
     this.actions.pipe(
       ofType(fromAccountActions.login),
-      switchMap((action) =>
+      switchMap(action =>
         this.authService.login(action.username, action.password).pipe(
-          map((account) => {
+          map(account => {
             safeCall(action.onSuccess);
 
             if ('targetRoute' in action) {
@@ -35,7 +35,7 @@ export class AccountEffects {
 
             return fromAccountActions.loginSuccess({ account });
           }),
-          catchError((error) => {
+          catchError(error => {
             safeCall(action.onError, error.error);
             return [fromAccountActions.loginFailed({ error })];
           }),
@@ -67,7 +67,7 @@ export class AccountEffects {
   loginFailed$ = createEffect(() =>
     this.actions.pipe(
       ofType(fromAccountActions.loginFailed),
-      map((action) =>
+      map(action =>
         fromAlertsActions.showAlert({
           alert: {
             message: action.error.error.statusCode

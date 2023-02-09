@@ -2,7 +2,7 @@ import { HttpParams } from '@angular/common/http';
 
 export function createParams(...objects: object[]): HttpParams {
   let paramsObject = {};
-  objects.forEach((object) => {
+  objects.forEach(object => {
     paramsObject = {
       ...paramsObject,
       ...object,

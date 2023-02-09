@@ -24,7 +24,7 @@ export class ShoeComponentDTO extends EntityDTO implements IShoeComponentDTO {
 
   @IsString()
   @IsNotEmpty()
-  @Validate((type) => componentTypes.includes(type))
+  @Validate(type => componentTypes.includes(type))
   @IsOptional({ groups: ['update'] })
   @Type(() => String)
   type: ComponentType;

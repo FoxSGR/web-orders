@@ -24,7 +24,7 @@ export class SeasonDTO implements ISeasonDTO {
   year: number;
 
   @IsNotEmpty()
-  @Validate((season) => !!seasonTypes[season])
+  @Validate(season => !!seasonTypes[season])
   @Type(() => String)
   seasons: SeasonType;
 }

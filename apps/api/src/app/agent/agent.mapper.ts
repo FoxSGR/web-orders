@@ -13,7 +13,7 @@ export class AgentMapper extends EntityMapper<IAgent, AgentDTO> {
   constructor(
     @Inject(forwardRef(() => ClientMapper))
     private clientMapper: ClientMapper,
-    private addressMapper: AddressMapper
+    private addressMapper: AddressMapper,
   ) {
     super();
   }
@@ -28,7 +28,7 @@ export class AgentMapper extends EntityMapper<IAgent, AgentDTO> {
 
   entityToResponse(agent: IAgent): Partial<AgentDTO> {
     // prevent overflow
-    agent.clients?.forEach((client) => delete client.agent);
+    agent.clients?.forEach(client => delete client.agent);
 
     return {
       ...super.entityToResponse(agent),

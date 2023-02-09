@@ -26,7 +26,7 @@ export abstract class EntityController<T extends IEntity, D> {
 
   public async find(
     user: IUser,
-    params: FindParams<T> = { owner: user }
+    params: FindParams<T> = { owner: user },
   ): Promise<Page<D>> {
     if (!this.hasPermission(user, 'findAll')) {
       throw new ForbiddenException();
@@ -37,7 +37,7 @@ export abstract class EntityController<T extends IEntity, D> {
     const page = await this.service.findPage(params);
     return {
       ...page,
-      items: page.items.map((entity) => this.toResponse(entity)) as D[],
+      items: page.items.map(entity => this.toResponse(entity)) as D[],
     };
   }
 
@@ -48,7 +48,7 @@ export abstract class EntityController<T extends IEntity, D> {
 
     const entity = await this.service.create(
       (await this.mapper.bodyToEntity(body, user)) as any,
-      user
+      user,
     );
 
     return this.toResponse(entity, 'full') as D;
@@ -62,7 +62,7 @@ export abstract class EntityController<T extends IEntity, D> {
     const entity = await this.service.update(
       id,
       (await this.mapper.bodyToEntity(body, user)) as any,
-      user
+      user,
     );
 
     return this.toResponse(entity, 'full') as D;
@@ -101,7 +101,7 @@ export abstract class EntityController<T extends IEntity, D> {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     type: 'findOne' | 'findAll' | 'create' | 'update' | 'delete',
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    id?: any
+    id?: any,
   ): boolean {
     return true;
   }

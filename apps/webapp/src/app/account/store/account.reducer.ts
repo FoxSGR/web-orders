@@ -12,7 +12,7 @@ export const initialAccountState: Account = { user: undefined };
  */
 export const accountReducer = createReducer<Account>(
   initialAccountState,
-  on(AccountActions.login, (_) => ({ user: undefined })),
+  on(AccountActions.login, _ => ({ user: undefined })),
   on(AccountActions.loginSuccess, (state, { account }) => account),
-  on(AccountActions.logout, (_) => ({ user: undefined })),
+  on(AccountActions.logout, _ => ({ user: undefined })),
 );

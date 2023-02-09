@@ -33,7 +33,7 @@ export class Agent implements IAgent {
   address?: Address;
 
   // not persisted
-  @OneToMany(() => Client, (client) => client.agent)
+  @OneToMany(() => Client, client => client.agent)
   clients?: Client[];
 
   @Column(() => OwnedEntity, { prefix: '' })

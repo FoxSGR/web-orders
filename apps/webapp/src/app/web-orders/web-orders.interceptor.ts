@@ -21,7 +21,7 @@ export class WebOrdersInterceptor implements HttpInterceptor {
   constructor(private router: Router, private store: Store<WebOrdersState>) {
     this.store
       .select(getAccount)
-      .subscribe((account) => (this.account = account));
+      .subscribe(account => (this.account = account));
   }
 
   /**
@@ -56,7 +56,7 @@ export class WebOrdersInterceptor implements HttpInterceptor {
         (event: HttpEvent<any>) => {
           return event;
         },
-        (err) => {
+        err => {
           if (err instanceof HttpErrorResponse) {
             switch (err.status) {
               case 401: {

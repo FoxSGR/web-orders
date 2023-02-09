@@ -20,7 +20,7 @@ export class ShoeModelComponent implements IShoeModelComponent {
   @PrimaryGeneratedColumn()
   id: Id;
 
-  @ManyToOne(() => ShoeModel, (model) => model.components)
+  @ManyToOne(() => ShoeModel, model => model.components)
   @JoinColumn({ name: 'modelId' })
   model: ShoeModel;
 

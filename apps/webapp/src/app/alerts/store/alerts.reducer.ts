@@ -29,10 +29,10 @@ export const alertsReducer = createReducer<AlertsState>(
   })),
   on(AlertActions.closeAlert, (state, { id }) => ({
     ...state,
-    collection: state.collection.filter((alert) => alert.id !== id),
+    collection: state.collection.filter(alert => alert.id !== id),
   })),
   on(AlertActions.closeAlertsWithPosition, (state, { position }) => ({
     ...state,
-    collection: state.collection.filter((alert) => alert.position !== position),
+    collection: state.collection.filter(alert => alert.position !== position),
   })),
 );

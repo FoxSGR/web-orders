@@ -19,12 +19,12 @@ export class SeedService extends CliService {
     this.logger.log('Starting to seed');
 
     const seederClasses = [UserSeeder, ColorSeeder];
-    const seeders: Seeder[] = seederClasses.map((clazz) =>
-      this._application.get(clazz)
+    const seeders: Seeder[] = seederClasses.map(clazz =>
+      this._application.get(clazz),
     );
 
     this.logger.log(
-      `Dropping and synchronizing database '${environment.database.database}'`
+      `Dropping and synchronizing database '${environment.database.database}'`,
     );
     await this.connection.synchronize(true);
 

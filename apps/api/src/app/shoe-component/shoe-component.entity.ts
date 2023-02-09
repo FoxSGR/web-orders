@@ -11,7 +11,7 @@ export class ShoeComponent implements IShoeComponent {
   id: number;
 
   @IsNotEmpty()
-  @Validate((type) => componentTypes.includes(type))
+  @Validate(type => componentTypes.includes(type))
   @Column({ type: 'enum', enum: componentTypes })
   type: ComponentType;
 

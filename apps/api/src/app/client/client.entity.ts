@@ -32,7 +32,7 @@ export class Client implements IClient {
   @JoinColumn()
   address: Address;
 
-  @ManyToOne(() => Agent, (agent) => agent.clients, { cascade: false })
+  @ManyToOne(() => Agent, agent => agent.clients, { cascade: false })
   @JoinColumn({ name: 'agentId' })
   agent: Agent;
 

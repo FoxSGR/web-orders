@@ -49,8 +49,8 @@ export class SampleListComponent extends BaseComponent implements OnInit {
     this.setPage(0);
     this.store
       .select(sampleSelectors.getPage)
-      .pipe(filter((page) => !!page))
-      .subscribe((page) => {
+      .pipe(filter(page => !!page))
+      .subscribe(page => {
         this.page = page as any;
         this.status = 'loaded';
       });

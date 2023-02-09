@@ -55,7 +55,7 @@ export class BaseViewComponent extends BaseComponent implements OnInit {
     // get the query params
     this.activatedRoute.queryParamMap
       .pipe(takeUntil(this.ngDestroyed$))
-      .subscribe((queryParams) => (this.queryParams = queryParams));
+      .subscribe(queryParams => (this.queryParams = queryParams));
 
     // check auth requirements
     this.checkAuth();
@@ -73,7 +73,7 @@ export class BaseViewComponent extends BaseComponent implements OnInit {
     this.store
       .select(getAccount)
       .pipe(takeUntil(this.ngDestroyed$))
-      .subscribe((account) => {
+      .subscribe(account => {
         if (account.user) {
           return;
         }

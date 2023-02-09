@@ -49,7 +49,7 @@ export class BaseComponent implements OnInit, OnDestroy {
 
   constructor(
     // inject only the injector so that subclasses only need to pass 1 parameter
-    injector: Injector
+    injector: Injector,
   ) {
     this.store = injector.get(Store);
     this.logger = injector.get(Logger);

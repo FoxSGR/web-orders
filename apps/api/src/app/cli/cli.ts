@@ -9,7 +9,7 @@ import { CliService } from './cli.service';
 const runCommand = async (
   application: INestApplicationContext,
   logger: Logger,
-  args: string[]
+  args: string[],
 ) => {
   const clazz = CliRegister.get(args[0]);
   if (!clazz) {
@@ -30,7 +30,7 @@ const bootstrap = async () => {
     await runCommand(
       application,
       logger,
-      process.argv.slice(2, process.argv.length)
+      process.argv.slice(2, process.argv.length),
     );
     await application.close();
     process.exit(0);

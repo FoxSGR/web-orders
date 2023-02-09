@@ -10,9 +10,9 @@ export class EntityEffects<T> {
   loadPage$ = createEffect(() =>
     this.actions.pipe(
       ofType(this.entityActions.loadPage),
-      switchMap((action) =>
+      switchMap(action =>
         this.service.findPage(action.params).pipe(
-          map((page) =>
+          map(page =>
             this.entityActions.pageLoaded({
               page,
             }),

@@ -29,7 +29,7 @@ export class AgentController extends EntityController<IAgent, AgentDTO> {
   @Get('/:id([0-9]+)')
   public async findOne(
     @CurrentUser() user: IUser,
-    @Param('id') id: Id
+    @Param('id') id: Id,
   ): Promise<AgentDTO | undefined> {
     return super.findOne(user, id);
   }
@@ -37,7 +37,7 @@ export class AgentController extends EntityController<IAgent, AgentDTO> {
   @Get()
   public async find(
     @CurrentUser() user: IUser,
-    @Query() params?: FindParams<IAgent>
+    @Query() params?: FindParams<IAgent>,
   ): Promise<Page<AgentDTO>> {
     return super.find(user, params);
   }
@@ -45,7 +45,7 @@ export class AgentController extends EntityController<IAgent, AgentDTO> {
   @Post()
   public async create(
     @CurrentUser() user: IUser,
-    @Body() body: AgentDTO
+    @Body() body: AgentDTO,
   ): Promise<AgentDTO> {
     return super.create(user, body);
   }
@@ -54,7 +54,7 @@ export class AgentController extends EntityController<IAgent, AgentDTO> {
   public async update(
     @CurrentUser() user: IUser,
     @Param('id') id: Id,
-    @Body() body: Partial<AgentDTO>
+    @Body() body: Partial<AgentDTO>,
   ): Promise<AgentDTO> {
     return super.update(user, id, body);
   }
@@ -62,7 +62,7 @@ export class AgentController extends EntityController<IAgent, AgentDTO> {
   @Delete('/:id([0-9]+)')
   public async delete(
     @CurrentUser() user: IUser,
-    @Param('id') id: Id
+    @Param('id') id: Id,
   ): Promise<AgentDTO> {
     return super.delete(user, id);
   }

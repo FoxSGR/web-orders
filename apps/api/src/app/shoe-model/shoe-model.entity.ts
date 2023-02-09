@@ -18,7 +18,7 @@ export class Season implements ISeason {
   year: number;
 
   @IsNotEmpty()
-  @Validate((type) => seasonTypes.includes(type))
+  @Validate(type => seasonTypes.includes(type))
   @Column({ type: 'enum', enum: seasonTypes })
   seasons: SeasonType;
 }
@@ -29,7 +29,7 @@ export class ShoeModel implements IShoeModel {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Validate((type) => shoeModelTypes.includes(type))
+  @Validate(type => shoeModelTypes.includes(type))
   @Column({ type: 'enum', enum: shoeModelTypes })
   type: ShoeModelType;
 
@@ -39,7 +39,7 @@ export class ShoeModel implements IShoeModel {
   @Column({ default: '[]', type: 'simple-json' })
   photos: IPhoto[];
 
-  @OneToMany(() => ShoeModelComponent, (component) => component.model, {
+  @OneToMany(() => ShoeModelComponent, component => component.model, {
     cascade: true,
     orphanedRowAction: 'delete',
   })

@@ -40,7 +40,7 @@ export class WOTabsComponent extends BaseViewComponent {
   constructor(
     private injector: Injector,
     private menuController: MenuController,
-    public platform: Platform
+    public platform: Platform,
   ) {
     super(injector);
   }

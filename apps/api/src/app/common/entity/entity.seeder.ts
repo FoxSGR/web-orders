@@ -9,7 +9,7 @@ export abstract class EntitySeeder<T> implements Seeder {
 
   protected constructor(
     private readonly entityClass: { new (): T },
-    private readonly repository: Repository<T>
+    private readonly repository: Repository<T>,
   ) {}
 
   async seed(): Promise<T[]> {
@@ -20,7 +20,7 @@ export abstract class EntitySeeder<T> implements Seeder {
     const entities = await this.constant();
 
     const generated: DeepPartial<T>[] = DataFactory.createForClass(
-      this.entityClass
+      this.entityClass,
     ).generate(10) as any;
     entities.push(...generated);
 
@@ -34,8 +34,8 @@ export abstract class EntitySeeder<T> implements Seeder {
 
     const created = await this.repository.save(entities as any[]);
 
-    created.forEach((entity) =>
-      this.logger.log(`Created '${entity.id} - ${entity[this.identifier()]}'`)
+    created.forEach(entity =>
+      this.logger.log(`Created '${entity.id} - ${entity[this.identifier()]}'`),
     );
 
     return created;

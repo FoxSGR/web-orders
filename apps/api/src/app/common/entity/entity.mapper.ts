@@ -4,7 +4,7 @@ import { EntityDTO } from './entity.dto';
 
 export abstract class EntityMapper<
   T extends IEntity,
-  D extends EntityDTO
+  D extends EntityDTO,
 > extends Mapper<T, D> {
   entityToResponse(input: T): Partial<D> {
     return {

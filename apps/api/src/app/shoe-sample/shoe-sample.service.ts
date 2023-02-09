@@ -9,7 +9,7 @@ import type { IUser } from '../user';
 @Injectable()
 export class ShoeSampleService extends EntityService<ShoeSample> {
   constructor(
-    @InjectRepository(ShoeSample) shoeSampleRepository: Repository<ShoeSample>
+    @InjectRepository(ShoeSample) shoeSampleRepository: Repository<ShoeSample>,
   ) {
     super(shoeSampleRepository, {
       name: 'shoe_sample',

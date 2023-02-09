@@ -9,4 +9,4 @@ export const getAccount = createFeatureSelector<Account>('account');
 /**
  * Selector to get the user.
  */
-export const getUser = createSelector(getAccount, (state) => state.user);
+export const getUser = createSelector(getAccount, state => state.user);

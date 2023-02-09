@@ -9,7 +9,7 @@ import { User } from './user.entity';
 export class UserService extends EntityService<User> {
   constructor(
     @InjectRepository(User)
-    repository: Repository<User>
+    repository: Repository<User>,
   ) {
     super(repository, { name: 'user', owned: false });
   }

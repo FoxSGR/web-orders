@@ -12,5 +12,5 @@ export const getAlerts = createFeatureSelector<AlertsState>('alerts');
 export const getAlertsWithPosition = createSelector(
   getAlerts,
   (state: AlertsState, { position }: { position: AlertPosition }) =>
-    state.collection.filter((alert) => alert.position === position),
+    state.collection.filter(alert => alert.position === position),
 );

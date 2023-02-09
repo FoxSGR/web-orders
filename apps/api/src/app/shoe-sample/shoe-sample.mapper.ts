@@ -23,7 +23,7 @@ export class ShoeSampleMapper extends EntityMapper<IShoeSample, ShoeSampleDTO> {
     private agentMapper: AgentMapper,
     private agentService: AgentService,
     private brandMapper: BrandMapper,
-    private brandService: BrandService
+    private brandService: BrandService,
   ) {
     super();
   }
@@ -34,7 +34,7 @@ export class ShoeSampleMapper extends EntityMapper<IShoeSample, ShoeSampleDTO> {
       sampleModel: await this.fieldToEntityAsync(
         this.modelMapper,
         user,
-        body.sampleModel
+        body.sampleModel,
       ),
       client: await this.find(this.clientService, user, body.client?.id),
       agent: await this.find(this.agentService, user, body.agent?.id),
@@ -47,7 +47,7 @@ export class ShoeSampleMapper extends EntityMapper<IShoeSample, ShoeSampleDTO> {
 
   entityToResponse(
     sample: IShoeSample,
-    type?: ResponseFormat
+    type?: ResponseFormat,
   ): Partial<ShoeSampleDTO> {
     return {
       ...super.entityToResponse(sample),
@@ -55,7 +55,7 @@ export class ShoeSampleMapper extends EntityMapper<IShoeSample, ShoeSampleDTO> {
       sampleModel: this.fieldToResponse(
         this.modelMapper,
         sample.sampleModel,
-        type
+        type,
       ),
       client: this.fieldToResponse(this.clientMapper, sample.client, type),
       agent: this.fieldToResponse(this.agentMapper, sample.agent, type),

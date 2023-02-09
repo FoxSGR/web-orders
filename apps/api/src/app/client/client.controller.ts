@@ -29,7 +29,7 @@ export class ClientController extends EntityController<IClient, ClientDTO> {
   @Get('/:id([0-9]+)')
   public async findOne(
     @CurrentUser() user: IUser,
-    @Param('id') id: Id
+    @Param('id') id: Id,
   ): Promise<ClientDTO | undefined> {
     return super.findOne(user, id);
   }
@@ -37,7 +37,7 @@ export class ClientController extends EntityController<IClient, ClientDTO> {
   @Get()
   public async find(
     @CurrentUser() user: IUser,
-    @Query() params?: FindParams<IClient>
+    @Query() params?: FindParams<IClient>,
   ): Promise<Page<ClientDTO>> {
     return super.find(user, params);
   }
@@ -45,7 +45,7 @@ export class ClientController extends EntityController<IClient, ClientDTO> {
   @Post()
   public async create(
     @CurrentUser() user: IUser,
-    @Body() body: ClientDTO
+    @Body() body: ClientDTO,
   ): Promise<ClientDTO> {
     return super.create(user, body);
   }
@@ -54,7 +54,7 @@ export class ClientController extends EntityController<IClient, ClientDTO> {
   public async update(
     @CurrentUser() user: IUser,
     @Param('id') id: Id,
-    @Body() body: Partial<ClientDTO>
+    @Body() body: Partial<ClientDTO>,
   ): Promise<ClientDTO> {
     return super.update(user, id, body);
   }
@@ -62,7 +62,7 @@ export class ClientController extends EntityController<IClient, ClientDTO> {
   @Delete('/:id([0-9]+)')
   public async delete(
     @CurrentUser() user: IUser,
-    @Param('id') id: Id
+    @Param('id') id: Id,
   ): Promise<ClientDTO> {
     return super.delete(user, id);
   }
