@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+
+import { IAuthResponse } from '@web-orders/api-interfaces';
 import { Account } from './store/account.types';
 import { environment } from '../../environments/environment';
 
@@ -21,17 +23,17 @@ export class AccountService {
    */
   login(username: string, password: string): Observable<Account> {
     return this.http
-      .post(`${environment.apiUrl}/auth/login`, {
-        username,
+      .post<IAuthResponse>(`${environment.apiUrl}/auth/login`, {
+        email: username,
         password,
       })
       .pipe(
-        map((data: any) => ({
+        map((data: IAuthResponse) => ({
           user: {
-            username: data.user.username,
+            username: data.user.email,
             token: data.token,
           },
-        })),
+        }))
       );
   }
 }

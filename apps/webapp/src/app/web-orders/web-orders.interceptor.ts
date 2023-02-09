@@ -33,7 +33,7 @@ export class WebOrdersInterceptor implements HttpInterceptor {
    */
   intercept(
     req: HttpRequest<any>,
-    next: HttpHandler,
+    next: HttpHandler
   ): Observable<HttpEvent<any>> {
     if (!req.url.startsWith(environment.apiUrl) || req.url.endsWith('/auth')) {
       return next.handle(req);
@@ -60,14 +60,16 @@ export class WebOrdersInterceptor implements HttpInterceptor {
           if (err instanceof HttpErrorResponse) {
             switch (err.status) {
               case 401: {
-                const encoded = encodeURIComponent(this.router.url);
+                const urlTree = this.router.parseUrl(this.router.url);
+                delete urlTree.queryParams['callback'];
+                const encoded = encodeURIComponent(urlTree.toString());
                 this.router.navigate(['login', { callback: encoded }]);
                 break;
               }
             }
           }
-        },
-      ),
+        }
+      )
     );
   }
 }

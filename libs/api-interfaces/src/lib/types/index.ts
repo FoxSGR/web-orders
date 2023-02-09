@@ -1,5 +1,6 @@
 export * from './address.types';
 export * from './agent.types';
+export * from './auth.types';
 export * from './brand.types';
 export * from './client.types';
 export * from './color.types';

@@ -1,2 +1,2 @@
-export * from './wo-menu/wo-menu.component';
-export * from './wo-tabs/wo-tabs.component';
+export * from './wo-container/wo-container.component';
+export * from './wo-main/wo-main.component';

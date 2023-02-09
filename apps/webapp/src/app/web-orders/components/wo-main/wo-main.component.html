@@ -1,0 +1,36 @@
+<ion-split-pane content-id="main" [disabled]="(user$ | async) === undefined">
+  <ion-menu content-id="main">
+    <ion-header>
+      <ion-toolbar class="ion-translucent" translucent>
+        <ion-title>Menu</ion-title>
+
+        <!-- Menu Button -->
+        <ion-buttons slot="start" class="ion-hide-lg-up">
+          <ion-menu-button
+            [autoHide]="false"
+            (click)="toggleMenu()"
+          ></ion-menu-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-list>
+        <ion-item
+          *ngFor="let item of menuItems"
+          (click)="onItemClick(item)"
+          class="ion-activatable"
+        >
+          <ion-ripple-effect class="wo-menu-ripple"></ion-ripple-effect>
+          <ion-icon
+            [name]="item.icon"
+            class="wo-menu-icon"
+            slot="start"
+          ></ion-icon>
+          <ion-label>{{ item.label | translate }}</ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-menu>
+
+  <ion-router-outlet id="main"></ion-router-outlet>
+</ion-split-pane>

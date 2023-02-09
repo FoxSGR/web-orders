@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { WOTabsComponent } from './components';
+import { WOContainerComponent } from './components';
 
 const routes: Routes = [
   {
@@ -11,7 +11,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    component: WOTabsComponent,
+    component: WOContainerComponent,
     children: [
       {
         path: 'home',

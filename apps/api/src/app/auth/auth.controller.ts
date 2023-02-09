@@ -7,6 +7,7 @@ import {
   Body,
 } from '@nestjs/common';
 
+import { IAuthResponse, IUserDTO } from '@web-orders/api-interfaces';
 import { JwtAuthGuard, LocalAuthGuard } from './guard';
 import { AuthService } from './auth.service';
 import { LoginDTO } from './auth.dto';
@@ -21,11 +22,11 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Body() dto: LoginDTO) {
+  async login(@Body() dto: LoginDTO): Promise<IAuthResponse> {
     const data = await this.authService.login(dto.email, dto.password);
     return {
       token: data.token,
-      user: this.userMapper.entityToResponse(data.user),
+      user: this.userMapper.entityToResponse(data.user) as IUserDTO,
     };
   }
 
