@@ -4,6 +4,7 @@ import {
   Injector,
   OnDestroy,
   OnInit,
+  ViewContainerRef,
 } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute } from '@angular/router';
@@ -51,6 +52,12 @@ export class BaseComponent implements OnInit, OnDestroy {
   protected readonly cdr: ChangeDetectorRef;
 
   /**
+   * View container for quicker queries.
+   * @protected
+   */
+  protected readonly vcr: ViewContainerRef;
+
+  /**
    * Comparator to keep the original order of items in the config.
    */
   originalOrder = () => 0;
@@ -62,7 +69,7 @@ export class BaseComponent implements OnInit, OnDestroy {
    */
   trackById = (_index: number, item: any) => item.id;
   trackByKey = (_index: number, item: any) => item.key;
-  trackByUid = (_index: number, item: any) => item._uid;
+  trackByUid = (_index: number, item: any) => item._uid || item.uid;
 
   constructor(
     // inject only the injector so that subclasses only need to pass 1 parameter
@@ -72,6 +79,7 @@ export class BaseComponent implements OnInit, OnDestroy {
     this.logger = injector.get(Logger);
     this.translate = injector.get(TranslateService);
     this.cdr = injector.get(ChangeDetectorRef);
+    this.vcr = injector.get(ViewContainerRef);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function,@angular-eslint/no-empty-lifecycle-method

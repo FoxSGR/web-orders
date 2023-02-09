@@ -179,6 +179,7 @@ export const sampleWizard: EntityFormWizard<ShoeSample> = {
             mimeType: 'image/*',
             multiple: true,
             maxSizeMB: 5,
+            hasDefault: true,
           },
           notes: {
             type: 'text-area',

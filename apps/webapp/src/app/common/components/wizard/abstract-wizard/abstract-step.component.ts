@@ -73,23 +73,25 @@ export abstract class AbstractStepComponent<T extends Entity>
         this.store.dispatch(
           entityActions(this.entityConfig.entityType).updateWizard({
             id: this.id,
-            wizardState: cloneDeep(this.state),
+            wizardState: this.state,
           }),
         );
       });
 
-    this.store
-      .select(entitySelectors(this.entityConfig.entityType).getWizard(this.id))
-      .pipe(takeUntil(this.ngDestroyed$))
-      .subscribe(state => {
-        if (this.stateUpdated) {
-          this.stateUpdated = false;
-          return;
-        }
-
-        this.state = cloneDeep(state);
-        this.cdr.detectChanges();
-      });
+    // this.store
+    //   .select(entitySelectors(this.entityConfig.entityType).getWizard(this.id))
+    //   .pipe(takeUntil(this.ngDestroyed$))
+    //   .subscribe(state => {
+    //     if (this.stateUpdated) {
+    //       this.stateUpdated = false;
+    //       return;
+    //     }
+    //
+    //     console.log(cloneDeep(state))
+    //
+    //     this.state = state;
+    //     this.cdr.detectChanges();
+    //   });
   }
 
   /**
@@ -105,9 +107,7 @@ export abstract class AbstractStepComponent<T extends Entity>
         .pipe(take(1)),
     );
 
-    if (state) {
-      state = cloneDeep(state);
-    } else {
+    if (!state) {
       state = {
         values: {},
       };

@@ -27,7 +27,15 @@ import { WebOrdersModule } from './web-orders/web-orders.module';
     AppRoutingModule,
     BrowserModule,
     TranslateModule.forRoot(translate),
-    StoreModule.forRoot({}),
+    StoreModule.forRoot(
+      {},
+      {
+        runtimeChecks: {
+          strictStateImmutability: false,
+          strictActionImmutability: false,
+        },
+      },
+    ),
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
       logOnly: environment.production, // Restrict extension to log-only mode

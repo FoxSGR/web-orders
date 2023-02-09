@@ -101,6 +101,7 @@ export class SmartFormMultipleComponent
     this.value!.splice(event.detail.to, 0, old);
     event.detail.complete();
 
+    this.onChange();
     this.updateCanAdd();
   }
 

@@ -1,0 +1,25 @@
+.wo-thumbnail-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wo-thumbnail-img {
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3), 0 3px 6px rgba(0, 0, 0, 0.3);
+  }
+}
+
+.wo-thumbnail-img, .wo-photo-modal img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+:host ion-card {
+  margin: 0;
+}

@@ -25,27 +25,47 @@
 
 <div *ngIf="value!.files.length > 0">
   <ion-list class="sf-file-list">
-    <ion-reorder-group [disabled]="false">
+    <ion-reorder-group
+      [disabled]="false"
+      (ionItemReorder)="handleReorder($any($event))"
+    >
       <ion-item
-        *ngFor="let file of value!.files"
+        *ngFor="let fileData of value!.files; trackBy: trackByUid"
         class="sf-file-list-file"
         lines="full"
+        [attr.data-uid]="fileData.uid"
       >
+        <wo-thumbnail
+          class="sf-file-thumbnail"
+          #thumbnail
+          [ngStyle]="{
+            display: thumbnail.loaded ? 'block' : 'none'
+          }"
+          [name]="fileData.name"
+          [file]="
+            isImage(getFile(fileData.uid)?.type || '')
+              ? getFile(fileData.uid)
+              : undefined
+          "
+        ></wo-thumbnail>
         <ion-icon
           slot="start"
           color="medium"
           name="image"
           class="sf-file-list-icon"
+          [ngStyle]="{
+            display: thumbnail.loaded ? 'none' : 'block'
+          }"
         ></ion-icon>
         <ion-label class="sf-file-name">
-          {{ file.name }}
+          {{ fileData.name }}
         </ion-label>
         <div slot="end" class="flex">
           <ion-reorder *ngIf="value!.files.length > 1">
             <ion-icon name="menu" color="medium"></ion-icon>
           </ion-reorder>
           <ion-button
-            (click)="removeFile(file)"
+            (click)="removeFile(fileData.uid)"
             shape="circle"
             fill="clear"
             size="medium"

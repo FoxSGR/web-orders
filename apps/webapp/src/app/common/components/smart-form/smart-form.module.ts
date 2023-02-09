@@ -11,6 +11,7 @@ import { DatePipe } from '../../pipes';
 
 import * as components from './components';
 import { ColorIndicatorComponent } from '../elements';
+import { ThumbnailComponent } from '../thumbnail/thumbnail.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { ColorIndicatorComponent } from '../elements';
     SelectSearchComponent,
     DatePipe,
     ColorIndicatorComponent,
+    ThumbnailComponent,
   ],
 })
 export class SmartFormModule {}

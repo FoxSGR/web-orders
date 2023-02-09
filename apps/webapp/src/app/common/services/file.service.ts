@@ -1,12 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as uuid from 'uuid';
 
-type FileState = 'toUpload' | 'stored';
-
-interface FileData {
-  state: 'toUpload' | 'stored';
-  file: File;
-}
+import { FileData, FileState } from '../types';
 
 /**
  * Service to manage file uploads.
@@ -20,17 +15,30 @@ export class FileService {
    */
   private files: { [key: string]: FileData } = {};
 
-  addFile(file: File, state: FileState): string {
+  addFile(file: File, state: FileState): FileData {
     const uid = uuid.v4();
-    this.files[uid] = {
-      state,
-      file
-    };
 
-    return uid;
+    const fileData = {
+      state,
+      file,
+      uid,
+      name: file.name,
+    };
+    this.files[uid] = fileData;
+
+    return fileData;
   }
 
-  unloadFile(uid: string) {
-    delete this.files[uid]
+  getData(uid: string): FileData {
+    return this.files[uid];
+  }
+
+  filesEqual(a: File, b: File) {
+    return (
+      a === b ||
+      (a.name === b.name &&
+        a.size === b.size &&
+        a.lastModified === b.lastModified)
+    );
   }
 }

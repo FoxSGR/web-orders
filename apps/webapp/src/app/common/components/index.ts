@@ -4,5 +4,6 @@ export * from './entity-list';
 export * from './wizard';
 export * from './smart-form/smart-form.module';
 export * from './entity-preview/entity-preview.types';
+export * from './thumbnail/thumbnail.component';
 
 export * from './elements';

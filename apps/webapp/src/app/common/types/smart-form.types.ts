@@ -2,6 +2,7 @@ import { EntityListConfig } from '../components/entity-list/entity-list.types';
 import { Entity } from '../models/entity';
 import { WOIconItemMap, WOItemMap } from '../wo-common.types';
 import { EntityType } from './entity.types';
+import { FileData } from './file.types';
 
 interface ISmartFormItem<T> {
   label?: string;
@@ -81,8 +82,7 @@ export interface SmartFormChoices<T extends string>
 }
 
 export interface SmartFormFiles {
-  files: File[];
-  default?: File;
+  files: FileData[];
 }
 
 export interface SmartFormFileUpload extends ISmartFormItem<any> {
@@ -90,6 +90,7 @@ export interface SmartFormFileUpload extends ISmartFormItem<any> {
   mimeType: string;
   multiple: boolean;
   maxSizeMB: number;
+  hasDefault?: boolean;
 }
 
 export interface SmartFormPhone {
