@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { debounceTime, takeUntil } from 'rxjs';
 
 import { SmartFormInfoBox } from '../../../types';
+import { WOItemMap } from '../../../wo-common.types';
 import { SmartFormAbstractItemComponent } from '../smart-form-abstract-item.component';
 
 @Component({
@@ -14,7 +15,7 @@ export class SmartFormInfoBoxComponent
   extends SmartFormAbstractItemComponent<void, SmartFormInfoBox>
   implements OnInit
 {
-  result: any = {};
+  result: WOItemMap = {};
 
   override ngOnInit() {
     super.ngOnInit();

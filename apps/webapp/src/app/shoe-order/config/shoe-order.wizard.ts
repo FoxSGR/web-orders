@@ -77,8 +77,15 @@ export const shoeOrderWizard: EntityFormWizard = {
                 }
               }
 
-              console.log(totalPairs);
-              return { totalPairs };
+              // price per pair
+              // total price
+
+              return {
+                totalPairs: {
+                  label: 'str.shoeOrder.common.totalPairs',
+                  value: totalPairs,
+                },
+              };
             },
           },
         },

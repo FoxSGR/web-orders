@@ -116,7 +116,7 @@ export interface SmartFormMap extends ISmartFormItem<object> {
 
 export interface SmartFormInfoBox extends ISmartFormItem<void> {
   type: 'info-box';
-  execute: (state: SmartFormState) => object;
+  execute: (state: SmartFormState) => WOItemMap;
   debounce?: number;
 }
 

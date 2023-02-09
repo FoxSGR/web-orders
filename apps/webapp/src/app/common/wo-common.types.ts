@@ -14,7 +14,12 @@ export interface WOIconItem extends AbstractWOItem {
   icon: string;
 }
 
-export type WOItem = AbstractWOItem | WOIconItem;
+export interface WOValueItem extends AbstractWOItem {
+  icon?: string;
+  value: any;
+}
+
+export type WOItem = AbstractWOItem | WOIconItem | WOValueItem;
 
 export type WOItemMap<T extends string = string> = { [key in T]: WOItem };
 export type WOIconItemMap<T extends string = string> = {

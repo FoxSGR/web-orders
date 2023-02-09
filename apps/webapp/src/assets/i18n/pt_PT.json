@@ -149,7 +149,8 @@
         "order": "Encomenda",
         "requestedAt": "Pedida em",
         "dateAsked": "Pedida em",
-        "dateDelivery": "Entregue em"
+        "dateDelivery": "Entregue em",
+        "totalPairs": "Total de pares"
       },
       "list": {
         "header": "Encomendas"
