@@ -63,6 +63,12 @@ export class ShoeOrder implements IShoeOrder {
   @Column({ default: '{}', type: 'simple-json' })
   sizes: ShoeSizes;
 
+  @Factory((_, ctx) =>
+    Object.values(ctx['sizes'] as ShoeSizes).reduce((a, b) => a + b, 0),
+  )
+  @Column({ default: 0 })
+  totalPairs: number;
+
   @Factory(commonColumns.ownedBase.seed)
   @Column(() => OwnedEntity, commonColumns.ownedBase.column)
   base: OwnedEntity;

@@ -4,9 +4,9 @@
   </h4>
 </ion-text>
 
-<div class="sf-info-box">
-  <ion-text>
-    <p *ngFor="let item of result | keyvalue: originalOrder" class="m0">
+<div class="sf-info-box flex center-everything">
+  <ion-text class="w100">
+    <p *ngFor="let item of result | keyvalue: originalOrder">
       <span style="font-weight: 500">
         {{ item.value.label | translate }}:
       </span>

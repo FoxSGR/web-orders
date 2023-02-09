@@ -35,6 +35,8 @@ export class ShoeOrderDTO extends EntityDTO implements IShoeOrderDTO {
   @IsOptional()
   sizes?: ShoeSizes;
 
+  totalPairs: number;
+
   @IsString()
   @IsOptional()
   @Type(() => String)

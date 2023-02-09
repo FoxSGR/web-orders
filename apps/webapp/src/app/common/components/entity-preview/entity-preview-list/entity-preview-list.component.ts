@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { Observable } from 'rxjs';
+import { firstValueFrom, Observable, take } from 'rxjs';
+import { get } from 'lodash';
 
 import {
   EntityPreviewColumns,
@@ -54,5 +55,21 @@ export class EntityPreviewListComponent<T extends Entity> {
 
   fileUrl(fileData: FileData): string {
     return this.fileService.buildUrl(fileData);
+  }
+
+  async onClickItem(item: EntityPreviewItem) {
+    if (!item.preview) {
+      return;
+    }
+
+    let id = item.preview.id;
+    if (item.preview.idProp) {
+      id = get(this.model, item.preview.idProp);
+    }
+    if (!id) {
+      return;
+    }
+
+    this.previewService.previewEntity(id, item.preview.type, true);
   }
 }

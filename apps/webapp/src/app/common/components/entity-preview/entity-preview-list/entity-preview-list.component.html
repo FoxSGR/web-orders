@@ -10,6 +10,8 @@
         <ion-item
           class="ion-no-padding transparent wo-entity-preview-item"
           *ngIf="item.type !== 'photo'; else photo"
+          [attr.button]="item.preview ? 'true' : null"
+          (click)="onClickItem(item)"
         >
           <ion-icon
             [name]="icon(item)"

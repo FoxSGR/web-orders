@@ -5,7 +5,6 @@ import {
   ShoeModelComponent,
   ShoeSample,
 } from '../../common';
-import { shoeComponentConstants } from '../../shoe-component';
 import { componentTypeConfigs } from '@web-orders/api-interfaces';
 
 export const samplePreview: (
@@ -33,16 +32,28 @@ export const samplePreview: (
           icon: 'bag',
           label: 'str.brand.common.brand',
           value: 'brand.name',
+          preview: {
+            type: 'brand',
+            idProp: 'brand.id',
+          },
         },
         {
           icon: 'people',
           label: 'str.client.common.client',
           value: 'client.name',
+          preview: {
+            type: 'client',
+            idProp: 'client.id',
+          },
         },
         {
           icon: 'hand-left',
           label: 'str.agent.common.agent',
           value: 'agent.name',
+          preview: {
+            type: 'agent',
+            idProp: 'agent.id',
+          },
         },
       ],
     },
@@ -85,6 +96,12 @@ export const samplePreview: (
           label: 'str.common.deadline',
           value: 'deadline',
         },
+        {
+          icon: 'reader',
+          label: 'str.common.notes',
+          value: 'notes',
+          type: 'text',
+        },
       ],
     },
     {
@@ -108,17 +125,6 @@ export const samplePreview: (
           )
           ?.slice(0, print ? 1 : entity.sampleModel.photos.length) || [],
       emptyText: 'str.sample.preview.photos.empty',
-    },
-    {
-      columns: 1,
-      items: [
-        {
-          icon: 'reader',
-          label: 'str.common.notes',
-          value: 'notes',
-          type: 'text',
-        },
-      ],
     },
     {
       header: {
@@ -211,5 +217,9 @@ const buildComponentItem = (
     },
     label: componentConfig.label + indexSuffix,
     valueType: 'value',
+    preview: {
+      type: 'shoe-component',
+      id: shoeModelComponent.component.id,
+    },
   } as EntityPreviewItem;
 };

@@ -9,8 +9,7 @@ export class ShoeOrder extends Entity implements IShoeOrderDTO {
   dateDelivery: Date;
   deadline: Date;
   notes: string;
-
-  totalPairs?: number;
+  totalPairs: number;
 
   constructor(order: IShoeOrderDTO) {
     super(order);
@@ -20,12 +19,5 @@ export class ShoeOrder extends Entity implements IShoeOrderDTO {
         ['sample', ShoeSample as any], // for some reason "as any" fixed the typescript error here
       ]),
     );
-
-    if (this.sizes) {
-      this.totalPairs = 0;
-      for (const amount of Object.values(this.sizes)) {
-        this.totalPairs += amount;
-      }
-    }
   }
 }

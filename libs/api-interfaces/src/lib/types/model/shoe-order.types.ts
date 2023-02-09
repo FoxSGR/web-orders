@@ -16,4 +16,5 @@ export interface IShoeOrderDTO extends IEntityDTO {
   dateDelivery?: Date;
   notes?: string;
   sizes?: ShoeSizes;
+  totalPairs: number;
 }

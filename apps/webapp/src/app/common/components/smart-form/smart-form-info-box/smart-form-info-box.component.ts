@@ -23,7 +23,7 @@ export class SmartFormInfoBoxComponent
     this.change
       .pipe(
         takeUntil(this.ngDestroyed$),
-        debounceTime(this.definition.debounce || 0),
+        debounceTime(this.definition.debounce || 1000),
       )
       .subscribe(() => this.calculateResult());
 
@@ -31,6 +31,7 @@ export class SmartFormInfoBoxComponent
   }
 
   private calculateResult() {
-    this.result = this.definition.execute(this.state);
+    this.result = this.definition.execute(this.state, this.injector);
+    this.cdr.detectChanges();
   }
 }

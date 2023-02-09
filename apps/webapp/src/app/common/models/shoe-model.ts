@@ -54,14 +54,6 @@ export class ShoeModel extends Entity implements IShoeModelDTO {
       model,
       new Map([['components', ShoeModelComponent]]),
     );
-  }
-
-  sortComponents() {
-    this.components?.sort(
-      (c1, c2) =>
-        ShoeModel.ComponentOrder.indexOf(c1.component.type) -
-        ShoeModel.ComponentOrder.indexOf(c2.component.type),
-    );
 
     // Sort the photos so that the default becomes the first
     this.photos?.sort((a, b) => +(b.default || 0) - +(a.default || 0));
@@ -90,5 +82,15 @@ export class ShoeModel extends Entity implements IShoeModelDTO {
         ShoeModel.ComponentOrder.indexOf(g1.type) -
         ShoeModel.ComponentOrder.indexOf(g2.type),
     );
+  }
+
+  calculatePrice(): number {
+    let price = 0;
+
+    for (const component of this.components || []) {
+      price += component.price || 0;
+    }
+
+    return price;
   }
 }

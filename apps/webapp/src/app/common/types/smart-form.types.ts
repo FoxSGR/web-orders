@@ -1,3 +1,5 @@
+import { Injector } from '@angular/core';
+
 import { EntityListConfig } from '../components/entity-list/entity-list.types';
 import { Entity } from '../models/entity';
 import { WOIconItemMap, WOItemMap } from '../wo-common.types';
@@ -76,6 +78,7 @@ export interface SmartFormEntitySelect<T extends Entity[]>
   config: Partial<EntityListConfig<T[number]>>;
   mode?: 'accordion' | 'modal';
   modalHeader?: string;
+  loadOnSelect?: boolean;
 }
 
 export interface SmartFormChoices<T extends string>
@@ -116,7 +119,7 @@ export interface SmartFormMap extends ISmartFormItem<object> {
 
 export interface SmartFormInfoBox extends ISmartFormItem<void> {
   type: 'info-box';
-  execute: (state: SmartFormState) => WOItemMap;
+  execute: (state: SmartFormState, injector: Injector) => WOItemMap;
   debounce?: number;
 }
 

@@ -5,6 +5,10 @@ $borderColor: var(
 .sf-info-box {
   border-radius: 5px;
   border: solid 0.5px $borderColor;
-  min-height: 150px;
-  padding: 20px;
+  padding: 10px 20px;
+
+  p {
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
 }

@@ -48,6 +48,7 @@ export class ShoeOrderMapper extends EntityMapper<IShoeOrder, ShoeOrderDTO> {
       dateDelivery: order.dateDelivery,
       notes: order.notes,
       sizes: order.sizes,
+      totalPairs: order.totalPairs,
     };
   }
 }

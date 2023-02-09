@@ -14,6 +14,7 @@ import { Entity } from '../../../models/entity';
 import { adjustModalHeight, isInView } from '../../../util';
 import { EntityListConfig } from '../../entity-list/entity-list.types';
 import { EntityConfigRegister } from '../../../entity-config.register';
+import { timeout } from 'rxjs';
 
 @Component({
   selector: 'wo-smart-form-entity-select',
@@ -81,6 +82,18 @@ export class SmartFormEntitySelectComponent
         accordion.value = undefined;
       } else if (this.modal) {
         this.modal.dismiss();
+      }
+
+      if (this.definition.loadOnSelect) {
+        const service = this.injector.get(this.entityConfig.serviceClass);
+        service
+          .findById(selected[0].id)
+          .pipe(timeout(3000))
+          .subscribe(entity => {
+            this.value![0] = entity;
+            console.log(entity);
+            this.onChange();
+          });
       }
     }
 

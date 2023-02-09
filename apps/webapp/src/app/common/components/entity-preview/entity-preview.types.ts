@@ -1,7 +1,9 @@
 import { Observable } from 'rxjs';
 
+import { Id } from '@web-orders/api-interfaces';
 import { Entity } from '../../models/entity';
 import { WOItemMap } from '../../wo-common.types';
+import { EntityType } from '../../types';
 
 export interface EntityPreviewItem<T extends Entity = Entity> {
   value: string | object | Date | (() => Observable<any> | any);
@@ -11,6 +13,11 @@ export interface EntityPreviewItem<T extends Entity = Entity> {
   type?: 'simple' | 'text' | 'color' | 'photo';
   hidden?: (entity: Entity) => boolean;
   choices?: WOItemMap;
+  preview?: {
+    type: EntityType;
+    idProp?: string;
+    id?: Id;
+  };
 }
 
 export type EntityPreviewColumns = 1 | 2 | 3 | 4;
