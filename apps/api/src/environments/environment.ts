@@ -13,6 +13,6 @@ export const environment = {
   },
   admin: {
     email: 'admin@test.com',
-    password: 'admin'
-  }
+    password: 'admin',
+  },
 };

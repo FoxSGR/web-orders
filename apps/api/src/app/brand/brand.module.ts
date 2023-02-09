@@ -7,9 +7,7 @@ import { BrandMapper } from './brand.mapper';
 import { BrandService } from './brand.service';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Brand]),
-  ],
+  imports: [TypeOrmModule.forFeature([Brand])],
   exports: [BrandMapper, BrandService],
   providers: [BrandMapper, BrandService],
   controllers: [BrandController],

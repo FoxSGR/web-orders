@@ -12,7 +12,7 @@ export abstract class EntityMapper<
       createdAt: input.base?.createdAt,
       updatedAt: input.base?.updatedAt,
       deletedAt: input.base?.deletedAt,
-      owner: (input as any).base?.owner?.id
+      owner: (input as any).base?.owner?.id,
     } as any;
   }
 }
