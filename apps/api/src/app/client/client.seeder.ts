@@ -2,18 +2,18 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { Color } from './color.entity';
+import { Client } from './client.entity';
 import { EntitySeeder } from '../common/entity';
 import { EntitySeederService } from '../common';
 
 @Injectable()
 @EntitySeederService()
-export class ColorSeeder extends EntitySeeder<Color> {
-  constructor(@InjectRepository(Color) repository: Repository<Color>) {
-    super(Color, repository);
+export class ClientSeeder extends EntitySeeder<Client> {
+  constructor(@InjectRepository(Client) repository: Repository<Client>) {
+    super(Client, repository);
   }
 
-  protected identifier(): keyof Color {
+  protected identifier(): keyof Client {
     return 'name';
   }
 }

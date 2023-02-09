@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { INestApplicationContext, Logger } from '@nestjs/common';
 
 import { AppModule } from '../app.module';
-import { SeedService } from './seed.service';
+import { SeedService } from '../common/service/seed.service';
 import { CliRegister } from './cli.register';
 import { CliService } from './cli.service';
 

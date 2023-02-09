@@ -17,7 +17,7 @@ import { ShoeSample, ShoeSampleModule } from './shoe-sample';
 import { User, UserModule } from './user';
 
 import { AppController } from './app.controller';
-import { SeedService } from './cli/seed.service';
+import { SeedService } from './common/service/seed.service';
 
 @Module({
   imports: [

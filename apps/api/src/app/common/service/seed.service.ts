@@ -2,11 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { Connection } from 'typeorm';
 import { Seeder } from 'nestjs-seeder';
 
-import { environment } from '../../environments/environment';
-import { Cli } from './cli.decorator';
-import { CliService } from './cli.service';
-import { UserSeeder } from '../user';
-import { ColorSeeder } from '../color';
+import { environment } from '../../../environments/environment';
+import { Cli, entitySeeders } from '../decorators';
+import { CliService } from '../../cli/cli.service';
 
 @Cli('seed')
 @Injectable()
@@ -18,8 +16,7 @@ export class SeedService extends CliService {
   async run() {
     this.logger.log('Starting to seed');
 
-    const seederClasses = [UserSeeder, ColorSeeder];
-    const seeders: Seeder[] = seederClasses.map(clazz =>
+    const seeders: Seeder[] = entitySeeders.map(clazz =>
       this._application.get(clazz),
     );
 

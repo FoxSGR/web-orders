@@ -49,5 +49,5 @@ export abstract class EntitySeeder<T> implements Seeder {
     return Promise.resolve([]);
   }
 
-  protected abstract identifier(): string;
+  protected abstract identifier(): keyof T;
 }
