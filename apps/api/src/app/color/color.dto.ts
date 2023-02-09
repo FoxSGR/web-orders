@@ -8,12 +8,10 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
-import { Id } from '../common';
+import { IColorDTO } from '@web-orders/api-interfaces';
+import { EntityDTO } from '../common/entity/entity.dto';
 
-export class ColorDTO {
-  @IsOptional()
-  id: Id;
-
+export class ColorDTO extends EntityDTO implements IColorDTO {
   @IsNotEmpty()
   @IsString()
   @IsOptional({ groups: ['update'] })

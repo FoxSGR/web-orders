@@ -7,14 +7,11 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
-import { Id } from '../common';
 import { ClientDTO } from '../client/client.dto';
 import { EntityDTO } from '../common/entity/entity.dto';
+import { AddressDTO } from '../address';
 
 export class AgentDTO extends EntityDTO {
-  @IsOptional()
-  id: Id;
-
   @IsString()
   @IsNotEmpty()
   @IsOptional({ groups: ['update'] })
@@ -33,5 +30,5 @@ export class AgentDTO extends EntityDTO {
 
   @ValidateNested()
   @IsOptional({ groups: ['update'] })
-  address: AgentDTO;
+  address: AddressDTO;
 }

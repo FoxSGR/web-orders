@@ -8,10 +8,14 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
-import { ComponentType, componentTypes } from './shoe-component.types';
+import {
+  ComponentType,
+  componentTypes,
+  IShoeComponentDTO,
+} from '@web-orders/api-interfaces';
 import { EntityDTO } from '../common/entity/entity.dto';
 
-export class ShoeComponentDTO extends EntityDTO {
+export class ShoeComponentDTO extends EntityDTO implements IShoeComponentDTO {
   @IsString()
   @IsNotEmpty()
   @IsOptional({ groups: ['update'] })

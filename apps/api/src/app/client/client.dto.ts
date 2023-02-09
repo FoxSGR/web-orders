@@ -6,15 +6,12 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
-import { Id } from '../common';
+import { IClientDTO } from '@web-orders/api-interfaces';
 import { AddressDTO } from '../address';
 import { AgentDTO } from '../agent/agent.dto';
 import { EntityDTO } from '../common/entity/entity.dto';
 
-export abstract class ClientDTO extends EntityDTO {
-  @IsOptional()
-  id: Id;
-
+export abstract class ClientDTO extends EntityDTO implements IClientDTO {
   @IsString()
   @IsNotEmpty()
   @IsOptional({ groups: ['update'] })

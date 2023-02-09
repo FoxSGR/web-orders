@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 
-import { Mapper } from '../common';
 import { IColor } from './color.types';
 import { ColorDTO } from './color.dto';
+import { EntityMapper } from '../common/entity/entity.mapper';
 
 @Injectable()
-export class ColorMapper extends Mapper<IColor, ColorDTO> {
+export class ColorMapper extends EntityMapper<IColor, ColorDTO> {
   bodyToEntity(body: ColorDTO): Partial<IColor> {
     return {
       name: body.name,
@@ -15,9 +15,9 @@ export class ColorMapper extends Mapper<IColor, ColorDTO> {
     };
   }
 
-  entityToResponse(color: IColor): ColorDTO {
+  entityToResponse(color: IColor): Partial<ColorDTO> {
     return {
-      id: color.id,
+      ...super.entityToResponse(color),
       name: color.name,
       red: color.red,
       green: color.green,

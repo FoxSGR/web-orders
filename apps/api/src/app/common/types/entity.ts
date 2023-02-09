@@ -1,6 +1,5 @@
+import { Id } from '@web-orders/api-interfaces';
 import type { IUser } from '../../user';
-
-export type Id = number;
 
 export interface IEntity {
   id: Id;
