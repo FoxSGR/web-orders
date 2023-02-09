@@ -173,13 +173,16 @@ export const sampleWizard: EntityFormWizard<ShoeSample> = {
             label: 'str.common.amount',
             placeholder: 'str.sample.wizard.amount.placeholder',
           },
-          photo: {
+          photos: {
             type: 'file-upload',
             label: 'str.common.photo',
             mimeType: 'image/*',
             multiple: true,
             maxSizeMB: 5,
             hasDefault: true,
+            generation: {
+              prop: 'sampleModel.photos',
+            },
           },
           notes: {
             type: 'text-area',

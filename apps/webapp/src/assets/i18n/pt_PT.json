@@ -63,7 +63,8 @@
           }
         },
         "fileUpload": {
-          "pick": "Escolher"
+          "pick": "Escolher",
+          "main": "Principal"
         }
       }
     },

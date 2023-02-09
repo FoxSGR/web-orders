@@ -1,11 +1,10 @@
-import { IsDate, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { IsArray, IsDate, IsOptional, IsString, ValidateNested } from 'class-validator';
 
-import { IShoeModelDTO } from '@web-orders/api-interfaces';
+import { APIFile, IShoeModelDTO, SeasonType } from '@web-orders/api-interfaces';
 import { Type } from 'class-transformer';
 import { EntityDTO } from '../shared/entity/entity.dto';
 import { ShoeModelType } from './shoe-model.types';
 import { ShoeModelComponentDTO } from './shoe-model-component/shoe-model-component.dto';
-import { SeasonType } from '../shared';
 
 export class ShoeModelDTO extends EntityDTO implements IShoeModelDTO {
   @IsString()
@@ -28,7 +27,13 @@ export class ShoeModelDTO extends EntityDTO implements IShoeModelDTO {
   dateCreated?: Date;
 
   @Type(() => String)
+  @IsString()
   season: SeasonType;
+
+  @Type(() => Array)
+  @IsArray()
+  @IsOptional()
+  photos: APIFile[];
 
   @IsOptional()
   @Type(() => String)

@@ -1,6 +1,9 @@
-export interface IPhoto {
+export interface APIFile {
   path: string;
   mimeType: string;
+  uid: string;
+  name: string;
+  default: boolean;
 }
 
 export interface ResponseData<T> {

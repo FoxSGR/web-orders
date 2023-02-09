@@ -6,9 +6,10 @@ import {
   ViewChild,
 } from '@angular/core';
 
-import { FileService } from '../../../services';
-import { FileData, SmartFormFiles, SmartFormFileUpload } from '../../../types';
+import { DialogService, FileService } from '../../../services';
+import { SmartFormFiles, SmartFormFileUpload } from '../../../types';
 import { SmartFormAbstractItemComponent } from '../smart-form-abstract-item.component';
+import { IonCheckbox } from '@ionic/angular';
 
 @Component({
   selector: 'wo-smart-form-file-upload',
@@ -25,7 +26,11 @@ export class SmartFormFileUploadComponent
     files: [],
   };
 
-  constructor(injector: Injector, private fileService: FileService) {
+  constructor(
+    injector: Injector,
+    private fileService: FileService,
+    private dialogService: DialogService,
+  ) {
     super(injector);
   }
 
@@ -56,6 +61,11 @@ export class SmartFormFileUploadComponent
       const fileData = { ...this.fileService.addFile(file, 'toUpload') };
       delete fileData.file;
       this.value!.files.push(fileData);
+
+      // if it's the first file, make it the default
+      if (this.value!.files.length === 1) {
+        fileData.default = true;
+      }
     }
 
     // clear the file input
@@ -66,14 +76,35 @@ export class SmartFormFileUploadComponent
   }
 
   removeFile(uid: string) {
-    this.value!.files = this.value!.files.filter(file => file.uid !== uid);
-    this.onChange();
+    this.dialogService.confirm(() => {
+      this.value!.files = this.value!.files.filter(file => file.uid !== uid);
+      this.onChange();
+    });
   }
 
   handleReorder(event: any) {
     const old = this.value!.files.splice(event.detail.from, 1)[0];
     this.value!.files.splice(event.detail.to, 0, old);
     event.detail.complete();
+    this.onChange();
+  }
+
+  changeDefault(uid: string, event: MouseEvent) {
+    // cancel the event to prevent overriding the value set below with the click
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    event.preventDefault();
+
+    const file = this.value!.files.find(f => f.uid === uid)!;
+    if (file.default) {
+      return;
+    }
+
+    for (const file of this.value!.files) {
+      file.default = file.uid === uid;
+    }
+
+    this.cdr.detectChanges();
     this.onChange();
   }
 

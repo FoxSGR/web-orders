@@ -1,4 +1,5 @@
 import {
+  APIFile,
   ComponentType,
   IShoeModelComponentDTO,
   IShoeModelDTO,
@@ -44,6 +45,7 @@ export class ShoeModel extends Entity implements IShoeModelDTO {
   components?: ShoeModelComponent[];
   dateCreated?: Date;
   season?: SeasonType;
+  photos: APIFile[];
   notes?: string;
 
   constructor(model: IShoeModelDTO) {

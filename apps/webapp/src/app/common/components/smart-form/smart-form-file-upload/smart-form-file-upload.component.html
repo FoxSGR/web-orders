@@ -60,7 +60,17 @@
         <ion-label class="sf-file-name">
           {{ fileData.name }}
         </ion-label>
-        <div slot="end" class="flex">
+        <div slot="end" class="flex sf-file-actions">
+          <div
+            *ngIf="definition.hasDefault && value!.files.length > 1"
+            style="position: relative"
+          >
+            <ion-checkbox
+              [checked]="fileData.default"
+              (click)="changeDefault(fileData.uid, $event)"
+              [title]="'str.common.smartForm.fileUpload.main' | translate"
+            ></ion-checkbox>
+          </div>
           <ion-reorder *ngIf="value!.files.length > 1">
             <ion-icon name="menu" color="medium"></ion-icon>
           </ion-reorder>
@@ -68,7 +78,7 @@
             (click)="removeFile(fileData.uid)"
             shape="circle"
             fill="clear"
-            size="medium"
+            size="small"
             class="sf-file-remove"
           >
             <ion-icon name="close" color="medium"></ion-icon>

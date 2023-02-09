@@ -23,4 +23,17 @@
   .sf-file-thumbnail {
     margin: 10px;
   }
+
+  .sf-file-remove::part(native) {
+    padding-inline-start: 0;
+    padding-inline-end: 0;
+  }
+
+  .sf-file-actions {
+    margin-inline-start: 0;
+
+    * {
+      width: 20px;
+    }
+  }
 }

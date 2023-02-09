@@ -8,8 +8,8 @@ import {
 import { DataFactory, Factory } from 'nestjs-seeder';
 import { Validate } from 'class-validator';
 
+import { APIFile, SeasonType, seasonTypes } from '@web-orders/api-interfaces';
 import { IShoeModel, ShoeModelType, shoeModelTypes } from './shoe-model.types';
-import { IPhoto, SeasonType, seasonTypes } from '../shared';
 import { ShoeModelComponent } from './shoe-model-component/shoe-model-component.entity';
 import { OwnedEntity } from '../shared/entity';
 import { commonColumns } from '../shared/entity/common-columns';
@@ -29,7 +29,7 @@ export class ShoeModel implements IShoeModel {
   reference?: string;
 
   @Column({ default: '[]', type: 'simple-json' })
-  photos: IPhoto[];
+  photos: APIFile[];
 
   @Factory(faker =>
     DataFactory.createForClass(ShoeModelComponent).generate(
