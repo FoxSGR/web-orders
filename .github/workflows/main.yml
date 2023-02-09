@@ -23,18 +23,4 @@ jobs:
 
       # Build
       - name: Build
-        run: yarn nx affected:build --all --configuration=production
-
-      - uses: "finnp/create-file-action@master"
-        env:
-          FILE_NAME: "dist/Procfile"
-          FILE_DATA: "web: npx http-server apps/webapp & node apps/api/main.js"
-
-      - name: Deploy to Heroku
-        uses: CDNievas/heroku-action@v1.0
-        with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_email: foxsgrno1@gmail.com
-          heroku_app_name: web-orders
-          appdir: "dist"
-          dynamicFiles: true
+        run: yarn build

@@ -5,8 +5,9 @@
   "scripts": {
     "ng": "nx",
     "postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2015 browser module main",
-    "start": "nx run-many --parallel --target=serve --projects=api,webapp",
-    "build": "nx build",
+    "start": "concurrently \"node dist/apps/api/main.js\" \"npx http-server dist/apps/webapp\"",
+    "serve": "nx run-many --parallel --target=serve --projects=api,webapp",
+    "build": "nx run-many --parallel --target=build --projects=api,webapp",
     "test": "nx test",
     "cli": "ts-node -r tsconfig-paths/register --project=./apps/api/tsconfig.app.json apps/api/src/app/cli/cli.ts"
   },
@@ -46,6 +47,7 @@
     "bcrypt": "^5.1.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
+    "concurrently": "^7.6.0",
     "dayjs": "^1.11.7",
     "flag-icons": "^6.6.6",
     "ionicons": "^6.1.1",

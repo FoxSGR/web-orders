@@ -1,5 +1,5 @@
 export const environment = {
-  production: false,
+  production: true,
   database: {
     type: 'mysql',
     host: process.env.DB_HOST,
