@@ -16,6 +16,7 @@ import { contactsPreview } from '../address';
   entityType: agentStoreConfig.name,
   serviceClass: AgentService,
   label: agent => agent.name,
+  icon: 'hand-left',
   route: 'agent',
   listConfig: {
     searchables: [

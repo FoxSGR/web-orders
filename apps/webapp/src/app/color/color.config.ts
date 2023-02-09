@@ -5,6 +5,7 @@ import { ColorService } from './color.service';
 @WOEntityConfig<Color>({
   entityType: colorStoreConfig.name,
   label: color => color.name,
+  icon: 'brush',
   route: 'color',
   serviceClass: ColorService,
   listConfig: {

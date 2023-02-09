@@ -7,6 +7,7 @@ import { shoeOrderWizard } from './shoe-order.wizard';
 @WOEntityConfig<ShoeOrder>({
   entityType: 'shoe-order',
   label: shoeOrder => shoeOrder.sample?.sampleModel?.reference,
+  icon: 'cube',
   route: 'shoe-order',
   serviceClass: ShoeOrderService,
   listConfig: shoeOrderListConfig,

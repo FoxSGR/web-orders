@@ -7,6 +7,7 @@ import { samplePreview } from './sample.preview';
 @WOEntityConfig<ShoeSample>({
   entityType: 'sample',
   label: sample => sample.sampleModel?.reference,
+  icon: 'camera',
   route: 'sample',
   serviceClass: SampleService,
   listConfig: sampleListConfig,

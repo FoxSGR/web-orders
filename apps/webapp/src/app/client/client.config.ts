@@ -13,6 +13,7 @@ import { addressForm, personalForm } from '../address/address.wizard';
 @WOEntityConfig<Client>({
   entityType: clientStoreConfig.name,
   label: client => client.name,
+  icon: 'people',
   route: 'client',
   serviceClass: ClientService,
   listConfig: {

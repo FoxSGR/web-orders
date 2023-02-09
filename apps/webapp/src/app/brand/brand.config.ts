@@ -5,6 +5,7 @@ import { BrandService } from './brand.service';
 @WOEntityConfig<Brand>({
   entityType: brandStoreConfig.name,
   label: brand => brand.name,
+  icon: 'bag',
   route: 'brand',
   serviceClass: BrandService,
   listConfig: {

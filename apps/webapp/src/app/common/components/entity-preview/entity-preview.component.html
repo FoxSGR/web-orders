@@ -2,11 +2,13 @@
   <ion-header>
     <ion-toolbar>
       <ion-title *ngIf="previewData">
+        <ion-icon
+          [name]="entityConfig.icon"
+          style="position: relative; top: 3px; margin-right: 2px"
+        ></ion-icon>
+
         {{ previewData.header.title | translate }}
-        <small
-          *ngIf="previewData.header.subTitle"
-          style="display: inline; margin-bottom: 1px"
-        >
+        <small *ngIf="previewData.header.subTitle" style="display: inline">
           {{ previewData.header.subTitle }}
         </small>
       </ion-title>

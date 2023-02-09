@@ -24,6 +24,7 @@ export interface EntityConfig<
 > {
   entityType: EntityType;
   label: (entity: T) => string;
+  icon: string;
   route?: string;
   serviceClass: { new (...t: any): S };
   service?: S;

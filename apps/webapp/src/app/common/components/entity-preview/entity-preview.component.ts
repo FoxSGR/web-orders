@@ -10,7 +10,7 @@ import { Store } from '@ngrx/store';
 
 import { Id } from '@web-orders/api-interfaces';
 import type { Entity } from '../../models/entity';
-import { EntityType } from '../../types';
+import { EntityConfig, EntityType } from '../../types';
 import { EntityPreviewConfig } from './entity-preview.types';
 import { EntityConfigRegister } from '../../entity-config.register';
 import { AbstractModalComponent } from '../abstract-modal/abstract-modal.component';
@@ -34,6 +34,7 @@ export class EntityPreviewComponent<T extends Entity>
   @Input() entityId?: Id;
   @Input() entityType: EntityType;
 
+  entityConfig: EntityConfig<T>;
   previewData!: EntityPreviewConfig;
 
   constructor(
@@ -57,8 +58,8 @@ export class EntityPreviewComponent<T extends Entity>
       );
     }
 
-    const entityConfig = EntityConfigRegister.getDefinition<T>(this.entityType);
-    this.previewData = entityConfig.previewConfig!(this.entity, false);
+    this.entityConfig = EntityConfigRegister.getDefinition<T>(this.entityType);
+    this.previewData = this.entityConfig.previewConfig!(this.entity, false);
     this.cdr.detectChanges();
   }
 

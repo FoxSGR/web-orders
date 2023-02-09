@@ -57,5 +57,31 @@ export const shoeOrderPreview: EntityPreviewGenerator<ShoeOrder> = (
         },
       ],
     },
+    {
+      columns: print ? 2 : 1,
+      items: [
+        {
+          icon: 'calendar',
+          label: 'str.sample.common.dateAsked',
+          value: 'dateAsked',
+        },
+        {
+          icon: 'calendar',
+          label: 'str.sample.common.dateDelivery',
+          value: 'dateDelivery',
+        },
+        {
+          icon: 'calendar',
+          label: 'str.common.deadline',
+          value: 'deadline',
+        },
+        {
+          icon: 'reader',
+          label: 'str.common.notes',
+          value: 'notes',
+          type: 'text',
+        },
+      ],
+    },
   ],
 });

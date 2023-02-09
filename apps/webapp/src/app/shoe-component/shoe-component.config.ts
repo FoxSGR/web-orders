@@ -8,6 +8,7 @@ import { shoeComponentWizardConfig } from './shoe-component.wizard.config';
 @WOEntityConfig<ShoeComponent>({
   entityType: shoeComponentStoreConfig.name,
   label: shoeComponent => shoeComponent.reference,
+  icon: 'hardware-chip',
   route: 'shoe-component',
   serviceClass: ShoeComponentService,
   listConfig: {
