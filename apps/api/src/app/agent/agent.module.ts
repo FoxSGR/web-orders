@@ -2,6 +2,7 @@ import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AddressModule } from '../address';
+import { Agent } from './agent.entity';
 import { AgentService } from './agent.service';
 import { AgentController } from './agent.controller';
 import { AgentMapper } from './agent.mapper';
@@ -11,7 +12,7 @@ import { ClientModule } from '../client/client.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([AgentRepository]),
+    TypeOrmModule.forFeature([Agent]),
     AddressModule,
     forwardRef(() => ClientModule),
   ],

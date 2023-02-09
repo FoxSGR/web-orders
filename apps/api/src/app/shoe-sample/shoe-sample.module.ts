@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { ShoeSample } from './shoe-sample.entity';
 import { ShoeSampleController } from './shoe-sample.controller';
 import { ShoeSampleMapper } from './shoe-sample.mapper';
 import { ShoeSampleService } from './shoe-sample.service';
@@ -15,7 +16,7 @@ import { ShoeModelModule } from '../shoe-model';
 @Module({
   controllers: [ShoeSampleController],
   imports: [
-    TypeOrmModule.forFeature([ShoeSampleRepository]),
+    TypeOrmModule.forFeature([ShoeSample]),
     AgentModule,
     BrandModule,
     ClientModule,

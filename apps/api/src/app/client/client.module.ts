@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AddressModule } from '../address';
 import { AgentModule } from '../agent/agent.module';
 import { BrandModule } from '../brand/brand.module';
+import { Client } from './client.entity';
 import { ClientController } from './client.controller';
 import { ClientMapper } from './client.mapper';
 import { ClientService } from './client.service';
@@ -12,7 +13,7 @@ import { ClientRepository } from './client.repository';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([ClientRepository]),
+    TypeOrmModule.forFeature([Client]),
     AddressModule,
     forwardRef(() => AgentModule),
     forwardRef(() => BrandModule),

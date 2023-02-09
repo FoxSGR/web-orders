@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { ShoeComponent } from './shoe-component.entity';
 import { ShoeComponentController } from './shoe-component.controller';
 import { ShoeComponentMapper } from './shoe-component.mapper';
 import { ShoeComponentSeeder } from './shoe-component.seeder';
@@ -9,7 +10,7 @@ import { ShoeComponentRepository } from './shoe-component.repository';
 
 @Module({
   controllers: [ShoeComponentController],
-  imports: [TypeOrmModule.forFeature([ShoeComponentRepository])],
+  imports: [TypeOrmModule.forFeature([ShoeComponent])],
   exports: [ShoeComponentMapper, ShoeComponentService],
   providers: [
     ShoeComponentRepository,

@@ -14,7 +14,7 @@ import { ShoeModelRepository } from './shoe-model.repository';
 @Module({
   controllers: [ShoeModelController],
   imports: [
-    TypeOrmModule.forFeature([ShoeModelRepository, ShoeModelComponent]),
+    TypeOrmModule.forFeature([ShoeModelComponent]),
     ColorModule,
     ShoeComponentModule,
   ],
