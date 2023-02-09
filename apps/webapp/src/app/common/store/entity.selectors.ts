@@ -6,5 +6,7 @@ export const entitySelectors = <T>(entity: EntityName) => {
 
   return {
     getPage: createSelector(get, (state: EntityState<T>) => state.page),
+    getFilter: createSelector(get, (state: EntityState<T>) => state.filter),
+    getStatus: createSelector(get, (state: EntityState<T>) => state.status),
   };
 };

@@ -1,5 +1,8 @@
 {
   "str": {
+    "common": {
+      "photo": "Fotografia"
+    },
     "menu": {
       "home": "Página Inicial",
       "sample": "Amostras",
@@ -7,6 +10,10 @@
       "management": "Gestão"
     },
     "sample": {
+      "common": {
+        "sample": "Amostra",
+        "requestedAt": "Pedida em"
+      },
       "list": {
         "header": "Amostras"
       }
@@ -16,8 +23,23 @@
         "reference": "Referência"
       }
     },
+    "client": {
+      "common": {
+        "client": "Cliente"
+      }
+    },
     "list": {
-      "empty": "Sem resultados."
+      "empty": "Sem resultados.",
+      "actions": {
+        "delete": "Apagar"
+      }
+    },
+    "dialogs": {
+      "delete": {
+        "text": "Tem a certeza que quer apagar?",
+        "confirm": "Confirmar",
+        "cancel": "Cancelar"
+      }
     },
     "account": {
       "username": "Username",

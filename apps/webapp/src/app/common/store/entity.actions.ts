@@ -13,4 +13,9 @@ export const entityActions = <T>(entityName: EntityName) => ({
     `[${entityName}] page loaded`,
     props<{ page: EntityPage<T> }>(),
   ),
+  reloadPage: createAction(`[${entityName}] reload page`),
+  delete: createAction(
+    `[${entityName}] delete`,
+    props<{ entity: Partial<T> }>(),
+  ),
 });

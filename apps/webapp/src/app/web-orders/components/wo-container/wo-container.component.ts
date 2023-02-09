@@ -15,7 +15,7 @@ export class WOContainerComponent extends BaseViewComponent {
     super(injector);
   }
 
-  toggleMenu(): void {
+  toggleMenu() {
     this.appService.toggleMenu();
   }
 }

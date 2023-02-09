@@ -5,13 +5,22 @@ import { entityActions } from './entity.actions';
 
 export const initialEntityState: <T>() => EntityState<T> = () => ({
   loaded: [],
+  filter: {},
+  status: 'unloaded',
 });
 
-export const entityReducer = <T>(config: EntityStoreConfig<T>) => {
+export const entityReducer = <T extends EntityState<any>>(
+  config: EntityStoreConfig<T>,
+) => {
   const actions = entityActions(config.name);
 
   return createReducer<T>(
     config.initialState,
-    on(actions.pageLoaded, (state, { page }) => ({ ...(state as any), page })),
+    on(actions.loadPage, state => ({ ...state, status: 'loading' })),
+    on(actions.pageLoaded, (state, { page }) => ({
+      ...state,
+      page,
+      status: 'loaded',
+    })),
   );
 };

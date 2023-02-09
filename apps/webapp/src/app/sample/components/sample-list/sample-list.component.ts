@@ -1,62 +1,62 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Injector,
-  OnInit,
-} from '@angular/core';
-import { ColumnMode, TableColumn } from '@swimlane/ngx-datatable';
-import { filter } from 'rxjs/operators';
+import { ChangeDetectionStrategy, Component, Injector } from '@angular/core';
 
-import { BaseComponent, EntityPage, ShoeSample } from '../../../common';
-import { sampleActions, sampleSelectors } from '../../store';
+import { ShoeSample } from '../../../common';
+import { sampleStoreConfig } from '../../store';
+import { SampleService } from '../../sample.service';
+import { EntityListComponent } from '../../../common';
+import { SamplePreviewComponent } from '../sample-preview/sample-preview.component';
 
 @Component({
   selector: 'wo-sample-list',
-  templateUrl: './sample-list.component.html',
+  templateUrl:
+    '../../../common/components/entity-list/entity-list.component.html',
+  styleUrls: [
+    '../../../common/components/entity-list/entity-list.component.scss',
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SampleListComponent extends BaseComponent implements OnInit {
-  rows: ShoeSample[] = [];
-
-  status = 'loading';
-
-  columns: TableColumn[] = [
-    {
-      name: this.translate.instant('str.model.common.reference'),
-      prop: 'baseModel.reference',
-      sortable: true,
-      canAutoResize: false,
-    },
-  ];
-
-  page: EntityPage<ShoeSample> = {
-    offset: 0,
-    size: 0,
-    items: [],
-    total: 0,
-  };
-
-  pageSize = 10;
-
-  ColumnMode = ColumnMode;
-
-  constructor(private injector: Injector) {
-    super(injector);
-  }
-
-  override ngOnInit(): void {
-    super.ngOnInit();
-    this.setPage(0);
-    this.store
-      .select(sampleSelectors.getPage)
-      .pipe(filter(page => !!page))
-      .subscribe(page => {
-        this.page = page as any;
-        this.status = 'loaded';
-      });
-  }
-
-  setPage(page: number): void {
-    this.store.dispatch(sampleActions.loadPage({ params: { offset: 0 } }));
+export class SampleListComponent extends EntityListComponent<ShoeSample> {
+  constructor(injector: Injector, entityService: SampleService) {
+    super(injector, {
+      entityName: sampleStoreConfig.name,
+      service: entityService,
+      preview: {
+        component: SamplePreviewComponent,
+      },
+      columns: [
+        {
+          name: 'Id',
+          prop: 'id',
+          sortable: true,
+          canAutoResize: false,
+          width: 70,
+        },
+        {
+          name: 'str.model.common.reference',
+          prop: 'baseModel.reference',
+          sortable: true,
+          canAutoResize: false,
+        },
+        {
+          name: 'str.client.common.client',
+          prop: 'client.name',
+          sortable: true,
+          canAutoResize: false,
+        },
+        {
+          name: 'str.sample.common.requestedAt',
+          prop: 'dateAsked',
+          sortable: true,
+          canAutoResize: true,
+          flexGrow: 2,
+        },
+        {
+          name: 'str.common.photo',
+          prop: 'dateAsked',
+          sortable: true,
+          canAutoResize: false,
+        },
+      ],
+    });
   }
 }

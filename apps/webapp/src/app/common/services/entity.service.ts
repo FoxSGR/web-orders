@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { createParams } from '../util/requests';
 import { EntityPage } from '../wo-common.types';
+import { Entity } from '../models/entity';
 
 export interface FindPageParams {
   limit?: number;
@@ -23,7 +24,7 @@ const defaultConfig: Partial<EntityServiceConfig> = {
   alwaysLoadRelations: false,
 };
 
-export class EntityService<T extends { id?: number }> {
+export class EntityService<T extends Entity> {
   constructor(private http: HttpClient, protected config: EntityServiceConfig) {
     this.config = { ...defaultConfig, ...config };
   }
@@ -67,7 +68,7 @@ export class EntityService<T extends { id?: number }> {
     );
   }
 
-  remove(id: string | number): Observable<T> {
+  delete(id: string | number): Observable<T> {
     return this.http.delete<T>(
       `${environment.apiUrl}/${this.config.route}/${id}`,
     );

@@ -4,6 +4,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 import { WOCommonModule } from '../common/wo-common.module';
@@ -12,9 +13,12 @@ import { SampleEffects, sampleReducer, sampleStoreConfig } from './store';
 import { persistReducer } from '../common/util/persist.reducer';
 
 import * as cc from './components';
-import { EffectsModule } from '@ngrx/effects';
 
-const components = [cc.SamplesComponent, cc.SampleListComponent];
+const components = [
+  cc.SamplesComponent,
+  cc.SampleListComponent,
+  cc.SamplePreviewComponent,
+];
 
 @NgModule({
   declarations: components,
@@ -32,6 +36,8 @@ const components = [cc.SamplesComponent, cc.SampleListComponent];
         persistReducer(sampleStoreConfig.initialState, {
           loaded: true,
           page: true,
+          filter: false,
+          status: false,
         }),
       ],
     }),

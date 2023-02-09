@@ -15,7 +15,9 @@ export const persistReducer =
   ): ((reducer: ActionReducer<T>) => ActionReducer<T>) =>
   reducer =>
     localStorageSync({
-      keys: Object.keys(persistedKeys),
+      keys: Object.keys(persistedKeys).filter(
+        key => persistedKeys[key as keyof KeyMap<T>] === true,
+      ),
       rehydrate: true, // restore the state when opening the app
       removeOnUndefined: true, // remove from the storage when the state is undefined
     })(reducer);

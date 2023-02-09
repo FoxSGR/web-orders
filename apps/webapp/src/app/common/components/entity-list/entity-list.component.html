@@ -1,0 +1,58 @@
+<ngx-datatable
+  class="material"
+  [rows]="page.items"
+  [headerHeight]="50"
+  [footerHeight]="50"
+  rowHeight="auto"
+  [externalPaging]="true"
+  [externalSorting]="true"
+  [columnMode]="ColumnMode.force"
+  [count]="page.total"
+  [offset]="page.offset"
+  [limit]="pageSize"
+  (page)="setPage($event.offset)"
+  [loadingIndicator]="(status | async) === 'loading'"
+  [scrollbarH]="true"
+  [virtualization]="false"
+  [messages]="{ emptyMessage: 'str.list.empty' | translate }"
+>
+  <ngx-datatable-column
+    *ngFor="let column of config.columns"
+    [name]="column.name! | translate"
+    [prop]="column.prop!"
+    [sortable]="column.sortable!"
+    [canAutoResize]="column.canAutoResize!"
+    [flexGrow]="column.flexGrow!"
+  ></ngx-datatable-column>
+
+  <ngx-datatable-column
+    name=""
+    [canAutoResize]="false"
+    [width]="80"
+    [sortable]="false"
+    [cellClass]="'wo-datatable-actions'"
+    [headerClass]="'wo-datatable-actions-header'"
+  >
+    <ng-template let-row="row" ngx-datatable-cell-template>
+      <ion-buttons slot="end">
+        <ion-button
+          *ngIf="config.preview"
+          class="wo-datatable-icon-button"
+          (click)="preview(row)"
+        >
+          <ion-icon slot="icon-only" icon="eye"></ion-icon>
+        </ion-button>
+        <ion-button
+          class="wo-datatable-icon-button"
+          (click)="actionsDropdown($event, row)"
+        >
+          <ion-icon
+            slot="icon-only"
+            ios="ellipsis-horizontal"
+            md="ellipsis-vertical"
+          ></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ng-template>
+  </ngx-datatable-column>
+</ngx-datatable>

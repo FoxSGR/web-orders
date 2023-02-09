@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions } from '@ngrx/effects';
+import { Store } from '@ngrx/store';
+
 import { EntityEffects, ShoeSample } from '../../common';
 import { SampleService } from '../sample.service';
 import { sampleStoreConfig } from './sample.config';
@@ -11,7 +13,7 @@ import { sampleStoreConfig } from './sample.config';
   providedIn: 'root',
 })
 export class SampleEffects extends EntityEffects<ShoeSample> {
-  constructor(actions: Actions, sampleService: SampleService) {
-    super(actions, sampleService, sampleStoreConfig.name);
+  constructor(store: Store, actions: Actions, sampleService: SampleService) {
+    super(store, actions, sampleService, sampleStoreConfig.name);
   }
 }

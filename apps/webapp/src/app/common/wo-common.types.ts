@@ -1,4 +1,4 @@
-export type KeyMap<T> = { [P in keyof Required<T>]: true };
+export type KeyMap<T> = { [P in keyof Required<T>]: boolean };
 
 export interface EntityPage<T> {
   size: number;

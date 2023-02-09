@@ -1,0 +1,23 @@
+::ng-deep .datatable-body-cell-label {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+::ng-deep .wo-datatable-actions,
+::ng-deep .wo-datatable-actions-header {
+  padding: 0 !important;
+}
+
+::ng-deep .datatable-body {
+  height: 73vh !important;
+}
+
+.wo-datatable-icon-button {
+  width: 32px !important;
+  height: 32px !important;
+  --padding-start: 8px !important;
+  --padding-bottom: 8px !important;
+  --padding-end: 8px !important;
+  --padding-top: 8px !important;
+}
