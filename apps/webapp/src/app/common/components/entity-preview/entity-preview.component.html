@@ -1,0 +1,39 @@
+<ng-container *ngIf="previewData && modal">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>
+        {{ previewData.header.title | translate }}
+        <small
+          *ngIf="previewData.header.subTitle"
+          style="display: inline; margin-bottom: 1px"
+        >
+          {{ previewData.header.subTitle }}
+        </small>
+      </ion-title>
+      <ion-buttons slot="end">
+        <ion-button (click)="close()" [strong]="true">
+          {{ 'str.common.done' | translate }}
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
+  <wo-entity-preview-action (edit)="edit()"></wo-entity-preview-action>
+
+  <ion-content class="ion-padding wo-preview-content">
+    <ng-container *ngTemplateOutlet="previewContent"></ng-container>
+  </ion-content>
+</ng-container>
+
+<ng-container *ngIf="previewData && !modal">
+  <ng-container *ngTemplateOutlet="previewContent"></ng-container>
+</ng-container>
+
+<ng-template #previewContent>
+  <wo-entity-preview-group
+    *ngFor="let group of previewData.groups"
+    [group]="group"
+    [entity]="entity"
+  >
+  </wo-entity-preview-group>
+</ng-template>

@@ -11,12 +11,7 @@ import {
   ViewChild,
   ViewChildren,
 } from '@angular/core';
-import {
-  LoadingController,
-  ModalController,
-  PopoverController,
-  SelectChangeEventDetail,
-} from '@ionic/angular';
+import { PopoverController, SelectChangeEventDetail } from '@ionic/angular';
 import {
   ColumnMode,
   DatatableComponent,
@@ -24,51 +19,24 @@ import {
   SortType,
   TableColumn,
 } from '@swimlane/ngx-datatable';
-import { Observable } from 'rxjs';
+import { cloneDeep } from 'lodash';
 
-import { IFindFilter } from '@web-orders/api-interfaces';
+import { IFindFilter, IFindParams } from '@web-orders/api-interfaces';
 import { BaseComponent } from '../base.component';
 import { Entity } from '../../models/entity';
 import { EntityPage } from '../../wo-common.types';
 import { EntityListDropdownComponent } from './entity-list-dropdown.component';
-import { EntityService } from '../../services';
-import {
-  entityActions,
-  EntityName,
-  entitySelectors,
-  EntityStatus,
-} from '../../store';
+import { entityActions } from '../../store';
 import { BasicCellComponent } from './cells';
 import { ENTITY_LIST_TOKEN, EntityListCellData } from './entity-list.token';
-
-export interface EntityListColumn extends TableColumn {
-  template?: any;
-}
-
-export interface EntityListConfig<T extends Entity> {
-  hideSearch?: boolean;
-  searchables: EntityListSearchable[];
-  entityName: EntityName;
-  columns: EntityListColumn[];
-  serviceClass?: { new (...t: any): EntityService<T> };
-  service?: EntityService<T>;
-  label: (entity: T) => string;
-  selection?: 'single' | 'multiple';
-  preview?: {
-    component: { new (t: any): any };
-  };
-}
-
-interface EntityListSearchable {
-  label: string;
-  prop: string;
-}
-
-interface EntityListSearchbar extends EntityListSearchable {
-  value?: string;
-}
-
-type EntityMap<T> = { [key: number]: T };
+import { EntityConfigRegister } from '../../entity-config.register';
+import { EntityConfig, EntityType } from '../../types';
+import {
+  EntityListConfig,
+  EntityListSearchable,
+  EntityListSearchBar,
+} from './entity-list.types';
+import { EntityPreviewService, EntityWizardService } from '../../services';
 
 @Component({
   selector: 'wo-entity-list',
@@ -79,23 +47,87 @@ export class EntityListComponent<T extends Entity>
   extends BaseComponent
   implements OnInit, AfterViewInit
 {
+  /**
+   * Custom templates for cells.
+   */
   @ViewChildren('templates') templates!: QueryList<TemplateRef<any>>;
   @ViewChild('datatable') datatable: DatatableComponent;
 
-  @Input() config!: EntityListConfig<T>;
+  /**
+   * Whether the entity list is the main component of the current page.
+   */
+  @Input() standalone = false;
 
-  selected: EntityMap<T> = {};
+  /**
+   * The type/name of the entities.
+   */
+  @Input() entityType: EntityType;
 
-  @Output()
-  pick = new EventEmitter<EntityMap<T>>();
+  /**
+   * The config of the entity list.
+   * @param value
+   */
+  @Input() set config(value: Partial<EntityListConfig<T>>) {
+    this._config = value as EntityListConfig<T>;
+  }
+  get config(): EntityListConfig<T> {
+    return this._config;
+  }
+  private _config: EntityListConfig<T>;
 
-  status$: Observable<EntityStatus>;
+  /**
+   * Config of the entity type.
+   */
+  entityConfig: EntityConfig<T>;
 
+  /**
+   * Additional data to pass to the service.
+   */
+  @Input() data?: any;
+
+  /**
+   * The picked entities, if selection is enabled.
+   */
+  @Input() pick: T[] = [];
+  @Output() pickChange = new EventEmitter<T[]>();
+
+  /**
+   * Whether the entity list is activated.
+   * If it's disabled, it will be in an idle state, e.g. requests won't be made
+   */
+  @Input() set enabled(value) {
+    if (value && !this._enabled) {
+      this.load({ page: 0 });
+    }
+
+    this._enabled = value;
+  }
+  get enabled() {
+    return this._enabled;
+  }
+  private _enabled = true;
+
+  /**
+   * Status of the list.
+   */
+  status: 'unloaded' | 'loading' | 'loaded';
+
+  /**
+   * Enums to use in the template.
+   */
   ColumnMode = ColumnMode;
   SortType = SortType;
 
-  pageSize = 10;
+  /**
+   * Number of items per page.
+   * @todo - increase
+   * @todo - allow user to change
+   */
+  pageSize = 20;
 
+  /**
+   * The page being shown.
+   */
   page: EntityPage<T> = {
     offset: 0,
     size: 0,
@@ -103,24 +135,39 @@ export class EntityListComponent<T extends Entity>
     total: 0,
   };
 
+  /**
+   * Entity sort data.
+   */
   sort = {
     prop: 'id',
     direction: 'desc',
   };
 
-  searchbars: EntityListSearchbar[];
+  /**
+   * The current search bar filters.
+   */
+  searchBars: EntityListSearchBar[];
 
+  /**
+   * Used to manage the actions dropdown popover.
+   */
   private currentActionsDropdown: HTMLIonPopoverElement | null = null;
 
-  private entityActions = entityActions('sample'); // call this just to get the type (overridden below)
+  /**
+   * Actions for this entity type.
+   */
+  private entityActions!: ReturnType<typeof entityActions>;
 
+  /**
+   * Cache for the Angular injector for custom templates.
+   */
   private injectorCache = {};
 
   constructor(
     injector: Injector,
     private readonly popoverController: PopoverController,
-    private readonly modalController: ModalController,
-    private readonly loadingController: LoadingController,
+    private readonly previewService: EntityPreviewService,
+    private readonly wizardService: EntityWizardService,
   ) {
     super(injector);
   }
@@ -128,33 +175,44 @@ export class EntityListComponent<T extends Entity>
   override ngOnInit(): void {
     super.ngOnInit();
 
-    if (!this.config.service && this.config.serviceClass) {
-      this.config.service = this.injector.get(this.config.serviceClass);
+    this.entityConfig = EntityConfigRegister.getDefinition(this.entityType);
+    this.config = {
+      ...this.entityConfig.listConfig,
+      ...cloneDeep(this.config),
+    };
+
+    // initialize the service
+    if (!this.entityConfig.service && this.entityConfig.serviceClass) {
+      this.entityConfig.service = this.injector.get(
+        this.entityConfig.serviceClass,
+      );
     }
 
-    this.status$ = this.store.select(
-      entitySelectors(this.config.entityName).getStatus,
-    );
-    this.searchbars = [
+    // translate column headers
+    // using the pipe throws a nasty warning
+    for (const column of this.config.columns) {
+      if (column.name?.startsWith('str.')) {
+        column.name = this.translate.instant(column.name);
+      }
+    }
+
+    // setup searchbars
+    this.searchBars = [
       {
         ...this.config.searchables[0],
         value: undefined,
       },
     ];
-    this.entityActions = entityActions(this.config.entityName);
 
-    this.load({ page: 0 });
-    this.store
-      .select(entitySelectors(this.config.entityName).getPage)
-      .subscribe(page => {
-        if (!page) {
-          return;
-        }
+    this.status = 'unloaded';
+    this.entityActions = entityActions(this.entityConfig.entityType);
 
-        this.page = { ...page } as any;
-        this.page.offset /= this.pageSize;
-      });
+    // load data
+    if (this.enabled) {
+      this.load({ page: 0 });
+    }
 
+    // initialize cell templates
     this.config.columns.forEach(col => {
       if (!col.template) {
         col.template = BasicCellComponent;
@@ -167,12 +225,28 @@ export class EntityListComponent<T extends Entity>
     for (let i = 0; i < this.templates.length; i++) {
       this.config.columns[i].cellTemplate = this.templates.get(i);
     }
+
+    this.cdr.detectChanges();
   }
 
+  /**
+   * Track by function for columns and things with a prop.
+   * @param _index
+   * @param item
+   */
+  trackByProp(_index: number, item: any) {
+    return item.prop;
+  }
+
+  /**
+   * Loads a page.
+   * @param param0
+   */
   load({ page }: { page?: number } = {}): void {
+    this.status = 'loading';
     page = page === undefined ? this.page.offset : page;
 
-    const filter: IFindFilter[] = this.searchbars
+    const filter: IFindFilter[] = this.searchBars
       .filter(s => s.value?.trim())
       .map(s => ({
         prop: s.prop,
@@ -180,45 +254,73 @@ export class EntityListComponent<T extends Entity>
         value: s.value,
       }));
 
-    this.store.dispatch(
-      this.entityActions.loadPage({
-        params: {
-          offset: page * this.pageSize,
-          filter,
-          sortField: this.sort.prop,
-          sortDirection: this.sort.direction as any,
-        },
-      }),
+    const params: IFindParams<T> = {
+      offset: page * this.pageSize,
+      filter,
+      sortField: this.sort.prop,
+      sortDirection: this.sort.direction as any,
+    };
+
+    let obs;
+    if (this.config.findPage) {
+      obs = this.config.findPage(this.entityConfig.service!, params, this.data);
+    } else {
+      obs = this.entityConfig.service!.findPage(params);
+    }
+
+    obs.subscribe({
+      next: loadedPage => {
+        if (!loadedPage) {
+          return;
+        }
+
+        this.page = { ...loadedPage };
+        this.page.offset /= this.pageSize;
+        this.status = 'loaded';
+        this.cdr.detectChanges();
+      },
+      error: error => {
+        this.store.dispatch(this.entityActions.pageLoadError({ error }));
+        this.status = 'unloaded';
+      },
+    });
+    this.store.dispatch(this.entityActions.loadPage());
+  }
+
+  /**
+   * Opens a preview for an entity.
+   * @param param0
+   * @param event
+   */
+  preview({ id }, event?: Event) {
+    if (event) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
+
+    this.previewService.previewEntity(
+      id,
+      this.entityConfig.entityType,
+      !this.standalone,
     );
   }
 
-  async preview({ id }, event: Event) {
+  /**
+   * Edit an entity.
+   * @param entity
+   * @param event
+   */
+  edit(entity: T, event: Event) {
     event.stopPropagation();
     event.preventDefault();
-
-    const loading = await this.loadingController.create();
-    await loading.present();
-
-    this.config.service!.findById(id).subscribe(async entity => {
-      await loading.dismiss();
-
-      const previewConfig = this.config.preview!;
-      const modal = await this.modalController.create({
-        component: previewConfig.component,
-        componentProps: {
-          entity,
-        },
-        showBackdrop: true,
-        presentingElement: await this.modalController.getTop(),
-        breakpoints: [0, 0.3, 0.9],
-        initialBreakpoint: 0.9,
-        cssClass: 'entity-preview-modal',
-      });
-
-      modal.present();
-    });
+    this.openWizard(entity);
   }
 
+  /**
+   * Opens a dropdown with options for an entity.
+   * @param event
+   * @param entity
+   */
   async actionsDropdown(event: Event, entity: T) {
     event.stopPropagation();
     event.preventDefault();
@@ -233,14 +335,21 @@ export class EntityListComponent<T extends Entity>
       showBackdrop: false,
       componentProps: {
         entity,
-        service: this.config.serviceClass,
-        entityName: this.config.entityName,
+        entityConfig: this.entityConfig,
+        refresh: () => this.load(),
       },
     });
 
     await this.currentActionsDropdown.present();
   }
 
+  /**
+   * Gets the injector for custom templates.
+   * This is used to pass data to them.
+   * @param column
+   * @param entity
+   * @returns
+   */
   templateInjector(column: TableColumn, entity: T) {
     const idx = `${column.name}-${entity.id}`;
     if (this.injectorCache[idx]) {
@@ -265,72 +374,105 @@ export class EntityListComponent<T extends Entity>
     return injector;
   }
 
+  /**
+   * Applies the current search.
+   */
   search() {
     this.load();
   }
 
+  /**
+   * Changes the order.
+   * @param param0
+   */
   changeSort({ sorts }) {
     this.sort = { prop: sorts[0].prop, direction: sorts[0].dir };
     this.load();
   }
 
-  availableSearchables(searchbar: EntityListSearchbar): EntityListSearchable[] {
+  /**
+   * Finds the available search fields for a given search bar.
+   * @param searchBar
+   * @returns
+   */
+  availableSearchFields(
+    searchBar: EntityListSearchBar,
+  ): EntityListSearchable[] {
     return [
-      searchbar,
+      searchBar,
       ...this.config.searchables.filter(
-        searchBar => !this.searchbars.find(s => s.prop === searchBar.prop),
+        searchBar => !this.searchBars.find(s => s.prop === searchBar.prop),
       ),
     ];
   }
 
+  /**
+   * Changes the field of a search bar.
+   * @param searchBar
+   * @param event
+   * @returns
+   */
   changeSearchbar(
-    searchbar: EntityListSearchbar,
-    dumbassEvent: any, // typescript is dumb and won't work with the proper type here
+    searchBar: EntityListSearchBar,
+    event: CustomEvent<SelectChangeEventDetail<EntityListSearchBar>>,
   ) {
-    const event: CustomEvent<SelectChangeEventDetail<EntityListSearchbar>> =
-      dumbassEvent;
     const newSearchable = event.detail.value;
 
     // special case to remove
     if (newSearchable.prop === '#remove') {
-      this.searchbars = this.searchbars.filter(s => s.prop !== searchbar.prop);
-      if (searchbar.value?.trim()) {
+      this.searchBars = this.searchBars.filter(s => s.prop !== searchBar.prop);
+      if (searchBar.value?.trim()) {
         this.load();
       }
       return;
     }
 
-    searchbar.prop = newSearchable.prop;
-    searchbar.label = newSearchable.label;
+    searchBar.prop = newSearchable.prop;
+    searchBar.label = newSearchable.label;
+    searchBar.choices = newSearchable.choices;
 
-    if (searchbar.value?.trim()) {
+    if (searchBar.value?.trim()) {
       this.load();
     }
   }
 
+  /**
+   * Creates a search bar.
+   */
   newSearchBar() {
     const searchable = this.config.searchables.find(
-      it => !this.searchbars.find(s => s.prop === it.prop),
+      it => !this.searchBars.find(s => s.prop === it.prop),
     );
     if (searchable) {
-      this.searchbars.push({
+      this.searchBars.push({
         ...searchable,
         value: '',
       });
     }
   }
 
-  remainingSearchables(): EntityListSearchable[] {
+  /**
+   * Finds which search fields are still available.
+   * @returns
+   */
+  remainingSearchFields(): EntityListSearchable[] {
     return this.config.searchables.filter(
-      searchable => !this.searchbars.find(s => s.prop === searchable.prop),
+      searchable => !this.searchBars.find(s => s.prop === searchable.prop),
     );
   }
 
+  /**
+   * Opens the wizard to create an entity.
+   */
   create() {
-    this.store.dispatch(this.entityActions.wizard({}));
+    this.openWizard();
   }
 
-  selectionType(): any {
+  /**
+   * Maps the selection type in the config to the ngx-datatable enum value.
+   * @returns
+   */
+  selectionType(): SelectionType | undefined {
     if (this.config.selection === 'single') {
       return SelectionType.single;
     } else if (this.config.selection === 'multiple') {
@@ -340,22 +482,94 @@ export class EntityListComponent<T extends Entity>
     }
   }
 
+  /**
+   * Handles a row select event.
+   * @param param0
+   * @returns
+   */
   onSelect({ selected }) {
-    this.selected = {};
-    for (const item of selected) {
-      this.selected[item.id] = item;
+    // if the selection mode is 'single', unselect the previously selected value
+    if (
+      this.config.selection === 'single' &&
+      selected[0]?.id &&
+      selected[0]?.id === this.pick[0]?.id
+    ) {
+      this.unselect(selected[0].id);
+      return;
     }
 
-    this.pick.emit(this.selected);
+    this.pick = selected;
+    this.updatePicked();
   }
 
-  selectedIds(): number[] {
-    return Object.keys(this.selected) as any;
+  /**
+   * Handles an activate event for a row.
+   * @param event
+   */
+  onActivate(event: any) {
+    if (event.type !== 'click' || this.selectionType()) {
+      return;
+    }
+
+    this.preview(event.row);
   }
 
+  /**
+   * Checks whether an entity is selected.
+   * @param id
+   * @returns
+   */
+  isPicked(id: number): boolean {
+    return !!this.pick.find(e => e.id === id);
+  }
+
+  /**
+   * Unselects an entity.
+   * @param id
+   */
   unselect(id: number) {
-    delete this.selected[id];
-    this.datatable.selected = this.datatable.selected.filter(e => e.id != id);
+    this.pick = this.pick.filter(e => e.id !== id);
+    this.updatePicked();
+  }
+
+  /**
+   * Returns the current app theme.
+   * @returns
+   */
+  theme(): 'dark' | 'light' {
+    return document.body.classList.contains('dark') ? 'dark' : 'light';
+  }
+
+  /**
+   * Used to track rows.
+   * @param row
+   */
+  rowIdentity(row: T) {
+    return row.id;
+  }
+
+  /**
+   * Updates the selected values.
+   */
+  private updatePicked() {
+    // update the selected items in the datatable component
+    // it is useful to use a different array to have a before vs after to unselect
+    this.datatable.selected = [...this.pick];
     this.datatable.recalculate();
+    this.pickChange.emit(this.pick);
+  }
+
+  /**
+   * Opens the entity wizard.
+   * @param entity
+   * @private
+   */
+  private openWizard(entity?: T) {
+    this.wizardService.openWizard(
+      this.entityType,
+      this.standalone ? 'routed' : 'standalone',
+      entity?.id,
+      { onComplete: () => this.load() },
+    );
   }
 }

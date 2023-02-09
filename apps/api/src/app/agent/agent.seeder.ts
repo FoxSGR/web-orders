@@ -1,16 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Connection } from 'typeorm';
 
 import { Agent } from './agent.entity';
-import { EntitySeeder } from '../common/entity';
-import { EntitySeederService } from '../common';
+import { AgentRepository } from './agent.repository';
+import { AgentService } from './agent.service';
+import { EntitySeeder } from '../shared/entity';
+import { EntitySeederService } from '../shared';
 
 @Injectable()
-@EntitySeederService()
+@EntitySeederService({ order: 100 })
 export class AgentSeeder extends EntitySeeder<Agent> {
-  constructor(@InjectRepository(Agent) repository: Repository<Agent>) {
-    super(Agent, repository);
+  constructor(connection: Connection, agentService: AgentService) {
+    super(Agent, agentService, connection, AgentRepository);
   }
 
   protected identifier(): keyof Agent {

@@ -9,6 +9,15 @@ export type AlertPosition = 'toast';
 export type AlertType = 'success' | 'info' | 'warning' | 'error';
 
 /**
+ * A button for an alert.
+ */
+export interface AlertButton {
+  text: string;
+  icon?: string;
+  callback: () => void;
+}
+
+/**
  * Represents an alert.
  */
 export interface Alert {
@@ -27,6 +36,16 @@ export interface Alert {
    * The message shown by the alert.
    */
   message: string;
+
+  /**
+   * Message string parameters to replace.
+   */
+  messageParams?: object;
+
+  /**
+   * Buttons to show in the alert.
+   */
+  buttons?: AlertButton[];
 
   /**
    * The position to show the alert at.

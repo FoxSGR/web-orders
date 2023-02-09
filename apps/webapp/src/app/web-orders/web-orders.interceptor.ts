@@ -65,10 +65,12 @@ export class WebOrdersInterceptor implements HttpInterceptor {
                 const encoded = encodeURIComponent(urlTree.toString());
 
                 if (!req.url.endsWith('/api/auth/login')) {
-                  this.store.dispatch(logout({
-                    mode: 'unauthorized',
-                    callback: encoded
-                  }))
+                  this.store.dispatch(
+                    logout({
+                      mode: 'unauthorized',
+                      callback: encoded,
+                    }),
+                  );
                 }
 
                 break;

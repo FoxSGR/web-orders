@@ -1,0 +1,9 @@
+:host ion-accordion {
+  ion-item {
+    --padding-start: 0;
+  }
+
+  [slot='content'] {
+    margin-bottom: 10px;
+  }
+}

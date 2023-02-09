@@ -1,4 +1,4 @@
-import type { IEntity } from '../common/entity';
+import type { IEntity } from '../shared/entity';
 import { IAddress } from '../address';
 import { IClient } from '../client';
 

@@ -3,7 +3,7 @@ import { DeepPartial } from 'typeorm';
 
 import { IUser } from './user.types';
 import { UserDTO } from './user.dto';
-import { EntityMapper } from '../common/entity/entity.mapper';
+import { EntityMapper } from '../shared/entity/entity.mapper';
 
 @Injectable()
 export class UserMapper extends EntityMapper<IUser, UserDTO> {

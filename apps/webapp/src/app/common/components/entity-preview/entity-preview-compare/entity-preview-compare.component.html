@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      {{ 'str.entity.preview.compare.title' | translate }}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding wo-preview-content">
+  <div class="wo-entity-compare-content">
+    <div class="wo-entity-compare-entities">
+      <div>
+        <ion-text>
+          <h5 class="wo-entity-compare-label">
+            {{ leftLabel | translate }}
+          </h5>
+        </ion-text>
+
+        <div class="wo-entity-compare-preview">
+          <wo-entity-preview
+            [entity]="left"
+            [entityType]="entityType"
+          ></wo-entity-preview>
+        </div>
+      </div>
+      <div>
+        <ion-text>
+          <h5 class="wo-entity-compare-label">
+            <span>{{ rightLabel | translate }}</span>
+            <small *ngIf="right.updatedAt">
+              {{ right.updatedAt | wodate: true }}
+            </small>
+          </h5>
+        </ion-text>
+
+        <div class="wo-entity-compare-preview">
+          <wo-entity-preview
+            [entity]="right"
+            [entityType]="entityType"
+          ></wo-entity-preview>
+        </div>
+      </div>
+    </div>
+    <div class="flex">
+      <ion-button (click)="onPick('left')">
+        {{ 'str.entity.preview.compare.accept' | translate }}
+        {{ leftLabel | translate }}
+      </ion-button>
+      <ion-button style="margin-left: auto" (click)="onPick('right')">
+        {{ 'str.entity.preview.compare.accept' | translate }}
+        {{ rightLabel | translate }}
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

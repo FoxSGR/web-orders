@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -26,26 +26,18 @@ export class EntityService<T extends Entity> {
     this.config = { ...defaultConfig, ...config };
   }
 
-  findPage(params: IFindParams<T>): Observable<EntityPage<T>> {
-    this._prepareParams(params);
-
+  findPage(
+    params: IFindParams<T>,
+    route = this.config.route,
+  ): Observable<EntityPage<T>> {
     return this.http
-      .get<EntityPage<T>>(`${environment.apiUrl}/${this.config.route}`, {
-        params: createParams({
-          ...params,
-          loadRelations: this.config.alwaysLoadRelations,
-        }),
+      .get<EntityPage<T>>(`${environment.apiUrl}/${route}`, {
+        params: this.createParams(params),
       })
-      .pipe(
-        map(page => ({
-          ...page,
-          items: this.map(page.items),
-          size: page.items.length,
-        })),
-      );
+      .pipe(map(page => this.mapPage(page)));
   }
 
-  findById(id: any, params?: any): Observable<T | undefined> {
+  findById(id: any, params?: any): Observable<T> {
     return this.http
       .get<T>(`${environment.apiUrl}/${this.config.route}/${id}`, {
         params: createParams(params),
@@ -71,21 +63,38 @@ export class EntityService<T extends Entity> {
       .pipe(map(e => this.mapOne(e)!));
   }
 
-  protected _prepareParams(params: IFindParams<any>) {
+  parseEntity(entity: T): T {
+    return new this.config.entityClass(entity) as T;
+  }
+
+  protected mapPage(page: EntityPage<T>) {
+    return {
+      ...page,
+      items: this.map(page.items),
+      size: page.items.length,
+    };
+  }
+
+  protected createParams(params: IFindParams<any>): HttpParams {
     if (params.filter) {
       params.filter = JSON.stringify(params.filter) as any;
     }
-  }
 
-  private mapOne(entity: T | undefined): T | undefined {
-    if (entity) {
-      return this.map([entity])[0];
+    if (this.config.alwaysLoadRelations) {
+      params.loadRelations = true;
     }
 
-    return entity;
+    return createParams({
+      ...params,
+      loadRelations: this.config.alwaysLoadRelations,
+    });
+  }
+
+  private mapOne(entity: T): T {
+    return this.map([entity])[0];
   }
 
   protected map(entities: T[]): T[] {
-    return entities.map(e => new this.config.entityClass(e)) as T[];
+    return entities.map(e => this.parseEntity(e));
   }
 }

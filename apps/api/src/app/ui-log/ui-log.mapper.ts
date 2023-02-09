@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { IUILog } from './ui-log.types';
 import { UILogDTO } from './ui-log.dto';
-import { EntityMapper } from '../common/entity/entity.mapper';
+import { EntityMapper } from '../shared/entity/entity.mapper';
 
 @Injectable()
 export class UILogMapper extends EntityMapper<IUILog, UILogDTO> {

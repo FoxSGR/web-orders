@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { EntityMapper } from '../common/entity/entity.mapper';
+import { EntityMapper } from '../shared/entity/entity.mapper';
 
 import { IBrand } from './brand.types';
 import { BrandDTO } from './brand.dto';
@@ -16,6 +16,8 @@ export class BrandMapper extends EntityMapper<IBrand, BrandDTO> {
     return {
       ...super.entityToResponse(brand),
       name: brand.name,
+      notes: brand.notes,
+      scope: brand.scope,
     };
   }
 }

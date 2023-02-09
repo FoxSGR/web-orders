@@ -1,23 +1,31 @@
 import { ActionReducer } from '@ngrx/store';
 import { localStorageSync } from 'ngrx-store-localstorage';
-import { KeyMap } from '../wo-common.types';
+
+import { EntityPersistConfig } from '../store';
 
 /**
  * Creates the function of the meta reducer that syncs the state with the
  * browser storage.
- * @param initialState the initial state.
+ * @param _initialState the initial state.
  * @param persistedKeys the state keys to persist.
+ * @param feature
  */
-export const persistReducer =
-  <T>(
-    initialState: T,
-    persistedKeys: KeyMap<T>,
-  ): ((reducer: ActionReducer<T>) => ActionReducer<T>) =>
-  reducer =>
-    localStorageSync({
-      keys: Object.keys(persistedKeys).filter(
-        key => persistedKeys[key as keyof KeyMap<T>] === true,
-      ),
-      rehydrate: true, // restore the state when opening the app
-      removeOnUndefined: true, // remove from the storage when the state is undefined
-    })(reducer);
+export const persistReducer = <T>(
+  _initialState: T,
+  persistedKeys: EntityPersistConfig<T>,
+  feature: string,
+): ((reducer: ActionReducer<T>) => ActionReducer<T>) => {
+  return localStorageSync({
+    keys: Object.entries(persistedKeys)
+      .filter(([, value]) => !!value)
+      .map(([key, value]) => {
+        const config = {};
+        config[key] = value;
+        return config;
+      }) as any,
+    rehydrate: true, // restore the state when opening the app
+    removeOnUndefined: true, // remove from the storage when the state is undefined
+    storageKeySerializer: key => `${feature} ${key}`,
+    restoreDates: false, // weirdly this makes it restore dates correctly
+  });
+};

@@ -1,5 +1,5 @@
 import { ComponentType, OrnamentType } from '@web-orders/api-interfaces';
-import type { IEntity } from '../common/entity';
+import type { IEntity } from '../shared/entity';
 
 export interface IShoeComponent extends IEntity {
   type: ComponentType;

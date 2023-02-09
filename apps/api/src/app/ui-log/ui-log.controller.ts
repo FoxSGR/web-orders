@@ -3,7 +3,7 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { UILogService } from './ui-log.service';
 import { UILogMapper } from './ui-log.mapper';
 import { UILogDTO } from './ui-log.dto';
-import { CurrentUser } from '../common';
+import { CurrentUser } from '../shared';
 import { IUser } from '../user';
 
 @Controller('/ui-log')

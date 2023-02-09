@@ -1,23 +1,22 @@
-export type KeyMap<T> = { [P in keyof Required<T>]: boolean };
-
 export interface EntityPage<T> {
   size: number;
   offset: number;
   items: T[];
   total: number;
+  extra?: object;
 }
 
-export interface EntityList<T> {
-  currentPage?: EntityPage<T>;
-  state: 'loading' | 'error' | 'loaded';
+interface AbstractWOItem {
+  label: string;
 }
 
-export const initialListState: EntityList<any> = {
-  state: 'loading',
+export interface WOIconItem extends AbstractWOItem {
+  icon: string;
+}
+
+export type WOItem = AbstractWOItem | WOIconItem;
+
+export type WOItemMap<T extends string = string> = { [key in T]: WOItem };
+export type WOIconItemMap<T extends string = string> = {
+  [key in T]: WOIconItem;
 };
-
-export interface SelectItem<T> {
-  id: number | string;
-  name: string;
-  data: T;
-}

@@ -12,24 +12,23 @@ export class ShoeSample extends Entity implements IShoeSampleDTO {
   agent?: Agent;
   brand?: Brand;
   dateAsked?: Date;
+  deadline?: Date;
   dateDelivery?: Date;
+  size?: number;
+  amount?: number;
   notes?: string;
 
   constructor(sample: IShoeSampleDTO) {
     super(sample);
-    this.initChildEntities(sample, {
-      baseModel: ShoeModel,
-      sampleModel: ShoeModel,
-      client: Client,
-      agent: Agent,
-      brand: Brand,
-    });
-
-    if (sample.dateAsked) {
-      this.dateAsked = new Date(sample.dateAsked);
-    }
-    if (sample.dateDelivery) {
-      this.dateAsked = new Date(sample.dateDelivery);
-    }
+    this.initChildEntities(
+      sample,
+      new Map([
+        ['baseModel', ShoeModel as any], // for some reason "as any" fixed the typescript error here
+        ['sampleModel', ShoeModel],
+        ['client', Client],
+        ['agent', Agent],
+        ['brand', Brand],
+      ]),
+    );
   }
 }

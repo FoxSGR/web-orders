@@ -7,13 +7,12 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
-import { EntityDTO } from '../common/entity/entity.dto';
+import { EntityDTO } from '../shared/entity/entity.dto';
 import { ShoeSampleDTO } from '../shoe-sample';
 import { ShoeSizes } from './shoe-order.types';
 
 export class ShoeOrderDTO extends EntityDTO {
   @ValidateNested()
-  @IsOptional({ groups: ['update'] })
   @Type(() => ShoeSampleDTO)
   sample: ShoeSampleDTO;
 

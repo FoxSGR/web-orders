@@ -1,26 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
 import { HttpClientModule } from '@angular/common/http';
-import { TranslateModule } from '@ngx-translate/core';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 
-import { EntityListModule } from './components';
-
-import * as components from './components';
 import * as directives from './directives';
-import * as pipes from './pipes';
+import { EntityPreviewModule } from './components/entity-preview/entity-preview.module';
 
 @NgModule({
-  declarations: [
-    components.EntityPreviewActionComponent,
-    components.EntityPreviewCloseComponent,
-    components.EntityPreviewListComponent,
-    components.StepperComponent,
-    directives.AutoFocusDirective,
-    pipes.CastPipe,
-    pipes.DatePipe,
-  ],
+  declarations: [directives.AutoFocusDirective],
   imports: [
     CommonModule,
     LoggerModule.forRoot({
@@ -29,18 +16,8 @@ import * as pipes from './pipes';
       colorScheme: ['purple', 'teal', 'gray', 'gray', 'red', 'red', 'red'],
     }),
     HttpClientModule,
-    IonicModule,
-    TranslateModule,
-    EntityListModule,
+    EntityPreviewModule,
   ],
-  exports: [
-    EntityListModule,
-    components.EntityPreviewActionComponent,
-    components.EntityPreviewCloseComponent,
-    components.EntityPreviewListComponent,
-    components.StepperComponent,
-    directives.AutoFocusDirective,
-    pipes.CastPipe,
-  ],
+  exports: [directives.AutoFocusDirective],
 })
 export class WOCommonModule {}

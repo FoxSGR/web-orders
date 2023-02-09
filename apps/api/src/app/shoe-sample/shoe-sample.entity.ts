@@ -13,15 +13,15 @@ import { ShoeModel } from '../shoe-model';
 import { Client } from '../client';
 import { Agent } from '../agent';
 import { Brand } from '../brand';
-import { OwnedEntity } from '../common/entity';
-import { commonColumns } from '../common/entity/common-columns';
+import { OwnedEntity } from '../shared/entity';
+import { commonColumns } from '../shared/entity/common-columns';
 
 @Entity()
 export class ShoeSample implements IShoeSample {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Factory(faker => ({ id: faker.random.number(99) + 1 }))
+  @Factory(faker => ({ id: faker.datatype.number(99) + 1 }))
   @ManyToOne(() => ShoeModel, { cascade: false })
   @JoinColumn()
   baseModel: ShoeModel;
@@ -34,17 +34,17 @@ export class ShoeSample implements IShoeSample {
   @JoinColumn()
   sampleModel: ShoeModel;
 
-  @Factory(faker => ({ id: faker.random.number(99) + 1 }))
+  @Factory(faker => ({ id: faker.datatype.number(99) + 1 }))
   @ManyToOne(() => Client, { cascade: false })
   @JoinColumn()
   client?: Client;
 
-  @Factory(faker => ({ id: faker.random.number(99) + 1 }))
+  @Factory(faker => ({ id: faker.datatype.number(99) + 1 }))
   @ManyToOne(() => Agent)
   @JoinColumn()
   agent?: Agent;
 
-  @Factory(faker => ({ id: faker.random.number(99) + 1 }))
+  @Factory(faker => ({ id: faker.datatype.number(99) + 1 }))
   @ManyToOne(() => Brand)
   @JoinColumn()
   brand?: Brand;
@@ -53,8 +53,20 @@ export class ShoeSample implements IShoeSample {
   @Column({ default: null })
   dateAsked?: Date;
 
+  @Factory(faker => faker.date.future())
+  @Column({ default: null })
+  deadline?: Date;
+
   @Column({ default: null })
   dateDelivery?: Date;
+
+  @Factory(faker => faker.datatype.number({ min: 36, max: 45 }))
+  @Column({ default: null })
+  size?: number;
+
+  @Factory(faker => faker.datatype.number({ min: 1, max: 5 }))
+  @Column({ default: 1 })
+  amount?: number;
 
   @Factory(commonColumns.notes.seed)
   @Column(commonColumns.notes.column)

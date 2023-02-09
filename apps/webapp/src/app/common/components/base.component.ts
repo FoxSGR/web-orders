@@ -50,6 +50,20 @@ export class BaseComponent implements OnInit, OnDestroy {
    */
   protected readonly cdr: ChangeDetectorRef;
 
+  /**
+   * Comparator to keep the original order of items in the config.
+   */
+  originalOrder = () => 0;
+
+  /**
+   * Track by function to track by id.
+   * @param _index
+   * @param item
+   */
+  trackById = (_index: number, item: any) => item.id;
+  trackByKey = (_index: number, item: any) => item.key;
+  trackByUid = (_index: number, item: any) => item._uid;
+
   constructor(
     // inject only the injector so that subclasses only need to pass 1 parameter
     protected injector: Injector,

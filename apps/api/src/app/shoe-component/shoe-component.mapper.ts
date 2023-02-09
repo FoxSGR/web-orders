@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { EntityMapper } from '../common/entity/entity.mapper';
+import { EntityMapper } from '../shared/entity/entity.mapper';
 import { IShoeComponent } from './shoe-component.types';
 import { ShoeComponentDTO } from './shoe-component.dto';
 

@@ -1,0 +1,12 @@
+<ion-spinner
+  *ngIf="!state"
+  style="margin: auto"
+  type="indeterminate"
+></ion-spinner>
+
+<wo-smart-form
+  *ngIf="state && wizardDefinition"
+  [definition]="wizardDefinition!.steps[stepKey].form"
+  [(state)]="state"
+  (stateChange)="changes.next($event)"
+></wo-smart-form>

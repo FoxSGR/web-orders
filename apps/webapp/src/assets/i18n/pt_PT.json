@@ -1,28 +1,140 @@
 {
   "str": {
     "common": {
-      "photo": "Fotografia",
-      "notes": "Notas",
-      "unset": "Não definido",
-      "placeholders": {
-        "search": "Pesquisar"
-      },
       "actions": {
         "create": "Criar"
+      },
+      "add": "Adicionar",
+      "address": {
+        "address": "Morada",
+        "line1": "Linha 1",
+        "line2": "Linha 2",
+        "city": "Cidade",
+        "zipCode": "Código postal",
+        "country": "País",
+        "placeholder": {
+          "line1": "Nome da rua",
+          "line2": "Andar, bloco...",
+          "city": "Nome da cidade",
+          "zipCode": "1234-123",
+          "country": "Nome do país"
+        }
+      },
+      "amount": "Quantidade",
+      "brand": "Marca",
+      "brands": "Marcas",
+      "color": "Cor",
+      "component": "Componente",
+      "components": "Componentes",
+      "contact": "Contacto",
+      "contacts": "Contactos",
+      "deadline": "Data limite",
+      "description": "Descrição",
+      "done": "Feito",
+      "empty": "Vazio",
+      "loadedFromServer": "Carregado do servidor",
+      "localChanges": "Alterações locais",
+      "location": {
+        "country": "País"
+      },
+      "material": "Material",
+      "name": "Nome",
+      "notes": "Notas",
+      "photo": "Fotografia",
+      "phoneNumber": "Número de telefone",
+      "placeholders": {
+        "search": "Pesquisar",
+        "selectedItems": "Os items selecionados aparecerão aqui",
+        "materialAmount": "Quantidade do material",
+        "materialSize": "Tamanho do material",
+        "materialNotes": "Notas acerca do material"
+      },
+      "price": "Preço",
+      "reference": "Referência",
+      "see": "Ver",
+      "size": "Tamanho",
+      "type": "Tipo",
+      "unset": "Não definido",
+      "vat": "Nº de Contribuinte",
+      "smartForm": {
+        "validation": {
+          "required": {
+            "message": "O campo \"{{field}}\" é obrigatório."
+          }
+        }
       }
     },
     "menu": {
       "home": "Página Inicial",
       "sample": "Amostras",
       "orders": "Encomendas",
-      "management": "Gestão"
+      "clients": "Clientes",
+      "agents": "Agentes",
+      "components": "Componentes",
+      "colors": "Cores",
+      "more": "Mais"
+    },
+    "wizard": {
+      "fields": {
+        "date": {
+          "placeholder": "Escolha a data"
+        }
+      },
+      "footer": {
+        "saveAndExit": "Gravar e sair",
+        "clear": "Limpar"
+      },
+      "alerts": {
+        "empty": {
+          "message": "Não é possível gravar sem dados preenchidos."
+        },
+        "load": {
+          "message": "Ocorreu um erro ao carregar."
+        },
+        "saveError": {
+          "message": "Ocorreu um erro ao gravar."
+        },
+        "saveInvalid": {
+          "message": "Não foi possível gravar, porque introduziu dados inválidos ou incompletos."
+        }
+      }
+    },
+    "entity": {
+      "preview": {
+        "common": {
+          "seeContacts": "Ver contactos"
+        },
+        "alerts": {
+          "error": {
+            "message": "Ocorreu um erro ao carregar a pré-visualização."
+          },
+          "conflict": {
+            "message": "Alterações recentes feitas a este elemento não foram gravadas. No ecrã seguinte, escolha a versão que pretende restaurar."
+          }
+        },
+        "compare": {
+          "accept": "Aceitar",
+          "title": "Escolha a versão que pretende restaurar"
+        }
+      },
+      "delete": {
+        "alerts": {
+          "success": {
+            "message": "Apagado."
+          },
+          "error": {
+            "message": "Ocorreu um erro ao apagar."
+          }
+        }
+      }
     },
     "sample": {
       "common": {
         "sample": "Amostra",
         "requestedAt": "Pedida em",
         "season": "Época",
-        "dateAsked": "Pedida em"
+        "dateAsked": "Pedida em",
+        "dateDelivery": "Entregue em"
       },
       "list": {
         "header": "Amostras"
@@ -33,7 +145,44 @@
       },
       "preview": {
         "components": {
-          "empty": "Não foram definidos os components do modelo."
+          "empty": "Não foram definidos os componentes do modelo."
+        }
+      },
+      "wizard": {
+        "header": {
+          "creating": "Criar amostra",
+          "updating": "Editar amostra"
+        },
+        "deadline": {
+          "label": "Entregar até"
+        },
+        "reference": {
+          "placeholder": "Referência do modelo"
+        },
+        "base": {
+          "header": "Base"
+        },
+        "model": {
+          "header": "Modelo"
+        },
+        "details": {
+          "header": "Detalhes"
+        },
+        "notes": {
+          "placeholder": "Notas acerca da amostra"
+        },
+        "component": {
+          "price": {
+            "placeholder": "Preço por par"
+          }
+        },
+        "messages": {
+          "save": {
+            "message": "A amostra foi gravada."
+          }
+        },
+        "amount": {
+          "placeholder": "Quantidade de pares"
         }
       }
     },
@@ -46,11 +195,49 @@
     "agent": {
       "common": {
         "agent": "Agente"
+      },
+      "preview": {
+        "clients": {
+          "empty": "Nenhum cliente tem este agente."
+        }
+      },
+      "wizard": {
+        "messages": {
+          "save": {
+            "message": "O agente foi gravado."
+          }
+        },
+        "header": {
+          "creating": "Criar agente",
+          "updating": "Editar agente"
+        },
+        "name": {
+          "placeholder": "Nome do agente"
+        }
       }
     },
     "client": {
       "common": {
         "client": "Cliente"
+      },
+      "wizard": {
+        "messages": {
+          "save": {
+            "message": "O cliente foi gravado."
+          }
+        },
+        "header": {
+          "creating": "Criar cliente",
+          "updating": "Editar cliente"
+        },
+        "name": {
+          "placeholder": "Nome do cliente"
+        }
+      },
+      "preview": {
+        "brands": {
+          "empty": "Não foi definida nenhuma marca."
+        }
       }
     },
     "brand": {
@@ -62,8 +249,11 @@
       "common": {
         "reference": "Referência",
         "name": "Descrição",
-        "componentReference": "Referência de Componente",
-        "componentName": "Descrição de Componente"
+        "componentReference": "Referência do Componente",
+        "componentDescription": "Descrição do Componente"
+      },
+      "ornaments": {
+        "ornamentType": "Tipo de Aplicação"
       },
       "types": {
         "leather": {
@@ -96,23 +286,55 @@
         "zip": {
           "label": "Fecho"
         },
+        "buckle": {
+          "label": "Fivela"
+        },
+        "frontlet": {
+          "label": "Testeira"
+        },
         "ornament": {
           "label": "Aplicação",
-          "type": "Tipo",
-          "types": {
-            "zip": {
-              "label": "Fecho"
-            },
-            "buckle": {
-              "label": "Fivela"
-            }
+          "type": "Tipo"
+        }
+      },
+      "wizard": {
+        "messages": {
+          "save": {
+            "message": "O componente foi gravada."
           }
+        },
+        "header": {
+          "creating": "Criar componente",
+          "updating": "Editar componente"
+        },
+        "name": {
+          "placeholder": "Nome do componente"
+        },
+        "reference": {
+          "placeholder": "Referência do componente"
+        },
+        "type": {
+          "placeholder": "Tipo de componente"
         }
       }
     },
     "color": {
       "common": {
         "color": "Cor"
+      },
+      "wizard": {
+        "messages": {
+          "save": {
+            "message": "A cor foi gravada."
+          }
+        },
+        "header": {
+          "creating": "Criar cor",
+          "updating": "Editar cor"
+        },
+        "name": {
+          "placeholder": "Nome da cor"
+        }
       }
     },
     "list": {
@@ -120,19 +342,23 @@
       "actions": {
         "delete": "Apagar",
         "newFilter": "Novo filtro",
-        "remove": "Remover"
+        "remove": "Remover",
+        "edit": "Editar"
       },
       "errors": {
         "loading": {
-          "message": "Ocorreu um erro ao carregar"
+          "message": "Ocorreu um erro ao carregar."
         }
       }
     },
     "dialogs": {
-      "delete": {
-        "text": "Tem a certeza que quer apagar?",
+      "common": {
+        "text": "Tem a certeza?",
         "confirm": "Confirmar",
         "cancel": "Cancelar"
+      },
+      "delete": {
+        "text": "Tem a certeza que quer apagar?"
       },
       "preview": {
         "overview": "Visão Geral"

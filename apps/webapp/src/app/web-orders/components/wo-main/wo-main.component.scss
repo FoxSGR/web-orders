@@ -1,7 +1,12 @@
 ion-menu {
   max-width: 280px !important;
+  --border: 1px solid #dedede;
 
   ion-icon {
     margin-right: 15px;
+  }
+
+  &.dark {
+    --border: 1px solid #222222;
   }
 }

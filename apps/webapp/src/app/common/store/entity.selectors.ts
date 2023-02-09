@@ -1,12 +1,16 @@
-import { EntityName, EntityState } from './entity.types';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 
-export const entitySelectors = <T>(entity: EntityName) => {
+import { EntityState } from './entity.types';
+import { EntityType, OptionalId } from '../types';
+import { memoize } from 'lodash';
+
+const _entitySelectors = <T>(entity: EntityType) => {
   const get = createFeatureSelector<EntityState<T>>(entity);
 
   return {
-    getPage: createSelector(get, (state: EntityState<T>) => state.page),
-    getFilter: createSelector(get, (state: EntityState<T>) => state.filter),
-    getStatus: createSelector(get, (state: EntityState<T>) => state.status),
+    getWizard: (id: OptionalId) =>
+      createSelector(get, (state: EntityState<T>) => state.wizardForms[id]),
   };
 };
+
+export const entitySelectors = memoize(_entitySelectors);

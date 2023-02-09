@@ -1,19 +1,23 @@
 import { Injectable } from '@nestjs/common';
 
-import { EntityMapper } from '../common/entity/entity.mapper';
+import { EntityMapper } from '../shared/entity/entity.mapper';
 import { IClient } from './client.types';
 import { ClientDTO } from './client.dto';
 import { AddressMapper } from '../address';
 import { IUser } from '../user';
-import { Promial, ResponseFormat } from '../common';
+import { Promial, ResponseFormat } from '../shared';
 import { AgentService } from '../agent/agent.service';
 import { AgentMapper } from '../agent/agent.mapper';
+import { BrandMapper } from '../brand/brand.mapper';
+import { BrandService } from '../brand/brand.service';
 
 @Injectable()
 export class ClientMapper extends EntityMapper<IClient, ClientDTO> {
   constructor(
     private addressMapper: AddressMapper,
     private agentService: AgentService,
+    private brandMapper: BrandMapper,
+    private brandService: BrandService,
   ) {
     super();
   }
@@ -25,6 +29,11 @@ export class ClientMapper extends EntityMapper<IClient, ClientDTO> {
       phoneNumber: client.phoneNumber,
       address: this.fieldToEntity(this.addressMapper, user, client.address),
       agent: await this.find(this.agentService, user, client.agent?.id),
+      brands: await this.find(
+        this.brandService,
+        user,
+        client.brands?.map(b => b.id),
+      ),
     };
   }
 
@@ -34,20 +43,23 @@ export class ClientMapper extends EntityMapper<IClient, ClientDTO> {
       delete client.agent.clients;
     }
 
-    let agent = undefined;
-    let address = undefined;
-    if (type === 'full') {
+    const full: Partial<ClientDTO> = {};
+
+    if (client.agent) {
       const agentMapper = new AgentMapper(this, this.addressMapper); // cannot inject because they depend on each other
-      agent = this.fieldToResponse(agentMapper, client.agent);
-      address = this.fieldToResponse(this.addressMapper, client.address);
+      full.agent = this.fieldToResponse(agentMapper, client.agent);
+    }
+
+    if (client.brands) {
+      full.brands = this.fieldToResponse(this.brandMapper, client.brands, type);
     }
 
     return {
       name: client.name,
       phoneNumber: client.phoneNumber,
       vat: client.vat,
-      address,
-      agent,
+      address: this.fieldToResponse(this.addressMapper, client.address),
+      ...full,
       ...super.entityToResponse(client),
     };
   }

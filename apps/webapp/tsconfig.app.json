@@ -3,8 +3,9 @@
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
     "types": [],
-    "target": "ES2017",
-    "strictPropertyInitialization": false
+    "target": "ES2022",
+    "strictPropertyInitialization": false,
+    "useDefineForClassFields": false
   },
   "files": ["src/main.ts", "src/polyfills.ts"],
   "include": ["src/**/*.d.ts"],

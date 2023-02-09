@@ -4,7 +4,7 @@ import { Factory } from 'nestjs-seeder';
 
 import { countries } from '@web-orders/api-interfaces';
 import { IAddress } from './address.types';
-import { EntityBase } from '../common/entity/entity';
+import { EntityBase } from '../shared/entity/entity';
 
 @Entity()
 export class Address implements IAddress {

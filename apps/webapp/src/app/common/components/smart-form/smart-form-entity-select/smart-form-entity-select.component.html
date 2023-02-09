@@ -1,0 +1,103 @@
+<ng-template #opener>
+  <ion-item
+    button
+    class="sf-entity-select-opener"
+    size="sm"
+    slot="header"
+    lines="full"
+    id="open-modal-{{ prop }}"
+    [detail]="mode === 'modal'"
+  >
+    <ion-label
+      *ngIf="definition.label"
+      class="flex"
+      style="align-items: center; align-self: center"
+    >
+      <div>
+        {{ definition.label | translate }}
+      </div>
+    </ion-label>
+
+    <!-- Start: Show the selected items -->
+    <div style="margin-left: auto">
+      <ion-chip
+        *ngFor="let entity of value; trackBy: trackById"
+        class="m0 mr5"
+        (click)="removeItem(entity, $event)"
+      >
+        {{ entity.id }}
+        -
+        {{ entityConfig.label(entity) }}
+        <ion-icon name="close"></ion-icon>
+      </ion-chip>
+    </div>
+    <!-- End: Show the selected items -->
+  </ion-item>
+</ng-template>
+
+<ng-container *ngIf="mode === 'accordion'; else modalItem">
+  <ion-accordion-group
+    #entitySelectAccordion
+    class="sf-entity-select w100"
+    (ionChange)="onAccordionToggle($event)"
+    [disabled]="isDisabled()"
+  >
+    <ion-accordion value="first">
+      <!-- Start: Accordion header -->
+      <ng-container *ngTemplateOutlet="opener" slot="header"></ng-container>
+      <!-- End: Accordion header -->
+
+      <!-- Start: Accordion content -->
+      <div style="margin: 10px 2px" slot="content">
+        <wo-entity-list
+          [entityType]="definition.entityName"
+          [config]="listConfig"
+          [(pick)]="value!"
+          (pickChange)="onEntitySelect($event, entitySelectAccordion)"
+          [enabled]="!!entitySelectAccordion.value"
+          [data]="state"
+        ></wo-entity-list>
+      </div>
+      <!-- End: Accordion content -->
+    </ion-accordion>
+  </ion-accordion-group>
+
+  <ion-item-divider style="min-height: 0"></ion-item-divider>
+</ng-container>
+
+<ng-template #modalItem>
+  <ng-container *ngTemplateOutlet="opener"></ng-container>
+</ng-template>
+
+<ion-modal
+  #modal
+  *ngIf="mode === 'modal'"
+  [keepContentsMounted]="false"
+  trigger="open-modal-{{ prop }}"
+  [canDismiss]="true"
+  [breakpoints]="[0, 0.3, 0.9]"
+  [initialBreakpoint]="0.9"
+  (didPresent)="onModalPresent()"
+>
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Welcome</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="modal.dismiss()" [strong]="true">
+            {{ 'str.common.done' | translate }}
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <wo-entity-list
+        [entityType]="definition.entityName"
+        [config]="listConfig"
+        [(pick)]="value!"
+        (pickChange)="onEntitySelect($event)"
+        [data]="state"
+      ></wo-entity-list>
+    </ion-content>
+  </ng-template>
+</ion-modal>

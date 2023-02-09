@@ -1,0 +1,65 @@
+$borderColor: var(
+  --ion-item-border-color,
+  var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13)))
+);
+.sf-multiple {
+  border-radius: 5px;
+  border: solid 0.5px $borderColor;
+  position: relative;
+  margin-bottom: 30px;
+
+  ion-item {
+    --ion-color-shade: #{$borderColor};
+  }
+}
+
+.sf-multiple-items {
+  display: flex;
+  flex-direction: column;
+  --ion-item-background: transparent;
+}
+
+.sf-multiple-form-item {
+  flex: 1;
+}
+
+.sf-multiple-item {
+  display: flex;
+  width: 100%;
+  gap: 5px;
+  align-items: center;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.sf-multiple-item-actions {
+  display: flex;
+  flex-direction: column;
+
+  ion-reorder {
+    display: flex;
+    align-items: center;
+    padding: 0 5px 0 15px;
+  }
+}
+
+.sf-multiple-label {
+  position: absolute;
+  top: -15px;
+  left: 11px;
+  backdrop-filter: blur(10px);
+  padding: 5px;
+}
+
+.sf-multiple-add {
+  position: absolute;
+  bottom: -22px;
+  right: 11px;
+  backdrop-filter: blur(10px);
+  padding: 0;
+
+  ion-button {
+    --padding-start: 10px;
+    --padding-end: 10px;
+  }
+}

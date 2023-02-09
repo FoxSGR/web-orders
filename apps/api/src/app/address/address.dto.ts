@@ -1,7 +1,7 @@
 import { IsOptional } from 'class-validator';
 
 import { IAddressDTO } from '@web-orders/api-interfaces';
-import { EntityDTO } from '../common/entity/entity.dto';
+import { EntityDTO } from '../shared/entity/entity.dto';
 
 export class AddressDTO extends EntityDTO implements IAddressDTO {
   @IsOptional()

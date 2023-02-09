@@ -1,4 +1,4 @@
-import type { IEntity } from '../common/entity';
+import type { IEntity } from '../shared/entity';
 
 export interface IAddress extends IEntity {
   line1: string;

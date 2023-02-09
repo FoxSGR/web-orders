@@ -1,17 +1,30 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Connection, DeepPartial } from 'typeorm';
 
 import { Brand } from './brand.entity';
-import { EntitySeeder } from '../common/entity';
-import { EntitySeederService } from '../common';
+import { EntitySeeder } from '../shared/entity';
+import { EntitySeederService } from '../shared';
+import { BrandRepository } from './brand.repository';
+import { BrandService } from './brand.service';
 
 @Injectable()
-@EntitySeederService()
+@EntitySeederService({ order: 200 })
 export class BrandSeeder extends EntitySeeder<Brand> {
-  constructor(@InjectRepository(Brand) repository: Repository<Brand>) {
-    super(Brand, repository);
+  constructor(connection: Connection, brandService: BrandService) {
+    super(Brand, brandService, connection, BrandRepository);
   }
 
   protected identifier = () => 'name' as keyof Brand;
+
+  protected constant(): DeepPartial<Brand>[] {
+    return [
+      {
+        name: 'Universal Brand',
+        scope: 'universal',
+        base: {
+          owner: { id: 1 },
+        },
+      },
+    ];
+  }
 }

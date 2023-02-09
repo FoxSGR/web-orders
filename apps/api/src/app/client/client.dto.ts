@@ -9,12 +9,12 @@ import { Type } from 'class-transformer';
 import { IClientDTO } from '@web-orders/api-interfaces';
 import { AddressDTO } from '../address';
 import { AgentDTO } from '../agent/agent.dto';
-import { EntityDTO } from '../common/entity/entity.dto';
+import { BrandDTO } from '../brand/brand.dto';
+import { EntityDTO } from '../shared/entity/entity.dto';
 
 export abstract class ClientDTO extends EntityDTO implements IClientDTO {
   @IsString()
   @IsNotEmpty()
-  @IsOptional({ groups: ['update'] })
   @Type(() => String)
   name: string;
 
@@ -27,12 +27,14 @@ export abstract class ClientDTO extends EntityDTO implements IClientDTO {
   vat?: string;
 
   @ValidateNested()
-  @IsOptional({ groups: ['update'] })
   @Type(() => AddressDTO)
   address: AddressDTO;
 
   @IsOptional()
-  @ValidateNested()
   @Type(() => AgentDTO)
   agent?: AgentDTO;
+
+  @IsOptional()
+  @Type(() => BrandDTO)
+  brands: BrandDTO[];
 }

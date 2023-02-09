@@ -48,8 +48,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     this.store.dispatch(
       login({
-        username: this.loginForm.controls['username'].value,
-        password: this.loginForm.controls['password'].value,
+        username: this.loginForm.controls['username'].value!,
+        password: this.loginForm.controls['password'].value!,
         targetRoute: '',
         onSuccess: () => this.reset(),
         onError: error => this.onError(error),

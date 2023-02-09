@@ -1,28 +1,24 @@
-import { Component, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import get from 'lodash/get';
-
-import { ENTITY_LIST_TOKEN, EntityListCellData } from '../entity-list.token';
+import { CellComponent } from './cell.component';
 
 @Component({
   template: `
-    <ion-label>
+    <ion-label *ngIf="shouldShow()">
       <span style="font-weight: 500;">{{ data.column.name! | translate }}</span>
       <br />
-      <span>{{ value() }}</span>
+      <span>{{ value || '&nbsp;' }}</span>
     </ion-label>
   `,
 })
-export class BasicCellComponent<T> {
-  constructor(@Inject(ENTITY_LIST_TOKEN) public data: EntityListCellData<T>) {}
+export class BasicCellComponent extends CellComponent implements OnInit {
+  value: any;
 
-  value(): any {
-    let value = get(this.data.entity, this.data.column.prop!);
+  override ngOnInit() {
+    super.ngOnInit();
 
-    if (this.data.column.pipe) {
-      value = this.data.column.pipe.transform(value);
+    if (this.shouldShow()) {
+      this.value = this.getValue();
     }
-
-    return value;
   }
 }

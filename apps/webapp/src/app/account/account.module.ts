@@ -23,7 +23,9 @@ const components = [cc.LoginComponent];
     CommonModule,
     StoreModule.forFeature('account', accountReducer, {
       initialState: initialAccountState,
-      metaReducers: [persistReducer(initialAccountState, { user: true })],
+      metaReducers: [
+        persistReducer(initialAccountState, { user: true }, 'account'),
+      ],
     }),
     EffectsModule.forFeature([AccountEffects]),
     TranslateModule,

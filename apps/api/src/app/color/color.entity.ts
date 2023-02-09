@@ -1,9 +1,9 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { IsNotEmpty, IsNumber, Max, Min } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 import { Factory } from 'nestjs-seeder';
 
 import { IColor } from './color.types';
-import { OwnedEntity } from '../common/entity';
+import { OwnedEntity } from '../shared/entity';
 
 @Entity()
 export class Color implements IColor {
@@ -11,33 +11,15 @@ export class Color implements IColor {
   id: number;
 
   @IsNotEmpty()
-  @Factory(faker => faker.commerce.color())
+  @Factory(faker => faker.color.human())
   @Column()
   name: string;
 
   @IsNotEmpty()
-  @IsNumber()
-  @Min(0)
-  @Max(255)
-  @Factory(faker => faker.random.number(255))
+  @IsString()
+  @Factory(faker => faker.color.rgb({ format: 'hex' }))
   @Column({ precision: 3, default: null })
-  red: number;
-
-  @IsNotEmpty()
-  @IsNumber()
-  @Min(0)
-  @Max(255)
-  @Factory(faker => faker.random.number(255))
-  @Column({ precision: 3, default: null })
-  green: number;
-
-  @IsNotEmpty()
-  @IsNumber()
-  @Min(0)
-  @Max(255)
-  @Factory(faker => faker.random.number(255))
-  @Column({ precision: 3, default: null })
-  blue: number;
+  color: string;
 
   @Column(() => OwnedEntity, { prefix: '' })
   base: OwnedEntity;

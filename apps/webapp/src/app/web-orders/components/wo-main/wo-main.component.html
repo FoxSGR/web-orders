@@ -1,5 +1,62 @@
+<ng-template #menuItemTpl let-item="item">
+  <ion-item
+    (click)="onItemClick(item)"
+    button
+    class="transparent"
+    slot="header"
+  >
+    <ion-ripple-effect class="wo-menu-ripple"></ion-ripple-effect>
+    <ion-icon
+      [name]="item.icon"
+      [color]="routeMatches(item, route$ | async) ? 'dark' : 'medium'"
+      class="wo-menu-icon"
+      slot="start"
+    ></ion-icon>
+    <ion-label
+      [ngStyle]="{
+        fontWeight: routeMatches(item, route$ | async) ? 500 : 400
+      }"
+    >
+      {{ item.label | translate }}
+    </ion-label>
+  </ion-item>
+</ng-template>
+
+<ng-template #menuItemListTpl let-items="items">
+  <ion-list class="transparent p0 w100">
+    <ng-container *ngFor="let item of items; trackBy: trackByRoute">
+      <ng-container
+        *ngIf="!item.children"
+        [ngTemplateOutlet]="menuItemTpl"
+        [ngTemplateOutletContext]="{ item: item }"
+      ></ng-container>
+
+      <ion-accordion-group *ngIf="item.children">
+        <ion-accordion value="first">
+          <ng-container
+            [ngTemplateOutlet]="menuItemTpl"
+            [ngTemplateOutletContext]="{ item: item }"
+          >
+          </ng-container>
+
+          <div slot="content">
+            <ng-container
+              [ngTemplateOutlet]="menuItemListTpl"
+              [ngTemplateOutletContext]="{ items: item.children }"
+            ></ng-container>
+          </div>
+        </ion-accordion>
+      </ion-accordion-group>
+    </ng-container>
+  </ion-list>
+</ng-template>
+
 <ion-split-pane contentId="main" [disabled]="(user$ | async) === undefined">
-  <ion-menu contentId="main">
+  <ion-menu
+    contentId="main"
+    [ngClass]="{ dark: darkTheme$ | async }"
+    *ngIf="!printMode"
+  >
     <ion-header>
       <ion-toolbar class="ion-translucent" translucent>
         <ion-title>Web Orders</ion-title>
@@ -14,28 +71,21 @@
       </ion-toolbar>
     </ion-header>
     <ion-content>
-      <ion-list>
-        <ion-item
-          *ngFor="let item of menuItems"
-          (click)="onItemClick(item)"
-          class="ion-activatable"
-        >
-          <ion-ripple-effect class="wo-menu-ripple"></ion-ripple-effect>
-          <ion-icon
-            [name]="item.icon"
-            [color]="routeMatches(item, route$ | async) ? 'dark' : 'medium'"
-            class="wo-menu-icon"
-            slot="start"
-          ></ion-icon>
-          <ion-label
-            [ngStyle]="{
-              fontWeight: routeMatches(item, route$ | async) ? 500 : 400
-            }"
-          >
-            {{ item.label | translate }}
-          </ion-label>
-        </ion-item>
-      </ion-list>
+      <div class="flex flex-column no-gap h100">
+        <div class="w100" style="flex: 1">
+          <ng-container
+            [ngTemplateOutlet]="menuItemListTpl"
+            [ngTemplateOutletContext]="{ items: menuItems }"
+          ></ng-container>
+        </div>
+
+        <div class="w100">
+          <ng-container
+            [ngTemplateOutlet]="menuItemListTpl"
+            [ngTemplateOutletContext]="{ items: bottomItems }"
+          ></ng-container>
+        </div>
+      </div>
     </ion-content>
   </ion-menu>
 

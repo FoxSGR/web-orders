@@ -1,4 +1,4 @@
-::ng-deep .entity-preview-modal ion-content {
+:host ::ng-deep .entity-preview ion-content {
   flex: unset;
 
   .wo-preview-content {
@@ -8,5 +8,15 @@
   ion-fab {
     margin-bottom: 15px;
     margin-right: 15px;
+  }
+}
+
+::ng-deep .entity-preview-modal {
+  --max-width: 600px;
+}
+
+@media screen and (min-width: 768px) {
+  ::ng-deep .entity-preview-modal {
+    --max-width: 80%;
   }
 }

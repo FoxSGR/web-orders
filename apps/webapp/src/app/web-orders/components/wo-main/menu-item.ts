@@ -3,4 +3,5 @@ export interface MenuItem {
   label: string;
   onClick?: () => void;
   route?: string;
+  children?: MenuItem[];
 }

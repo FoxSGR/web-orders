@@ -14,8 +14,8 @@ import { ShoeOrderService } from './shoe-order.service';
 import { ShoeOrderMapper } from './shoe-order.mapper';
 import { IShoeOrder } from './shoe-order.types';
 import { ShoeOrderDTO } from './shoe-order.dto';
-import { CurrentUser, FindParams, Page } from '../common';
-import { EntityController } from '../common/entity';
+import { CurrentUser, FindParams, Page } from '../shared';
+import { EntityController } from '../shared/entity';
 import { IUser } from '../user';
 
 @Controller('/shoe-order')

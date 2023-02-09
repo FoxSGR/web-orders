@@ -1,0 +1,31 @@
+<ion-item lines="none" [disabled]="isDisabled()">
+  <ion-label position="stacked">{{
+    'str.common.phoneNumber' | translate
+  }}</ion-label>
+  <ion-grid class="ion-no-padding w100 mt5">
+    <ion-row>
+      <ion-col size-md="4" size-sm="12" size-xs="12">
+        <wo-select-search
+          [options]="intlConfigOptions"
+          [(model)]="value!.prefix"
+          (modelChange)="onPrefixChange()"
+          [placeholder]="'str.common.address.country' | translate"
+        >
+        </wo-select-search>
+      </ion-col>
+      <ion-col size-md="8" size-sm="12" size-xs="12">
+        <ion-item lines="none">
+          <ion-input
+            [maxlength]="15"
+            [min]="0"
+            type="number"
+            placeholder="911231231"
+            [(ngModel)]="value!.value"
+            (ngModelChange)="onChange()"
+            [disabled]="isDisabled()"
+          ></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-item>

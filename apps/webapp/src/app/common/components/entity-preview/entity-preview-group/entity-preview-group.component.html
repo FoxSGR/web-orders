@@ -1,0 +1,60 @@
+<div style="margin: 0 10px" *ngIf="group.collapsable; else groupContent">
+  <ion-accordion-group>
+    <ion-accordion value="first">
+      <!-- Start: Accordion header -->
+      <ion-item slot="header">
+        <ion-icon
+          *ngIf="group.header?.icon"
+          [name]="group.header!.icon"
+          class="ion-padding-end"
+        ></ion-icon>
+        <ion-label>
+          <p style="font-weight: 500">
+            {{ group.header!.title | translate }}
+          </p>
+        </ion-label>
+      </ion-item>
+      <!-- End: Accordion header -->
+      <!-- Start: Accordion content -->
+      <div slot="content">
+        <div>
+          <ng-container *ngTemplateOutlet="groupContent"></ng-container>
+        </div>
+      </div>
+      <!-- End: Accordion content -->
+    </ion-accordion>
+  </ion-accordion-group>
+  <ion-item-divider style="min-height: 0"></ion-item-divider>
+</div>
+
+<ng-template #groupContent>
+  <ion-text *ngIf="group.header && !group.collapsable">
+    <h6>
+      {{ group.header.title | translate }}
+      <span *ngIf="group.header.subTitle" style="font-weight: 300">
+        {{ group.header.subTitle }}
+      </span>
+    </h6>
+  </ion-text>
+
+  <ion-label *ngIf="group.items.length === 0 && group.emptyText">
+    <p>{{ group.emptyText | translate }}</p>
+  </ion-label>
+
+  <wo-entity-preview-list
+    *ngIf="(!group.type || group.type === 'items') && group.items.length > 0"
+    [items]="group.items"
+    [model]="entity"
+    [columns]="group.columns"
+    [indexed]="!!group.showIndex"
+  ></wo-entity-preview-list>
+
+  <ng-container *ngIf="group.type === 'groups'">
+    <wo-entity-preview-group
+      *ngFor="let child of group.items"
+      [group]="$any(child)"
+      [entity]="entity"
+    >
+    </wo-entity-preview-group>
+  </ng-container>
+</ng-template>

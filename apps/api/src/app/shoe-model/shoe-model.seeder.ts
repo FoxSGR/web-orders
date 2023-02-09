@@ -1,18 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Connection } from 'typeorm';
 
 import { ShoeModel } from './shoe-model.entity';
-import { EntitySeeder } from '../common/entity';
-import { EntitySeederService } from '../common';
+import { ShoeModelRepository } from './shoe-model.repository';
+import { EntitySeeder } from '../shared/entity';
+import { EntitySeederService } from '../shared';
+import { ShoeModelService } from './shoe-model.service';
 
 @Injectable()
-@EntitySeederService()
+@EntitySeederService({ order: 14900 })
 export class ShoeModelSeeder extends EntitySeeder<ShoeModel> {
   nested = ['components'];
 
-  constructor(@InjectRepository(ShoeModel) repository: Repository<ShoeModel>) {
-    super(ShoeModel, repository);
+  constructor(connection: Connection, shoeModelService: ShoeModelService) {
+    super(ShoeModel, shoeModelService, connection, ShoeModelRepository);
   }
 
   protected identifier = () => 'reference' as keyof ShoeModel;

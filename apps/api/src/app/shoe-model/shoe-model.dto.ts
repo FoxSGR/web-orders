@@ -1,33 +1,11 @@
-import {
-  IsDate,
-  IsInt,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  Min,
-  Validate,
-  ValidateNested,
-} from 'class-validator';
+import { IsDate, IsOptional, IsString, ValidateNested } from 'class-validator';
 
-import { ISeasonDTO, IShoeModelDTO } from '@web-orders/api-interfaces';
+import { IShoeModelDTO } from '@web-orders/api-interfaces';
 import { Type } from 'class-transformer';
-import { EntityDTO } from '../common/entity/entity.dto';
+import { EntityDTO } from '../shared/entity/entity.dto';
 import { ShoeModelType } from './shoe-model.types';
 import { ShoeModelComponentDTO } from './shoe-model-component/shoe-model-component.dto';
-import { SeasonType, seasonTypes } from '../common';
-
-export class SeasonDTO implements ISeasonDTO {
-  @IsNotEmpty()
-  @IsInt()
-  @Min(1900)
-  @Type(() => Number)
-  year: number;
-
-  @IsNotEmpty()
-  @Validate(season => !!seasonTypes[season])
-  @Type(() => String)
-  seasons: SeasonType;
-}
+import { SeasonType } from '../shared';
 
 export class ShoeModelDTO extends EntityDTO implements IShoeModelDTO {
   @IsString()
@@ -37,7 +15,6 @@ export class ShoeModelDTO extends EntityDTO implements IShoeModelDTO {
 
   @IsString()
   @Type(() => String)
-  @IsOptional({ groups: ['update'] })
   reference: string;
 
   @ValidateNested({ each: true })
@@ -50,10 +27,8 @@ export class ShoeModelDTO extends EntityDTO implements IShoeModelDTO {
   @Type(() => Date)
   dateCreated?: Date;
 
-  @ValidateNested()
-  @IsOptional({ groups: ['update'] })
-  @Type(() => SeasonDTO)
-  season: SeasonDTO;
+  @Type(() => String)
+  season: SeasonType;
 
   @IsOptional()
   @Type(() => String)

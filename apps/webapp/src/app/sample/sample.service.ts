@@ -7,9 +7,7 @@ import { IFindParams } from '@web-orders/api-interfaces';
 import { Client, createParams, EntityService, ShoeSample } from '../common';
 import { environment } from '../../environments/environment';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class SampleService extends EntityService<ShoeSample> {
   constructor(http: HttpClient) {
     super(http, {
@@ -20,7 +18,7 @@ export class SampleService extends EntityService<ShoeSample> {
   }
 
   getTopClients(params: IFindParams<Client>): Observable<Client[]> {
-    this._prepareParams(params);
+    this.createParams(params);
 
     return this.http
       .get(`${environment.apiUrl}/shoe-sample/top/clients`, {

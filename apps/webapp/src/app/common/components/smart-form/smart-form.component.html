@@ -1,12 +1,16 @@
-<ng-container *ngFor="let item of config.items">
-  <ng-container *ngIf="item.type === 'entity-select'">
-    <ion-item>
-      <ion-accordion value="first">
-        <ion-item slot="header" color="light">
-          <ion-label>First Accordion</ion-label>
-        </ion-item>
-        <div class="ion-padding" slot="content">First Content</div>
-      </ion-accordion>
-    </ion-item>
-  </ng-container>
+<ng-container
+  *ngFor="
+    let item of definition.items | keyvalue: originalOrder;
+    trackBy: trackByKey
+  "
+>
+  <wo-smart-form-item
+    *ngIf="!item.value.hidden?.(state, item.key)"
+    [formDefinition]="definition"
+    [definition]="item.value"
+    [prop]="item.key"
+    [(state)]="state"
+    (stateChange)="stateChange.emit($event)"
+  >
+  </wo-smart-form-item>
 </ng-container>

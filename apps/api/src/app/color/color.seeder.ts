@@ -1,16 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Connection } from 'typeorm';
 
 import { Color } from './color.entity';
-import { EntitySeeder } from '../common/entity';
-import { EntitySeederService } from '../common';
+import { EntitySeeder } from '../shared/entity';
+import { EntitySeederService } from '../shared';
+import { ColorRepository } from './color.repository';
+import { ColorService } from './color.service';
 
 @Injectable()
-@EntitySeederService()
+@EntitySeederService({ order: 14700 })
 export class ColorSeeder extends EntitySeeder<Color> {
-  constructor(@InjectRepository(Color) repository: Repository<Color>) {
-    super(Color, repository);
+  constructor(connection: Connection, private colorService: ColorService) {
+    super(Color, colorService, connection, ColorRepository);
   }
 
   protected identifier = () => 'name' as keyof Color;

@@ -1,0 +1,9 @@
+<input #uploadInput type="file" style="display: none" onChange="{setImage}" />
+
+<ion-item>
+  <ion-label *ngIf="definition.label">
+    {{ definition.label | translate }}
+  </ion-label>
+
+  <ion-input></ion-input>
+</ion-item>

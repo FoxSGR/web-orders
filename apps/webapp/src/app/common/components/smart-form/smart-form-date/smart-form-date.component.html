@@ -1,0 +1,34 @@
+<ion-item (click)="openDatePicker()" button lines="full">
+  <ion-label *ngIf="definition.label">{{
+    definition.label | translate
+  }}</ion-label>
+
+  <ion-datetime-button
+    #datetimeButton
+    [datetime]="prop"
+    [disabled]="isDisabled()"
+  >
+    <ion-chip slot="date-target">
+      <span *ngIf="!value">
+        {{ 'str.wizard.fields.date.placeholder' | translate }}
+      </span>
+      <span *ngIf="value">
+        {{ value | wodate }}
+      </span>
+    </ion-chip>
+  </ion-datetime-button>
+
+  <ion-modal [keepContentsMounted]="true" #modal>
+    <ng-template>
+      <ion-datetime
+        [presentation]="definition.dateType"
+        [id]="prop"
+        [disabled]="isDisabled()"
+        [(ngModel)]="value"
+        (ionChange)="onChange()"
+        [showClearButton]="true"
+        [showDefaultButtons]="true"
+      ></ion-datetime>
+    </ng-template>
+  </ion-modal>
+</ion-item>

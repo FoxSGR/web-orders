@@ -21,14 +21,29 @@ export class AlertsEffects {
         ofType(alertActions.showAlert),
         tap(async action => {
           const position = action.alert.position || 'toast';
-          const timeout = action.alert.timeout || 20;
+          const timeout = action.alert.timeout || 60;
 
           if (position === 'toast') {
             const toast = await this.toastController.create({
               message: await firstValueFrom(
-                this.translate.get(action.alert.message),
+                this.translate.get(
+                  action.alert.message,
+                  action.alert.messageParams,
+                ),
               ),
               duration: timeout * 1000,
+              buttons: [
+                ...(action.alert.buttons || []).map(button => ({
+                  text: button.text,
+                  icon: button.icon,
+                  handler: button.callback,
+                })),
+                {
+                  side: 'end',
+                  icon: 'close',
+                  handler: () => toast.dismiss(),
+                },
+              ],
             });
 
             await toast.present();

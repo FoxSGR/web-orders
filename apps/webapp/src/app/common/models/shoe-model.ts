@@ -18,18 +18,14 @@ export class ShoeModelComponent
   extends Entity
   implements IShoeModelComponentDTO
 {
+  sort: number;
   component: ShoeComponent;
   amount?: number;
   price?: number;
   color?: Color;
 }
 
-export class SeasonDTO {
-  year: number;
-  seasons: SeasonType;
-}
-
-export class ShoeModel extends Entity {
+export class ShoeModel extends Entity implements IShoeModelDTO {
   static ComponentOrder: ComponentType[] = [
     'leather',
     'lining',
@@ -47,12 +43,15 @@ export class ShoeModel extends Entity {
   reference: string;
   components?: ShoeModelComponent[];
   dateCreated?: Date;
-  season: SeasonDTO;
+  season?: SeasonType;
   notes?: string;
 
   constructor(model: IShoeModelDTO) {
     super(model);
-    this.initChildEntities(model, { components: ShoeModelComponent });
+    this.initChildEntities(
+      model,
+      new Map([['components', ShoeModelComponent]]),
+    );
   }
 
   sortComponents() {

@@ -1,0 +1,18 @@
+<div class="sf-group" [ngClass]="{ inline: definition.inline }">
+  <ng-container
+    *ngFor="
+      let item of definition.children | keyvalue: originalOrder;
+      trackBy: trackByKey
+    "
+  >
+    <wo-smart-form-item
+      [ngStyle]="{ flex: 1 }"
+      *ngIf="!isHidden(item.key)"
+      [formDefinition]="formDefinition"
+      [definition]="item.value"
+      [prop]="childProp(item.key)"
+      [(state)]="state"
+      (stateChange)="stateChange.emit($event)"
+    ></wo-smart-form-item>
+  </ng-container>
+</div>

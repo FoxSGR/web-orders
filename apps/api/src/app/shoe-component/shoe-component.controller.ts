@@ -10,12 +10,12 @@ import {
 } from '@nestjs/common';
 
 import { Id } from '@web-orders/api-interfaces';
-import { EntityController } from '../common/entity';
+import { EntityController } from '../shared/entity';
 import { ShoeComponentService } from './shoe-component.service';
 import { ShoeComponentMapper } from './shoe-component.mapper';
 import { IShoeComponent } from './shoe-component.types';
 import { ShoeComponentDTO } from './shoe-component.dto';
-import { CurrentUser, FindParams, Page } from '../common';
+import { CurrentUser, FindParams, Page } from '../shared';
 import { IUser } from '../user';
 
 @Controller('/shoe-component')

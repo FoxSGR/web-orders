@@ -1,0 +1,124 @@
+<div class="wo-wizard {{ wizardType }}" *ngIf="wizard">
+  <div class="wo-stepper-container">
+    <ion-text class="ion-text-center" *ngIf="showHeader">
+      <h4>
+        <ion-icon
+          style="vertical-align: middle; margin-bottom: 5px"
+          [name]="wizard.header.icon"
+        ></ion-icon>
+        <span *ngIf="!creating()">
+          {{ wizard.header.updating | translate }}
+          {{ id }}
+        </span>
+        <span *ngIf="creating()">
+          {{ wizard.header.creating | translate }}
+        </span>
+      </h4>
+    </ion-text>
+
+    <div *ngIf="loading">
+      <ion-progress-bar type="indeterminate"></ion-progress-bar>
+    </div>
+
+    <ng-container *ngIf="!loading">
+      <div class="wo-stepper" *ngIf="!loading && steps().length > 1">
+        <div class="wo-stepper-steps">
+          <ng-container
+            *ngFor="
+              let stepEntry of wizard.steps | keyvalue: originalOrder;
+              trackBy: trackByKey;
+              let i = index
+            "
+          >
+            <div class="wo-stepper-step" *ngIf="stepEntry.value as step">
+              <ion-fab-button
+                class="wo-stepper-step-button"
+                [color]="buttonColor(i, step)"
+                (click)="navigate(step, stepEntry.key)"
+              >
+                <span *ngIf="i >= currentStepIndex(); else doneStep">
+                  {{ i + 1 }}
+                </span>
+                <ng-template #doneStep>
+                  <ion-icon name="checkmark"></ion-icon>
+                </ng-template>
+              </ion-fab-button>
+              <ion-text
+                [color]="isCurrentStep(step) ? 'dark' : 'medium'"
+                [ngStyle]="{
+                  fontWeight: isCurrentStep(step) ? 500 : 400
+                }"
+              >
+                <small>
+                  {{ step.title! | translate }}
+                </small>
+              </ion-text>
+            </div>
+            <div
+              class="wo-stepper-separator"
+              *ngIf="i !== steps().length - 1"
+            ></div>
+          </ng-container>
+        </div>
+      </div>
+
+      <div class="mt20 mb40">
+        <router-outlet *ngIf="wizardType === 'routed'"></router-outlet>
+        <wo-standalone-step
+          *ngIf="wizardType === 'standalone'"
+          [id]="id"
+          [entityConfig]="entityConfig"
+          [stepKey]="currentStep.key"
+        >
+        </wo-standalone-step>
+      </div>
+    </ng-container>
+  </div>
+
+  <div class="wo-stepper-footer-container" *ngIf="!loading && wizard">
+    <div class="wo-stepper-footer">
+      <div style="margin-right: auto; display: flex; align-items: center">
+        <ion-button
+          *ngIf="currentStepIndex() > 0"
+          shape="circle"
+          fill="outline"
+          (click)="previousStep()"
+          color="medium"
+          class="big"
+        >
+          <ion-icon name="chevron-back-outline"></ion-icon>
+        </ion-button>
+        <ion-button
+          *ngIf="creating()"
+          (click)="clear()"
+          fill="clear"
+          color="medium"
+          style="margin-left: 5px"
+        >
+          {{ 'str.wizard.footer.clear' | translate }}
+        </ion-button>
+      </div>
+
+      <div style="margin-left: auto">
+        <ion-button
+          *ngIf="currentStepIndex() < steps().length - 1"
+          (click)="complete()"
+          fill="clear"
+          color="medium"
+          style="margin-right: 5px"
+        >
+          {{ 'str.wizard.footer.saveAndExit' | translate }}
+        </ion-button>
+        <ion-button shape="circle" (click)="nextStep()" class="big">
+          <ion-icon
+            [name]="
+              currentStepIndex() === steps().length - 1
+                ? 'checkmark'
+                : 'chevron-forward-outline'
+            "
+          ></ion-icon>
+        </ion-button>
+      </div>
+    </div>
+  </div>
+</div>

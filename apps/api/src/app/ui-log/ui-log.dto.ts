@@ -1,4 +1,4 @@
-import { EntityDTO } from '../common/entity/entity.dto';
+import { EntityDTO } from '../shared/entity/entity.dto';
 import { UILogType } from './ui-log.types';
 
 export class UILogDTO extends EntityDTO {

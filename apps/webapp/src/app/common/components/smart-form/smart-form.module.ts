@@ -1,12 +1,43 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
+import { TranslateModule } from '@ngx-translate/core';
+import { FormsModule } from '@angular/forms';
 
-import { SmartFormComponent } from './smart-form.component';
+import { EntityListModule } from '../entity-list';
+import { SelectSearchComponent } from '../select-search';
+
+import { DatePipe } from '../../pipes';
+
+import * as components from './components';
+import { ColorIndicatorComponent } from '../elements';
 
 @NgModule({
-  declarations: [SmartFormComponent],
-  exports: [SmartFormComponent],
-  imports: [CommonModule, IonicModule],
+  declarations: [
+    components.SmartFormComponent,
+    components.SmartFormTextInputComponent,
+    components.SmartFormTextAreaComponent,
+    components.SmartFormChoicesComponent,
+    components.SmartFormNumberInputComponent,
+    components.SmartFormDateComponent,
+    components.SmartFormEntitySelectComponent,
+    components.SmartFormFileUploadComponent,
+    components.SmartFormPhoneInputComponent,
+    components.SmartFormColorComponent,
+    components.SmartFormGroupComponent,
+    components.SmartFormItemComponent,
+    components.SmartFormMultipleComponent,
+  ],
+  exports: [components.SmartFormComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonicModule,
+    TranslateModule,
+    EntityListModule,
+    SelectSearchComponent,
+    DatePipe,
+    ColorIndicatorComponent,
+  ],
 })
 export class SmartFormModule {}

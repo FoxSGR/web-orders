@@ -2,7 +2,9 @@ import {
   Body,
   Controller,
   Delete,
+  forwardRef,
   Get,
+  Inject,
   Param,
   Post,
   Put,
@@ -14,13 +16,19 @@ import { ClientService } from './client.service';
 import { ClientMapper } from './client.mapper';
 import { IClient } from './client.types';
 import { ClientDTO } from './client.dto';
-import { CurrentUser, FindParams, Page } from '../common';
-import { EntityController } from '../common/entity';
+import { CurrentUser, FindParams, Page } from '../shared';
+import { EntityController } from '../shared/entity';
 import { IUser } from '../user';
+import { BrandDTO } from '../brand/brand.dto';
+import { BrandMapper } from '../brand/brand.mapper';
 
 @Controller('/client')
 export class ClientController extends EntityController<IClient, ClientDTO> {
-  constructor(service: ClientService, mapper: ClientMapper) {
+  constructor(
+    service: ClientService,
+    mapper: ClientMapper,
+    @Inject(forwardRef(() => BrandMapper)) private brandMapper: BrandMapper,
+  ) {
     super();
     this.mapper = mapper;
     this.service = service;
@@ -65,5 +73,27 @@ export class ClientController extends EntityController<IClient, ClientDTO> {
     @Param('id') id: Id,
   ): Promise<ClientDTO> {
     return super.delete(user, id);
+  }
+
+  @Get('/:id([0-9]+)/brand')
+  public async findBrands(
+    @CurrentUser() user: IUser,
+    @Param('id') id: number,
+    @Query() params?: FindParams<IClient>,
+  ): Promise<Page<Partial<BrandDTO>>> {
+    params.owner = user;
+    if (params.filter) {
+      params.filter = JSON.parse(params.filter as any);
+    }
+
+    const service = this.service as ClientService;
+    const page = await service.findBrands(id, params);
+    return {
+      ...page,
+      items: this.brandMapper.entitiesToResponse(page.items) as BrandDTO[],
+      extra: {
+        universal: this.brandMapper.entitiesToResponse(page.extra['universal']),
+      },
+    };
   }
 }

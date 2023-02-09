@@ -3,6 +3,7 @@ import { IShoeComponent } from '../../shoe-component';
 import { IShoeModel } from '../shoe-model.types';
 
 export interface IShoeModelComponent {
+  sort: number;
   model?: IShoeModel;
   component: IShoeComponent;
   amount?: number;

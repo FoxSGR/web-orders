@@ -2,20 +2,17 @@ import { IsOptional, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
 import { IShoeSampleDTO } from '@web-orders/api-interfaces';
-import { EntityDTO } from '../common/entity/entity.dto';
+import { EntityDTO } from '../shared/entity/entity.dto';
 import { ShoeModelDTO } from '../shoe-model';
 import { ClientDTO } from '../client';
 import { AgentDTO } from '../agent';
 import { BrandDTO } from '../brand';
 
 export class ShoeSampleDTO extends EntityDTO implements IShoeSampleDTO {
-  @ValidateNested()
-  @IsOptional({ groups: ['update'] })
   @Type(() => ShoeModelDTO)
   baseModel?: ShoeModelDTO;
 
   @ValidateNested()
-  @IsOptional({ groups: ['update'] })
   @Type(() => ShoeModelDTO)
   sampleModel?: ShoeModelDTO;
 
@@ -40,7 +37,19 @@ export class ShoeSampleDTO extends EntityDTO implements IShoeSampleDTO {
 
   @IsOptional()
   @Type(() => Date)
+  deadline?: Date;
+
+  @IsOptional()
+  @Type(() => Date)
   dateDelivery?: Date;
+
+  @IsOptional()
+  @Type(() => Number)
+  size?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  amount?: number;
 
   @IsOptional()
   @Type(() => String)

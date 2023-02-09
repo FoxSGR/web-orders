@@ -1,12 +1,12 @@
 import { Component, Input } from '@angular/core';
-import { AlertController } from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
+import { LoadingController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
-import { lastValueFrom } from 'rxjs';
 
-import { EntityService } from '../../services';
 import { Entity } from '../../models/entity';
-import { entityActions, EntityName } from '../../store';
+import { entityActions } from '../../store';
+import { EntityConfig } from '../../types';
+import { alertActions } from '../../../alerts';
+import { DialogService } from '../../services';
 
 @Component({
   template: `
@@ -18,40 +18,41 @@ import { entityActions, EntityName } from '../../store';
   `,
 })
 export class EntityListDropdownComponent<T extends Entity> {
-  @Input() service: EntityService<T>;
   @Input() entity: T;
-  @Input() entityName: EntityName;
+  @Input() entityConfig: EntityConfig<T>;
+  @Input() refresh: () => void;
 
   constructor(
     private store: Store,
-    private alertController: AlertController,
-    private translate: TranslateService,
+    private loadingController: LoadingController,
+    private dialogService: DialogService,
   ) {}
 
   async delete() {
-    const alert = await this.alertController.create({
-      message: await lastValueFrom(
-        this.translate.get('str.dialogs.delete.text'),
-      ),
-      buttons: [
-        {
-          text: await lastValueFrom(
-            this.translate.get('str.dialogs.delete.cancel'),
-          ),
-        },
-        {
-          text: await lastValueFrom(
-            this.translate.get('str.dialogs.delete.confirm'),
-          ),
-          id: 'confirm-button',
-          handler: () =>
-            this.store.dispatch(
-              entityActions(this.entityName).delete({ entity: this.entity }),
-            ),
-        },
-      ],
-    });
+    this.dialogService.confirm(async () => {
+      const loading = await this.loadingController.create();
+      loading.present();
 
-    alert.present();
+      this.entityConfig.service!.delete(this.entity.id!).subscribe({
+        next: () => {
+          this.store.dispatch(
+            entityActions(this.entityConfig.entityType).deleted({
+              entity: this.entity,
+            }),
+          );
+          this.refresh();
+        },
+        error: () =>
+          this.store.dispatch(
+            alertActions.showAlert({
+              alert: {
+                type: 'error',
+                message: 'str.entity.delete.alerts.error.message',
+              },
+            }),
+          ),
+        complete: () => loading.dismiss(),
+      });
+    }, 'str.dialogs.delete.text');
   }
 }

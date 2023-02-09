@@ -7,7 +7,7 @@
       "projectType": "application",
       "architect": {
         "build": {
-          "builder": "@nrwl/node:build",
+          "builder": "@nrwl/node:webpack",
           "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/apps/api",
@@ -30,7 +30,7 @@
           }
         },
         "serve": {
-          "builder": "@nrwl/node:execute",
+          "builder": "@nrwl/node:node",
           "options": {
             "buildTarget": "api:build"
           }
@@ -44,7 +44,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/api"],
+          "outputs": ["{workspaceRoot}/coverage/apps/api"],
           "options": {
             "jestConfig": "apps/api/jest.config.js",
             "passWithNoTests": true
@@ -95,6 +95,10 @@
             ],
             "styles": [
               "apps/webapp/src/styles.scss",
+              "node_modules/@swimlane/ngx-datatable/index.css",
+              "node_modules/@swimlane/ngx-datatable/themes/material.scss",
+              "node_modules/@swimlane/ngx-datatable/themes/dark.scss",
+              "node_modules/@swimlane/ngx-datatable/assets/icons.css",
               {
                 "input": "node_modules/@ionic/angular/css/core.css"
               },
@@ -140,7 +144,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumError": "10mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -199,7 +203,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/webapp"],
+          "outputs": ["{workspaceRoot}/coverage/apps/webapp"],
           "options": {
             "jestConfig": "apps/webapp/jest.config.js",
             "passWithNoTests": true
@@ -260,5 +264,8 @@
       "tags": [],
       "implicitDependencies": ["webapp"]
     }
+  },
+  "cli": {
+    "analytics": "3fb1c41c-6139-4f5d-aac1-d2b2d3b30f9c"
   }
 }

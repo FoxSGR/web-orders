@@ -14,8 +14,8 @@ import { ShoeSampleService } from './shoe-sample.service';
 import { ShoeSampleMapper } from './shoe-sample.mapper';
 import { IShoeSample } from './shoe-sample.types';
 import { ShoeSampleDTO } from './shoe-sample.dto';
-import { CurrentUser, FindParams, Page } from '../common';
-import { EntityController } from '../common/entity';
+import { CurrentUser, FindParams, Page } from '../shared';
+import { EntityController } from '../shared/entity';
 import { IUser } from '../user';
 import { ClientMapper } from '../client';
 

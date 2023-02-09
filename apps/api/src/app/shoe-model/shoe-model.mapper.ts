@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 
-import { EntityMapper } from '../common/entity/entity.mapper';
+import { EntityMapper } from '../shared/entity/entity.mapper';
 import { IShoeModel } from './shoe-model.types';
 import { ShoeModelDTO } from './shoe-model.dto';
 import { ColorMapper, ColorService } from '../color';
 import { ShoeComponentMapper, ShoeComponentService } from '../shoe-component';
 import { IUser } from '../user';
-import { Promial, ResponseFormat } from '../common';
+import { Promial, ResponseFormat } from '../shared';
 import { IShoeModelComponent } from './shoe-model-component/shoe-model-component.types';
 import { ShoeModelComponentDTO } from './shoe-model-component/shoe-model-component.dto';
 
@@ -45,6 +45,7 @@ export class ShoeModelMapper extends EntityMapper<IShoeModel, ShoeModelDTO> {
 
         return {
           component,
+          sort: input.sort,
           amount: input.amount,
           price: input.price,
           color: input.color
@@ -60,12 +61,7 @@ export class ShoeModelMapper extends EntityMapper<IShoeModel, ShoeModelDTO> {
       reference: body.reference,
       components: modelComponents,
       dateCreated: body.dateCreated,
-      season: body.season
-        ? {
-            year: body.season.year,
-            seasons: body.season.seasons,
-          }
-        : undefined,
+      season: body.season,
       notes: body.notes,
       base: {
         owner: user,
@@ -81,6 +77,7 @@ export class ShoeModelMapper extends EntityMapper<IShoeModel, ShoeModelDTO> {
     if (type === 'full') {
       components =
         shoeModel.components?.map(component => ({
+          sort: component.sort,
           component: this.fieldToResponse(
             this.componentMapper,
             component.component,
@@ -97,10 +94,7 @@ export class ShoeModelMapper extends EntityMapper<IShoeModel, ShoeModelDTO> {
       reference: shoeModel.reference,
       components,
       dateCreated: shoeModel.dateCreated,
-      season: {
-        year: shoeModel.season.year,
-        seasons: shoeModel.season.seasons,
-      },
+      season: shoeModel.season,
       notes: shoeModel.notes,
     };
   }

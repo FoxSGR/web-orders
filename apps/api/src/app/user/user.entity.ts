@@ -5,7 +5,7 @@ import { Factory } from 'nestjs-seeder';
 
 import { Role, roles } from '@web-orders/api-interfaces';
 import type { IUser } from './user.types';
-import { EntityBase } from '../common/entity/entity';
+import { EntityBase } from '../shared/entity/entity';
 import { Client } from '../client/client.entity';
 import { hashPassword } from '../auth/auth';
 

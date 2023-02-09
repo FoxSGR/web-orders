@@ -1,0 +1,23 @@
+<ion-item button (click)="openInput()" [disabled]="isDisabled()">
+  <ion-label *ngIf="definition.label">
+    {{ definition.label | translate }}
+  </ion-label>
+  <div class="flex">
+    <ion-text *ngIf="value" color="medium">
+      {{ value }}
+    </ion-text>
+    <wo-color-indicator [value]="value"></wo-color-indicator>
+  </div>
+</ion-item>
+
+<div style="position: relative">
+  <ion-input
+    #colorInput
+    style="position: absolute; visibility: hidden; height: 0"
+    [(ngModel)]="value"
+    (ionChange)="onChange()"
+    [required]="definition.required || false"
+    [debounce]="100"
+    type="color"
+  ></ion-input>
+</div>

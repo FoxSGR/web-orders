@@ -1,0 +1,11 @@
+:host ion-item {
+  height: 100%;
+
+  &::part(native) {
+    height: 100%;
+  }
+
+  ion-label {
+    align-self: flex-start;
+  }
+}

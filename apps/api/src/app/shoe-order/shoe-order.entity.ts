@@ -9,9 +9,9 @@ import {
 import { IShoeOrder, ShoeSizes } from './shoe-order.types';
 import { ShoeSample } from '../shoe-sample';
 import { ShoeModel } from '../shoe-model';
-import { OwnedEntity } from '../common/entity';
+import { OwnedEntity } from '../shared/entity';
 import { Factory } from 'nestjs-seeder';
-import { commonColumns } from '../common/entity/common-columns';
+import { commonColumns } from '../shared/entity/common-columns';
 
 @Entity()
 export class ShoeOrder implements IShoeOrder {

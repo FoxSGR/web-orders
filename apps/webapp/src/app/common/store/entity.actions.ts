@@ -1,14 +1,12 @@
 import { createAction, props } from '@ngrx/store';
+import { memoize } from 'lodash';
 
-import { Id, IFindParams } from '@web-orders/api-interfaces';
+import { Id } from '@web-orders/api-interfaces';
 import { EntityPage } from '../wo-common.types';
-import { EntityName } from './entity.types';
+import { EntityType, OptionalId, SmartFormState } from '../types';
 
-export const entityActions = <T>(entityName: EntityName) => ({
-  loadPage: createAction(
-    `[${entityName}] load page`,
-    props<{ params: IFindParams<T> }>(),
-  ),
+const _entityActions = <T>(entityName: EntityType) => ({
+  loadPage: createAction(`[${entityName}] load page`),
   pageLoaded: createAction(
     `[${entityName}] page loaded`,
     props<{ page: EntityPage<T> }>(),
@@ -17,13 +15,23 @@ export const entityActions = <T>(entityName: EntityName) => ({
     `[${entityName}] page load error`,
     props<{ error: any }>(),
   ),
-  reloadPage: createAction(`[${entityName}] reload page`),
-  delete: createAction(
-    `[${entityName}] delete`,
+  deleted: createAction(
+    `[${entityName}] deleted`,
     props<{ entity: Partial<T> }>(),
   ),
-  wizard: createAction(
-    `[${entityName}] wizard`,
-    props<{ id?: Id }>(),
+  wizard: createAction(`[${entityName}] wizard`, props<{ id?: OptionalId }>()),
+  loadWizard: createAction(
+    `[${entityName}] load wizard`,
+    props<{ id: OptionalId }>(),
+  ),
+  updateWizard: createAction(
+    `[${entityName}] update wizard`,
+    props<{ id: OptionalId; wizardState: SmartFormState }>(),
+  ),
+  clearWizard: createAction(
+    `[${entityName}] clear wizard`,
+    props<{ id: OptionalId }>(),
   ),
 });
+
+export const entityActions = memoize(_entityActions);

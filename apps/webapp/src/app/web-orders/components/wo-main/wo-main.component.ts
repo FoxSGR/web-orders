@@ -7,7 +7,10 @@ import { WOAppService } from '../../service/wo-app.service';
 import { WebOrdersState } from '../../web-orders.types';
 import { MenuItem } from './menu-item';
 import { getAccount, logout } from '../../../account';
-import { padWithSlashes } from '../../../common';
+import { DialogService, padWithSlashes, ThemeService } from '../../../common';
+
+// init services
+import '../../../common/services/history.service';
 
 @Component({
   selector: 'wo-main',
@@ -15,12 +18,22 @@ import { padWithSlashes } from '../../../common';
   styleUrls: ['./wo-main.component.scss'],
 })
 export class WOMainComponent {
+  /**
+   * The current user.
+   */
   user$ = this.store.select(getAccount).pipe(map(acc => acc?.user));
+
+  /**
+   * The current route url.
+   */
   route$ = this.router.events.pipe(
     filter(event => event instanceof NavigationStart),
     map(event => (event as NavigationStart).url),
   );
 
+  /**
+   * Main items in the menu.
+   */
   menuItems: MenuItem[] = [
     {
       icon: 'home',
@@ -38,21 +51,69 @@ export class WOMainComponent {
       route: 'order',
     },
     {
-      icon: 'people',
-      label: 'str.menu.management',
-      route: 'management',
+      label: 'str.menu.more',
+      icon: 'add',
+      children: [
+        {
+          icon: 'hardware-chip',
+          label: 'str.menu.components',
+          route: 'shoe-component',
+        },
+        {
+          icon: 'people',
+          label: 'str.menu.clients',
+          route: 'client',
+        },
+        {
+          icon: 'hand-left',
+          label: 'str.menu.agents',
+          route: 'agent',
+        },
+        {
+          icon: 'brush',
+          label: 'str.menu.colors',
+          route: 'color',
+        },
+      ],
     },
+  ];
+
+  /**
+   * Items in the bottom part of the menu.
+   */
+  bottomItems: MenuItem[] = [
     {
       icon: 'log-out',
       label: 'str.account.logout',
-      onClick: () => this.store.dispatch(logout({ mode: 'manual' })),
+      onClick: () =>
+        this.dialogService.confirm(() =>
+          this.store.dispatch(logout({ mode: 'manual' })),
+        ),
     },
   ];
+
+  /**
+   * Whether dark mode is enabled.
+   */
+  get darkTheme$() {
+    return this.themeService.darkTheme$;
+  }
+
+  /**
+   * Whether the app is in printing mode.
+   */
+  get printMode() {
+    return this.themeService.printMode;
+  }
+
+  trackByRoute = (_index: number, item: MenuItem) => item.route;
 
   constructor(
     private store: Store<WebOrdersState>,
     private router: Router,
     private appService: WOAppService,
+    private themeService: ThemeService,
+    private dialogService: DialogService,
   ) {}
 
   toggleMenu(): void {
@@ -61,14 +122,10 @@ export class WOMainComponent {
 
   onItemClick(item: MenuItem) {
     if (item.route) {
-      this.navigate(item.route);
+      this.router.navigate([item.route]);
     } else if (item.onClick) {
       item.onClick();
     }
-  }
-
-  navigate(route: string) {
-    this.router.navigate([route]);
   }
 
   routeMatches(item: MenuItem, currentRoute: string | null) {

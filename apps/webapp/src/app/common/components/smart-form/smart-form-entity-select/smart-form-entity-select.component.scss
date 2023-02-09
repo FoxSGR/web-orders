@@ -1,0 +1,17 @@
+:host ::ng-deep .datatable-body {
+  height: 200px !important;
+  min-height: 200px !important;
+  overflow-y: auto;
+}
+
+:host ::ng-deep .sf-entity-select-opener {
+  height: 100%;
+
+  &::part(native) {
+    height: 100%;
+  }
+}
+
+:host ion-item::part(detail-icon) {
+  opacity: 1;
+}

@@ -25,14 +25,8 @@ $searchbarHeight: 40px;
   padding: 0 0 $gap 0;
 }
 
-.entity-list-search {
-  > * {
-    height: $searchbarHeight;
-  }
-}
-
-.entity-list-search-field,
-:host ion-searchbar {
+.entity-list-search > * {
+  height: $searchbarHeight;
   --padding-top: 0;
   --padding-bottom: 0;
   margin: 0;
@@ -41,7 +35,10 @@ $searchbarHeight: 40px;
 
 .entity-list-search-field {
   flex: 1 0 130px;
+}
 
+.entity-list-search-field,
+.entity-list-search-choices {
   ion-select {
     width: 100%;
     margin-top: -5px;
@@ -54,10 +51,14 @@ $searchbarHeight: 40px;
   }
 }
 
+:host ion-searchbar,
+.entity-list-search-choices {
+  flex: 12 0 auto;
+}
+
 :host ion-searchbar {
   --border-radius: 4px !important;
   width: unset !important;
-  flex: 12 0 auto;
 
   ::ng-deep .searchbar-input-container,
   ::ng-deep input {
@@ -74,41 +75,77 @@ $searchbarHeight: 40px;
   margin: 0;
 }
 
-:host {
-  ::ng-deep .datatable-body-row {
-    border-top: 1px
-      var(
-        --ion-item-border-color,
-        var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13)))
-      );
-    border-bottom: solid 1px
-      var(
-        --ion-item-border-color,
-        var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13)))
-      );
-  }
-}
-
-::ng-deep .ngx-datatable {
+// ngx-datatable tweaks
+:host::ng-deep .ngx-datatable {
   box-shadow: none !important;
 
+  .datatable-body-row {
+    cursor: pointer;
+  }
+
+  // Start: select feature
   &.selectable {
     .datatable-body-row:has(.wo-database-check input[value='on']),
     .datatable-body-row.active,
     .datatable-body-row.active .datatable-row-group {
       background: rgba(0, 0, 0, 0.1) !important;
     }
+  }
+  // End: select feature
 
-    .datatable-body-row {
-      cursor: pointer;
+  // Start: tweaks to make dark look better
+  .datatable-header,
+  .datatable-body,
+  .datatable-footer,
+  .datatable-pager li a {
+    background: var(--ion-background-color);
+    color: var(--color) !important;
+  }
+
+  &.dark .datatable-pager li {
+    &.active a {
+      background: var(--ion-toolbar-background) !important;
+    }
+    &:not(.disabled):hover a {
+      background: var(--ion-toolbar-background) !important;
     }
   }
-}
 
-::ng-deep .datatable-body-cell-label {
-  height: 100%;
-  display: flex;
-  align-items: center;
+  $border: solid 1px
+    var(
+      --ion-item-border-color,
+      var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13)))
+    ) !important;
+  &.dark {
+    border: $border;
+    .datatable-body-row {
+      border-top: $border;
+      border-bottom: none !important;
+    }
+  }
+  // End: tweaks to make dark look better
+
+  // Start: alignment fixes
+  .datatable-body-cell-label,
+  .datatable-header-inner,
+  .datatable-header-cell,
+  .datatable-header-cell-template-wrap {
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  .datatable-body-cell-label > * {
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  .ngx-datatable.material .datatable-header .datatable-row-right,
+  .ngx-datatable.material .datatable-body .datatable-row-right {
+    background-image: none;
+  }
+  // End: alignment fixes
 }
 
 ::ng-deep .wo-datatable-actions,
@@ -119,31 +156,16 @@ $searchbarHeight: 40px;
   padding: 0 !important;
 }
 
-::ng-deep .datatable-body {
+:host::ng-deep .standalone .datatable-body {
   height: calc(100vh - 207px) !important;
 }
 
 // disable a border between frozenRight cells and the rest
-::ng-deep .ngx-datatable.material .datatable-header .datatable-row-right,
-::ng-deep .ngx-datatable.material .datatable-body .datatable-row-right {
-  background-image: none;
-}
-
-.wo-datatable-icon-button {
+::ng-deep .wo-datatable-icon-button {
   width: 32px !important;
   height: 32px !important;
   --padding-start: 8px !important;
   --padding-bottom: 8px !important;
   --padding-end: 8px !important;
   --padding-top: 8px !important;
-}
-
-::ng-deep .entity-preview-modal {
-  --max-width: 600px;
-}
-
-@media screen and (min-width: 768px) {
-  ::ng-deep .entity-preview-modal {
-    --max-width: 80%;
-  }
 }

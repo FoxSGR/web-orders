@@ -3,10 +3,11 @@ import { forwardRef, Inject, Injectable } from '@nestjs/common';
 
 import { AddressMapper } from '../address';
 import { IAgent } from './agent.types';
-import { EntityMapper } from '../common/entity/entity.mapper';
+import { EntityMapper } from '../shared/entity/entity.mapper';
 import { AgentDTO } from './agent.dto';
 import { ClientMapper } from '../client/client.mapper';
 import { IUser } from '../user';
+import { ResponseFormat } from '../shared';
 
 @Injectable()
 export class AgentMapper extends EntityMapper<IAgent, AgentDTO> {
@@ -26,13 +27,13 @@ export class AgentMapper extends EntityMapper<IAgent, AgentDTO> {
     };
   }
 
-  entityToResponse(agent: IAgent): Partial<AgentDTO> {
+  entityToResponse(agent: IAgent, type?: ResponseFormat): Partial<AgentDTO> {
     // prevent overflow
     agent.clients?.forEach(client => delete client.agent);
 
     return {
       name: agent.name,
-      clients: this.fieldToResponse(this.clientMapper, agent.clients),
+      clients: this.fieldToResponse(this.clientMapper, agent.clients, type),
       address: this.fieldToResponse(this.addressMapper, agent.address),
       ...super.entityToResponse(agent),
     };

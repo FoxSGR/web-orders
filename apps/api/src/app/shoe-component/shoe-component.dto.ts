@@ -15,12 +15,11 @@ import {
   OrnamentType,
   ornamentTypes,
 } from '@web-orders/api-interfaces';
-import { EntityDTO } from '../common/entity/entity.dto';
+import { EntityDTO } from '../shared/entity/entity.dto';
 
 export class ShoeComponentDTO extends EntityDTO implements IShoeComponentDTO {
   @IsString()
   @IsNotEmpty()
-  @IsOptional({ groups: ['update'] })
   @Type(() => String)
   reference: string;
 
@@ -32,7 +31,6 @@ export class ShoeComponentDTO extends EntityDTO implements IShoeComponentDTO {
   @IsString()
   @IsNotEmpty()
   @Validate(type => componentTypes.includes(type))
-  @IsOptional({ groups: ['update'] })
   @Type(() => String)
   type: ComponentType;
 

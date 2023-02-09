@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { WOContainerComponent } from './components';
+import { woRoutes } from './web-orders.routes';
 
 const routes: Routes = [
   {
@@ -12,18 +13,7 @@ const routes: Routes = [
   {
     path: '',
     component: WOContainerComponent,
-    children: [
-      {
-        path: 'home',
-        loadChildren: () =>
-          import('../home/home.module').then(m => m.HomeModule),
-      },
-      {
-        path: 'sample',
-        loadChildren: () =>
-          import('../sample/sample.module').then(m => m.SampleModule),
-      },
-    ],
+    children: woRoutes,
   },
 ];
 

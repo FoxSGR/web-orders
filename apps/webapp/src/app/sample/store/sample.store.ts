@@ -13,13 +13,8 @@ export const sampleStoreConfig: EntityStoreConfig<EntityState<ShoeSample>> = {
   initialState: initialEntityState<ShoeSample>(),
 };
 
-/**
- * The reducer for sample actions.
- */
 export const sampleReducer = entityReducer(sampleStoreConfig);
-
 export const sampleActions = entityActions(sampleStoreConfig.name);
-
 export const sampleSelectors = entitySelectors<ShoeSample>(
   sampleStoreConfig.name,
 );

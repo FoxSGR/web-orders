@@ -1,0 +1,9 @@
+.sf-group {
+  display: flex;
+  gap: 15px;
+  flex-direction: column;
+
+  &.inline {
+    flex-direction: row;
+  }
+}

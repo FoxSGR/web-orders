@@ -15,8 +15,8 @@ import { AgentService } from './agent.service';
 import { AgentMapper } from './agent.mapper';
 import { IAgent } from './agent.types';
 import { AgentDTO } from './agent.dto';
-import { CurrentUser, FindParams, Page } from '../common';
-import { EntityController } from '../common/entity';
+import { CurrentUser, FindParams, Page } from '../shared';
+import { EntityController } from '../shared/entity';
 import { IUser } from '../user';
 
 @Controller('/agent')

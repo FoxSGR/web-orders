@@ -4,9 +4,7 @@ import { EntityState, EntityStoreConfig } from './entity.types';
 import { entityActions } from './entity.actions';
 
 export const initialEntityState: <T>() => EntityState<T> = () => ({
-  loaded: [],
-  filter: {},
-  status: 'unloaded',
+  wizardForms: {},
 });
 
 export const entityReducer = <T extends EntityState<any>>(
@@ -16,16 +14,23 @@ export const entityReducer = <T extends EntityState<any>>(
 
   return createReducer<T>(
     config.initialState,
-    on(actions.loadPage, state => ({ ...state, status: 'loading' })),
-    on(actions.pageLoaded, (state, { page }) => ({
-      ...state,
-      page,
-      status: 'loaded',
-    })),
-    on(actions.pageLoadError, state => ({
-      ...state,
-      page: { ...state.page, items: [] },
-      status: 'error',
-    })),
+    on(actions.updateWizard, (state, { id, wizardState }) => {
+      const wizardForms = { ...state.wizardForms };
+      wizardForms[id] = wizardState;
+
+      return {
+        ...state,
+        wizardForms,
+      };
+    }),
+    on(actions.clearWizard, (state, { id }) => {
+      const wizardForms = { ...state.wizardForms };
+      delete wizardForms[id];
+
+      return {
+        ...state,
+        wizardForms,
+      };
+    }),
   );
 };

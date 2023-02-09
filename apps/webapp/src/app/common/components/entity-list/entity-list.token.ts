@@ -1,9 +1,17 @@
 import { InjectionToken } from '@angular/core';
-import { TableColumn } from '@swimlane/ngx-datatable';
+import {
+  EntityListAbstractColumn,
+  EntityListColumn,
+} from './entity-list.types';
 
-export interface EntityListCellData<T> {
+import { Entity } from '../../models/entity';
+
+export interface EntityListCellData<
+  T extends Entity,
+  S extends EntityListAbstractColumn<T> = EntityListColumn<T>,
+> {
   entity: T;
-  column: TableColumn;
+  column: S;
 }
 
 export const ENTITY_LIST_TOKEN = new InjectionToken<EntityListCellData<any>>(

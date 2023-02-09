@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { environment } from '../environments/environment';
 
+import { CommonModule } from './common/common.module';
 import { Address, AddressModule } from './address';
 import { Agent, AgentModule } from './agent';
 import { AuthModule } from './auth/auth.module';
@@ -17,8 +18,9 @@ import { ShoeSample, ShoeSampleModule } from './shoe-sample';
 import { UILogModule } from './ui-log';
 import { User, UserModule } from './user';
 
+import { SeedService } from './shared/service';
+
 import { AppController } from './app.controller';
-import { SeedService } from './common/service/seed.service';
 
 @Module({
   imports: [
@@ -40,6 +42,7 @@ import { SeedService } from './common/service/seed.service';
         User,
       ],
     }),
+    CommonModule,
     AddressModule,
     AgentModule,
     AuthModule,

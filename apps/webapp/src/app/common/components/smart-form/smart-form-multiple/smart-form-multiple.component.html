@@ -1,0 +1,56 @@
+<div class="sf-multiple" [ngClass]="{ 'sf-can-add': canAdd }">
+  <div *ngIf="definition.label" class="sf-multiple-label">
+    {{ definition.label | translate }}
+  </div>
+
+  <div>
+    <ion-list class="sf-multiple-items">
+      <ion-reorder-group
+        [disabled]="false"
+        (ionItemReorder)="handleReorder($any($event))"
+      >
+        <ng-container
+          *ngFor="let child of value; trackBy: trackByUid; let i = index"
+        >
+          <ion-item
+            color="none"
+            class="sf-multiple-item-wrapper"
+            *ngIf="!isHidden(i)"
+            [lines]="dragging || i === value!.length - 1 ? 'none' : 'full'"
+          >
+            <div class="sf-multiple-item">
+              <wo-smart-form-item
+                class="sf-multiple-form-item"
+                [formDefinition]="formDefinition"
+                [definition]="definition.children"
+                [prop]="childProp(i)"
+                [(state)]="state"
+                (stateChange)="stateChange.emit($event); updateCanAdd()"
+              >
+              </wo-smart-form-item>
+              <div class="sf-multiple-item-actions">
+                <ion-reorder *ngIf="value!.length > 1">
+                  <ion-icon name="menu"></ion-icon>
+                </ion-reorder>
+                <ion-button
+                  fill="clear"
+                  shape="circle"
+                  class="medium"
+                  color="dark"
+                  (click)="remove(i)"
+                >
+                  <ion-icon name="close"></ion-icon>
+                </ion-button>
+              </div>
+            </div>
+          </ion-item>
+        </ng-container>
+      </ion-reorder-group>
+    </ion-list>
+    <div class="sf-multiple-add" *ngIf="canAdd">
+      <ion-button fill="clear" (click)="add()">
+        {{ 'str.common.add' | translate }}
+      </ion-button>
+    </div>
+  </div>
+</div>

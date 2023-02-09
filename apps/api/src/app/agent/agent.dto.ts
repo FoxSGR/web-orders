@@ -9,14 +9,13 @@ import {
 import { Type } from 'class-transformer';
 
 import { ClientDTO } from '../client/client.dto';
-import { EntityDTO } from '../common/entity/entity.dto';
+import { EntityDTO } from '../shared/entity/entity.dto';
 import { AddressDTO } from '../address';
 
 export class AgentDTO extends EntityDTO {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  @IsOptional({ groups: ['update'] })
   @Type(() => String)
   name: string;
 
@@ -28,12 +27,10 @@ export class AgentDTO extends EntityDTO {
 
   @ApiProperty()
   @IsArray()
-  @ValidateNested({ each: true })
-  @IsOptional({ groups: ['update'] })
+  @IsOptional()
   clients: ClientDTO[];
 
   @ApiProperty()
   @ValidateNested()
-  @IsOptional({ groups: ['update'] })
   address: AddressDTO;
 }

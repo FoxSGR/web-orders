@@ -1,20 +1,23 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Connection } from 'typeorm';
 
-import { EntityService } from '../common/entity';
+import { Id } from '@web-orders/api-interfaces';
+import { EntityService } from '../shared/entity';
 import { ShoeSample } from './shoe-sample.entity';
 import type { IUser } from '../user';
-import { FindParams } from '../common';
+import { FindParams } from '../shared';
 import { Client, ClientService, IClient } from '../client';
+import { ShoeSampleRepository } from './shoe-sample.repository';
+import { ShoeModelService } from '../shoe-model';
 
 @Injectable()
 export class ShoeSampleService extends EntityService<ShoeSample> {
   constructor(
-    @InjectRepository(ShoeSample) shoeSampleRepository: Repository<ShoeSample>,
+    connection: Connection,
     private clientService: ClientService,
+    private shoeModelService: ShoeModelService,
   ) {
-    super(shoeSampleRepository, {
+    super(connection, ShoeSampleRepository, {
       name: 'shoe_sample',
       relations: [
         'baseModel',
@@ -42,35 +45,59 @@ export class ShoeSampleService extends EntityService<ShoeSample> {
         notes: {
           prop: 'notes',
         },
-        'components.component.reference': {
+        'sampleModel.components.component.reference': {
           prop: 'sampleModel.components.component.reference',
         },
-        'components.component.name': {
+        'sampleModel.components.component.name': {
           prop: 'sampleModel.components.component.name',
         },
       },
     });
   }
 
-  async create(entity: Partial<ShoeSample>, user: IUser): Promise<ShoeSample> {
-    entity.sampleModel.type = 'sample';
-    return super.create(entity, user);
+  async save(
+    entity: Partial<ShoeSample>,
+    id?: Id,
+    user?: IUser,
+  ): Promise<ShoeSample> {
+    if (entity.sampleModel) {
+      entity.sampleModel.type = 'sample';
+      entity.sampleModel = await this.shoeModelService.save(
+        entity.sampleModel,
+        undefined,
+        user,
+      );
+    }
+    if (entity.baseModel) {
+      entity.baseModel.type = 'base';
+    }
+
+    return super.save(entity, id, user);
+  }
+
+  protected async update(
+    id: Id,
+    entity: Partial<ShoeSample>,
+    user?: IUser,
+  ): Promise<ShoeSample> {
+    const found = await this.findOne(id, user, true);
+    if (entity.sampleModel && found?.sampleModel) {
+      entity.sampleModel.id = found.sampleModel.id;
+    }
+
+    return super.update(id, entity, user);
   }
 
   async topClients(params: FindParams<IClient>, user: IUser) {
-    let queryBuilder = this.repository
+    const queryBuilder = this.repository
       .createQueryBuilder()
       .select('sample.client as clientId, count(*) as count')
       .from(ShoeSample, 'sample')
       .where('sample.owner = :owner', { owner: user.id });
 
     if (params.filter) {
-      queryBuilder = queryBuilder.innerJoin(Client, 'client');
-      queryBuilder = this.clientService.applyFilterToQueryBuilder(
-        queryBuilder,
-        params.filter,
-        'client',
-      );
+      queryBuilder.innerJoin(Client, 'client');
+      this.clientService.applyFilterToQueryBuilder(queryBuilder, params.filter);
     }
 
     const topClientsData = await queryBuilder
@@ -88,6 +115,21 @@ export class ShoeSampleService extends EntityService<ShoeSample> {
         sortDirection: params.sortDirection || 'ASC',
       },
       clientIds,
+    );
+  }
+
+  async mapFoundEntities(
+    entities: ShoeSample[],
+    params: FindParams<ShoeSample>,
+  ): Promise<void> {
+    await super.mapFoundEntities(entities, params);
+    await this.shoeModelService.mapFoundEntities(
+      entities.filter(e => e.sampleModel).map(e => e.sampleModel),
+      params,
+    );
+    await this.shoeModelService.mapFoundEntities(
+      entities.filter(e => e.baseModel).map(e => e.baseModel),
+      params,
     );
   }
 }

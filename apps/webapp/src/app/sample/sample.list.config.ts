@@ -1,27 +1,12 @@
-import { countries } from '@web-orders/api-interfaces';
 import {
   AdvancedCellComponent,
   DatePipe,
-  EntityListConfig,
+  inlineFlag,
   ShoeSample,
 } from '../common';
-import { sampleStoreConfig } from './store';
-import { SamplePreviewComponent } from './components';
-import { SampleService } from './sample.service';
-
-const inlineFlag = (entity: ShoeSample, field: string) => {
-  const countryCode = entity[field]?.address?.country?.toLowerCase();
-  if (!countryCode) {
-    return '';
-  }
-
-  const countryName = countries[countryCode];
-  return `<span class="fi fi-${countryCode}" title="${countryName}"></span>`;
-};
+import { EntityListConfig } from '../common/components/entity-list/entity-list.types';
 
 export const sampleListConfig: EntityListConfig<ShoeSample> = {
-  entityName: sampleStoreConfig.name,
-  label: sample => sample.sampleModel.reference,
   searchables: [
     {
       label: 'str.model.common.reference',
@@ -40,14 +25,18 @@ export const sampleListConfig: EntityListConfig<ShoeSample> = {
       prop: 'brand.name',
     },
     {
+      label: 'str.shoeComponent.common.componentReference',
+      prop: 'sampleModel.components.component.reference',
+    },
+    {
+      label: 'str.shoeComponent.common.componentDescription',
+      prop: 'sampleModel.components.component.name',
+    },
+    {
       label: 'str.common.notes',
       prop: 'notes',
     },
   ],
-  serviceClass: SampleService,
-  preview: {
-    component: SamplePreviewComponent,
-  },
   columns: [
     {
       name: 'Id',
@@ -72,12 +61,14 @@ export const sampleListConfig: EntityListConfig<ShoeSample> = {
         {
           name: 'str.client.common.client',
           prop: 'client.name',
-          inline: (entity: ShoeSample) => inlineFlag(entity, 'client'),
+          inline: (entity: ShoeSample) =>
+            inlineFlag(entity, 'client.address.country'),
         },
         {
           name: 'str.agent.common.agent',
           prop: 'agent.name',
-          inline: (entity: ShoeSample) => inlineFlag(entity, 'agent'),
+          inline: (entity: ShoeSample) =>
+            inlineFlag(entity, 'agent.address.country'),
         },
       ],
       template: AdvancedCellComponent,

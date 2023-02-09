@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 
-import { Promial, ResponseFormat } from '../common';
-import { EntityMapper } from '../common/entity/entity.mapper';
+import { Promial, ResponseFormat } from '../shared';
+import { EntityMapper } from '../shared/entity/entity.mapper';
 import { IShoeSample } from './shoe-sample.types';
 import { ShoeSampleDTO } from './shoe-sample.dto';
-import { ShoeModelService } from '../shoe-model';
+import { ShoeModel, ShoeModelService } from '../shoe-model';
 import { ShoeModelMapper } from '../shoe-model/shoe-model.mapper';
 import { ClientMapper } from '../client';
 import { ClientService } from '../client/client.service';
@@ -29,18 +29,25 @@ export class ShoeSampleMapper extends EntityMapper<IShoeSample, ShoeSampleDTO> {
   }
 
   async bodyToEntity(body: ShoeSampleDTO, user: IUser): Promial<IShoeSample> {
+    const sampleModel = await this.fieldToEntityAsync<ShoeModel>(
+      this.modelMapper,
+      user,
+      body.sampleModel,
+    );
+    if (sampleModel) {
+      sampleModel.type = 'sample';
+    }
+
     return {
       baseModel: await this.find(this.modelService, user, body.baseModel?.id),
-      sampleModel: await this.fieldToEntityAsync(
-        this.modelMapper,
-        user,
-        body.sampleModel,
-      ),
+      sampleModel,
       client: await this.find(this.clientService, user, body.client?.id),
       agent: await this.find(this.agentService, user, body.agent?.id),
       brand: await this.find(this.brandService, user, body.brand?.id),
       dateAsked: body.dateAsked,
       dateDelivery: body.dateDelivery,
+      size: body.size,
+      amount: body.amount,
       notes: body.notes,
     };
   }
@@ -62,6 +69,8 @@ export class ShoeSampleMapper extends EntityMapper<IShoeSample, ShoeSampleDTO> {
       brand: this.fieldToResponse(this.brandMapper, sample.brand, type),
       dateAsked: sample.dateAsked,
       dateDelivery: sample.dateDelivery,
+      size: sample.size,
+      amount: sample.amount,
       notes: sample.notes,
     };
   }

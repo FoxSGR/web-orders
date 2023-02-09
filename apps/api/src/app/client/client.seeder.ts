@@ -1,18 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Connection } from 'typeorm';
 
 import { Client } from './client.entity';
-import { EntitySeeder } from '../common/entity';
-import { EntitySeederService } from '../common';
+import { ClientRepository } from './client.repository';
+import { ClientService } from './client.service';
+import { EntitySeeder } from '../shared/entity';
+import { EntitySeederService } from '../shared';
 
 @Injectable()
-@EntitySeederService()
+@EntitySeederService({ order: 300 })
 export class ClientSeeder extends EntitySeeder<Client> {
   nested = ['address'];
 
-  constructor(@InjectRepository(Client) repository: Repository<Client>) {
-    super(Client, repository);
+  constructor(connection: Connection, clientService: ClientService) {
+    super(Client, clientService, connection, ClientRepository);
   }
 
   protected identifier = () => 'name' as keyof Client;

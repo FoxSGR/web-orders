@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { IAddress } from './address.types';
 import { AddressDTO } from './address.dto';
-import { EntityMapper } from '../common/entity/entity.mapper';
+import { EntityMapper } from '../shared/entity/entity.mapper';
 
 @Injectable()
 export class AddressMapper extends EntityMapper<IAddress, AddressDTO> {

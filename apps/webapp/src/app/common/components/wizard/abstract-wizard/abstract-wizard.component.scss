@@ -1,0 +1,83 @@
+@use 'sass:math';
+
+$stepper-button-size: 45px;
+
+.wo-wizard {
+  &.routed {
+    .wo-stepper-container,
+    .wo-stepper-footer {
+      max-width: 60%;
+    }
+  }
+
+  &.standalone {
+    height: 100%;
+
+    .wo-stepper-container,
+    .wo-stepper-footer {
+      padding: 0 15px;
+    }
+  }
+}
+
+.wo-stepper-container {
+  margin: auto;
+}
+
+.wo-stepper {
+  display: block;
+  padding: 10px 15px;
+  margin: 0 15px;
+}
+
+@media screen and (max-width: 576px) {
+  .wo-stepper {
+    max-width: 100% !important;
+    margin: 0 15px;
+  }
+
+  .wo-stepper-container,
+  .wo-stepper-footer {
+    max-width: 100% !important;
+  }
+}
+
+.wo-stepper-steps {
+  display: flex;
+  gap: 10px;
+  max-width: 60%;
+  margin: auto;
+}
+
+.wo-stepper-step-button {
+  width: $stepper-button-size;
+  height: $stepper-button-size;
+}
+
+.wo-stepper-step {
+  ion-text {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.wo-stepper-separator {
+  margin-top: math.div($stepper-button-size, 2);
+  flex-grow: 1;
+  height: 1px;
+  background: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.12);
+}
+
+.wo-stepper-footer-container {
+  position: sticky;
+  bottom: -16px;
+  padding: 5px 0;
+  background: var(--ion-background-color);
+  z-index: 999;
+}
+
+.wo-stepper-footer {
+  display: flex;
+  margin: auto;
+}

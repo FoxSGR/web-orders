@@ -9,8 +9,8 @@ import {
   ornamentTypes,
 } from '@web-orders/api-interfaces';
 import { IShoeComponent } from './shoe-component.types';
-import { OwnedEntity } from '../common/entity';
-import { commonColumns } from '../common/entity/common-columns';
+import { OwnedEntity } from '../shared/entity';
+import { commonColumns } from '../shared/entity/common-columns';
 
 @Entity()
 export class ShoeComponent implements IShoeComponent {
@@ -19,18 +19,18 @@ export class ShoeComponent implements IShoeComponent {
 
   @IsNotEmpty()
   @Validate(type => componentTypes.includes(type))
-  @Factory(faker => faker.random.arrayElement(componentTypes))
+  @Factory(faker => faker.helpers.arrayElement(componentTypes))
   @Column({ type: 'enum', enum: componentTypes })
   type: ComponentType;
 
   @Validate(type => ornamentTypes.includes(type))
-  @Factory(faker => faker.random.arrayElement(ornamentTypes))
+  @Factory(faker => faker.helpers.arrayElement(ornamentTypes))
   @Column({ type: 'enum', enum: ornamentTypes })
   ornamentType: OrnamentType;
 
   @IsNotEmpty()
   @Factory(faker =>
-    faker.random.boolean() ? faker.random.alphaNumeric(5) : null,
+    faker.datatype.boolean() ? faker.random.alphaNumeric(5) : null,
   )
   @Column({ default: null })
   reference?: string;
@@ -41,12 +41,12 @@ export class ShoeComponent implements IShoeComponent {
   name: string;
 
   @Min(0)
-  @Factory(faker => faker.random.number(3) || null)
+  @Factory(faker => faker.datatype.number(3) || null)
   @Column({ default: null })
   amount?: number;
 
   @Min(0)
-  @Factory(faker => faker.random.number(10) || null)
+  @Factory(faker => faker.datatype.number(10) || null)
   @Column({ default: null })
   price?: number;
 

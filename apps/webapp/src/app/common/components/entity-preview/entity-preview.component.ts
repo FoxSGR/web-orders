@@ -1,60 +1,78 @@
-import {
-  AfterViewInit,
-  Directive,
-  HostListener,
-  Input,
-  OnInit,
-} from '@angular/core';
+import { Component, Injector, Input, OnInit } from '@angular/core';
+import { LoadingController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
+import { firstValueFrom } from 'rxjs';
+import { Store } from '@ngrx/store';
 
 import type { Entity } from '../../models/entity';
+import { EntityConfig, EntityType } from '../../types';
+import { EntityPreviewConfig } from './entity-preview.types';
+import { EntityConfigRegister } from '../../entity-config.register';
+import { AbstractModalComponent } from '../abstract-modal/abstract-modal.component';
+import { alertActions } from '../../../alerts';
 
-@Directive()
-export abstract class EntityPreviewComponent<T extends Entity>
-  implements OnInit, AfterViewInit
+@Component({
+  selector: 'wo-entity-preview',
+  templateUrl: './entity-preview.component.html',
+  styleUrls: ['./entity-preview.component.scss'],
+})
+export class EntityPreviewComponent<T extends Entity>
+  extends AbstractModalComponent
+  implements OnInit
 {
   @Input() entity: T;
-  @Input() modal: HTMLIonModalElement;
+  @Input() entityId?: T;
+  @Input() entityType: EntityType;
 
-  private dismissed = false;
+  previewData!: EntityPreviewConfig;
 
-  constructor(protected translate: TranslateService) {}
-
-  ngOnInit() {
-    this.modal.onDidDismiss().then(() => (this.dismissed = true));
+  constructor(
+    protected translate: TranslateService,
+    protected loadingController: LoadingController,
+    protected store: Store,
+    protected injector: Injector,
+  ) {
+    super();
   }
 
-  ngAfterViewInit() {
-    setTimeout(() => this.adjustScroll(), 300);
-    setTimeout(() => this.adjustScroll(), 600);
-    setTimeout(() => this.adjustScroll(), 900);
-    setTimeout(() => this.adjustScroll(), 1200);
-    setTimeout(() => this.adjustScroll(), 1500);
-  }
+  override async ngOnInit() {
+    super.ngOnInit();
 
-  @HostListener('window:resize')
-  onResize() {
-    this.adjustScroll();
-  }
+    const entityConfig = EntityConfigRegister.getDefinition<T>(this.entityType);
+    if (this.entityId && !this.entity) {
+      await this.loadEntity(entityConfig);
+    }
 
-  close() {
-    this.modal.dismiss();
+    this.previewData = entityConfig.previewConfig!(this.entity);
   }
 
   edit() {
-    this.modal.dismiss();
+    // this.config.edit(this.entity);
+    this.close();
   }
 
-  private adjustScroll() {
-    if (this.dismissed) {
-      return;
-    }
+  private async loadEntity(config: EntityConfig<T>) {
+    const loading = await this.loadingController.create();
+    await loading.present();
 
-    const content = this.modal.querySelector('ion-content');
-    const page: HTMLElement | null = this.modal.querySelector('.ion-page');
-    if (content && page) {
-      const height = window.innerHeight - page.getBoundingClientRect().top;
-      content.style.height = `${height}px`;
+    try {
+      config.service = this.injector.get(config.serviceClass);
+      this.entity = await firstValueFrom(
+        config.service!.findById(this.entityId!),
+      );
+    } catch (e) {
+      console.error(e);
+      this.store.dispatch(
+        alertActions.showAlert({
+          alert: {
+            type: 'error',
+            message: 'str.entity.preview.alerts.error.message',
+          },
+        }),
+      );
+      return;
+    } finally {
+      await loading.dismiss();
     }
   }
 }

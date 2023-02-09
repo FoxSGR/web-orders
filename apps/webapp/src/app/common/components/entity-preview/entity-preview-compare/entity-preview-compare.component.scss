@@ -1,0 +1,35 @@
+::ng-deep .entity-preview-compare-modal {
+  --width: 900px;
+}
+
+.wo-entity-compare-content {
+  height: 100%;
+  display: grid;
+  grid-template-rows: 1fr 40px;
+}
+
+.wo-entity-compare-entities {
+  display: flex;
+  overflow: hidden;
+  min-height: 0;
+  gap: 15px;
+
+  > * {
+    flex: 1;
+  }
+}
+
+.wo-entity-compare-label {
+  margin-bottom: 15px;
+  display: flex;
+  align-items: baseline;
+
+  > :first-child {
+    flex: 1;
+  }
+}
+
+.wo-entity-compare-preview {
+  overflow: auto;
+  height: calc(100% - 68px);
+}

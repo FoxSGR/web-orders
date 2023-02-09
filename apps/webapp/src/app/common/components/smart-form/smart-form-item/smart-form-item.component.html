@@ -1,0 +1,102 @@
+<ion-text *ngIf="definition.type === 'header'">
+  <h5>{{ definition.label | translate }}</h5>
+</ion-text>
+
+<wo-smart-form-entity-select
+  *ngIf="definition.type === 'entity-select'"
+  [formDefinition]="formDefinition"
+  [definition]="definition"
+  [prop]="prop"
+  [(state)]="state"
+  (stateChange)="stateChange.emit($event)"
+></wo-smart-form-entity-select>
+
+<wo-smart-form-text-input
+  *ngIf="definition.type === 'text-input'"
+  [formDefinition]="formDefinition"
+  [definition]="definition"
+  [prop]="prop"
+  [(state)]="state"
+  (stateChange)="stateChange.emit($event)"
+>
+</wo-smart-form-text-input>
+
+<wo-smart-form-text-area
+  *ngIf="definition.type === 'text-area'"
+  [formDefinition]="formDefinition"
+  [definition]="definition"
+  [prop]="prop"
+  [(state)]="state"
+  (stateChange)="stateChange.emit($event)"
+>
+</wo-smart-form-text-area>
+
+<wo-smart-form-number-input
+  *ngIf="definition.type === 'number-input'"
+  [formDefinition]="formDefinition"
+  [definition]="definition"
+  [prop]="prop"
+  [(state)]="state"
+  (stateChange)="stateChange.emit($event)"
+>
+</wo-smart-form-number-input>
+
+<wo-smart-form-date
+  *ngIf="definition.type === 'date'"
+  [formDefinition]="formDefinition"
+  [definition]="definition"
+  [prop]="prop"
+  [(state)]="state"
+  (stateChange)="stateChange.emit($event)"
+>
+</wo-smart-form-date>
+
+<wo-smart-form-multiple
+  *ngIf="definition.type === 'multiple'"
+  [formDefinition]="formDefinition"
+  [definition]="definition"
+  [prop]="prop"
+  [(state)]="state"
+  (stateChange)="stateChange.emit($event)"
+>
+</wo-smart-form-multiple>
+
+<wo-smart-form-group
+  *ngIf="definition.type === 'group'"
+  [formDefinition]="formDefinition"
+  [definition]="definition"
+  [prop]="prop"
+  [(state)]="state"
+  (stateChange)="stateChange.emit($event)"
+>
+</wo-smart-form-group>
+
+<wo-smart-form-choices
+  *ngIf="definition.type === 'choices'"
+  [formDefinition]="formDefinition"
+  [definition]="definition"
+  [prop]="prop"
+  [(state)]="state"
+  (stateChange)="stateChange.emit($event)"
+>
+</wo-smart-form-choices>
+
+<wo-smart-form-phone-input
+  *ngIf="definition.type === 'phone-input'"
+  [formDefinition]="formDefinition"
+  [definition]="definition"
+  [prop]="prop"
+  [(state)]="state"
+  (stateChange)="stateChange.emit($event)"
+>
+</wo-smart-form-phone-input>
+
+<wo-smart-form-color
+  *ngIf="definition.type === 'color'"
+  [formDefinition]="formDefinition"
+  [definition]="definition"
+  [prop]="prop"
+  [(state)]="state"
+  (stateChange)="stateChange.emit($event)"
+>
+</wo-smart-form-color>

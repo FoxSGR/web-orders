@@ -12,8 +12,8 @@ import { DataFactory, Factory } from 'nestjs-seeder';
 import { IAgent } from './agent.types';
 import { Client } from '../client/client.entity';
 import { Address } from '../address/address.entity';
-import { OwnedEntity } from '../common/entity/entity';
-import { commonColumns } from '../common/entity/common-columns';
+import { OwnedEntity } from '../shared/entity/entity';
+import { commonColumns } from '../shared/entity/common-columns';
 
 @Entity()
 export class Agent implements IAgent {
@@ -25,7 +25,7 @@ export class Agent implements IAgent {
   @Column()
   name: string;
 
-  @Factory(faker => `${faker.phone.phoneNumber()}`)
+  @Factory(faker => `${faker.phone.number('#########')}`)
   @Column({ default: null })
   phoneNumber?: string;
 

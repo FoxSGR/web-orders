@@ -5,6 +5,8 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
+import { ColorIndicatorComponent } from '../elements';
+
 import { EntityListDropdownComponent } from './entity-list-dropdown.component';
 import { EntityListComponent } from './entity-list.component';
 
@@ -16,6 +18,9 @@ import * as cells from './cells';
     EntityListComponent,
     cells.AdvancedCellComponent,
     cells.BasicCellComponent,
+    cells.FlagCellComponent,
+    cells.ChoiceCellComponent,
+    cells.ColorCellComponent,
   ],
   imports: [
     CommonModule,
@@ -23,6 +28,7 @@ import * as cells from './cells';
     TranslateModule,
     FormsModule,
     NgxDatatableModule,
+    ColorIndicatorComponent,
   ],
   exports: [EntityListComponent],
 })

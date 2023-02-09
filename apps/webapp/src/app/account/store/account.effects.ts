@@ -89,7 +89,6 @@ export class AccountEffects {
       switchMap(({ callback, mode }) => {
         const result: any[] = [];
         if (mode === 'manual') {
-          this.router.navigate(['']);
           result.push(
             alertActions.showAlert({
               alert: {
@@ -98,10 +97,9 @@ export class AccountEffects {
               },
             }),
           );
-        } else if (mode === 'unauthorized') {
-          this.router.navigate(['login', { callback }]);
         }
 
+        this.router.navigate(['login', { callback }]);
         return result;
       }),
     ),
