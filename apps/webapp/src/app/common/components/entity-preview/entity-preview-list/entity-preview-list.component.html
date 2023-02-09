@@ -11,7 +11,11 @@
           class="ion-no-padding transparent wo-entity-preview-item"
           *ngIf="item.type !== 'photo'; else photo"
         >
-          <ion-icon [name]="icon(item)" class="ion-padding-end"></ion-icon>
+          <ion-icon
+            [name]="icon(item)"
+            class="ion-padding-end"
+            style="margin-bottom: 5px"
+          ></ion-icon>
           <ion-label [ngClass]="{ flex: item.type === 'color' }">
             <p style="display: inline; font-weight: 500" class="m0">
               {{ item.label | translate }}
@@ -87,8 +91,7 @@
                 {{ item.label }}
               </ion-label>
               <wo-thumbnail
-                class="m5"
-                style="flex: 1"
+                style="flex: 1; margin: 10px 5px"
                 [url]="fileUrl($any(item.value))"
                 [name]="$any(item.value).name"
                 [size]="'100%'"

@@ -20,3 +20,9 @@ export type WOItemMap<T extends string = string> = { [key in T]: WOItem };
 export type WOIconItemMap<T extends string = string> = {
   [key in T]: WOIconItem;
 };
+
+export interface WOActionItem {
+  label: string;
+  icon: string;
+  action: () => void;
+}

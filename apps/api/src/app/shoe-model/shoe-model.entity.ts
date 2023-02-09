@@ -55,6 +55,7 @@ export class ShoeModel implements IShoeModel {
   @Column(commonColumns.notes.column)
   notes?: string;
 
-  @Column(() => OwnedEntity, { prefix: '' })
+  @Factory(commonColumns.ownedBase.seed)
+  @Column(() => OwnedEntity, commonColumns.ownedBase.column)
   base: OwnedEntity;
 }

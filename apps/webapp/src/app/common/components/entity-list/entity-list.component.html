@@ -176,11 +176,12 @@
         *ngIf="column.width; else noWidth"
         [name]="column.name!"
         [prop]="column.prop!"
-        [sortable]="false"
+        [sortable]="column.sortable || false"
         [canAutoResize]="column.canAutoResize!"
         [flexGrow]="column.flexGrow!"
         [pipe]="column.pipe!"
         [width]="column.width"
+        [maxWidth]="column.maxWidth!"
         [frozenRight]="column.frozenRight"
         [cellTemplate]="column.cellTemplate"
       ></ngx-datatable-column>
@@ -188,10 +189,11 @@
         <ngx-datatable-column
           [name]="column.name!"
           [prop]="column.prop!"
-          [sortable]="false"
+          [sortable]="column.sortable || false"
           [canAutoResize]="column.canAutoResize!"
           [flexGrow]="column.flexGrow!"
           [pipe]="column.pipe!"
+          [maxWidth]="column.maxWidth!"
           [frozenRight]="column.frozenRight"
           [cellTemplate]="column.cellTemplate"
         ></ngx-datatable-column>

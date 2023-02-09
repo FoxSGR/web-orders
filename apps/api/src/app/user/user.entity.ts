@@ -8,6 +8,7 @@ import type { IUser } from './user.types';
 import { EntityBase } from '../shared/entity/entity';
 import { Client } from '../client/client.entity';
 import { hashPassword } from '../auth/auth';
+import { commonColumns } from '../shared/entity/common-columns';
 
 @Entity()
 export class User implements IUser {
@@ -47,6 +48,7 @@ export class User implements IUser {
   @Validate((role: string) => !!roles[role])
   roles: Role[];
 
+  @Factory(commonColumns.ownedBase.seed)
   @Column(() => EntityBase, { prefix: '' })
   base: EntityBase;
 

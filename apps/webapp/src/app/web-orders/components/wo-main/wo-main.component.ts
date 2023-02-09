@@ -48,7 +48,7 @@ export class WOMainComponent {
     {
       icon: 'cube',
       label: 'str.menu.orders',
-      route: 'order',
+      route: 'shoe-order',
     },
     {
       label: 'str.menu.more',

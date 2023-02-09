@@ -8,6 +8,7 @@ export * from './smart-form-entity-select/smart-form-entity-select.component';
 export * from './smart-form-file-upload/smart-form-file-upload.component';
 export * from './smart-form-phone-input/smart-form-phone-input.component';
 export * from './smart-form-color/smart-form-color.component';
+export * from './smart-form-map/smart-form-map.component';
 export * from './smart-form-group/smart-form-group.component';
 export * from './smart-form-item/smart-form-item.component';
 export * from './smart-form-multiple/smart-form-multiple.component';

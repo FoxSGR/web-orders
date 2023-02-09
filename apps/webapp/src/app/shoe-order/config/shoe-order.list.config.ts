@@ -3,11 +3,11 @@ import {
   DatePipe,
   inlineFlag,
   PhotoCellComponent,
-  ShoeSample,
-} from '../common';
-import { EntityListConfig } from '../common/components/entity-list/entity-list.types';
+  ShoeOrder,
+} from '../../common';
+import { EntityListConfig } from '../../common/components/entity-list/entity-list.types';
 
-export const sampleListConfig: EntityListConfig<ShoeSample> = {
+export const shoeOrderListConfig: EntityListConfig<ShoeOrder> = {
   searchables: [
     {
       label: 'str.model.common.reference',
@@ -48,28 +48,33 @@ export const sampleListConfig: EntityListConfig<ShoeSample> = {
     },
     {
       name: 'str.model.common.model',
-      prop: 'sampleModel.reference',
+      prop: 'sample.sampleModel.reference',
+      sortable: true,
+      canAutoResize: false,
+      width: 75,
+    },
+    {
+      name: 'str.common.pairs',
+      prop: 'totalPairs',
       sortable: true,
       canAutoResize: false,
       width: 75,
     },
     {
       name: 'str.client.common.client',
-      prop: 'client.name',
+      prop: 'sample.client.name',
       sortable: true,
       canAutoResize: true,
       summaryTemplate: [
         {
           name: 'str.client.common.client',
-          prop: 'client.name',
-          inline: (entity: ShoeSample) =>
-            inlineFlag(entity, 'client.address.country'),
+          prop: 'sample.client.name',
+          inline: entity => inlineFlag(entity, 'sample.client.address.country'),
         },
         {
           name: 'str.agent.common.agent',
-          prop: 'agent.name',
-          inline: (entity: ShoeSample) =>
-            inlineFlag(entity, 'agent.address.country'),
+          prop: 'sample.agent.name',
+          inline: entity => inlineFlag(entity, 'sample.agent.address.country'),
         },
       ],
       template: AdvancedCellComponent,
@@ -85,7 +90,7 @@ export const sampleListConfig: EntityListConfig<ShoeSample> = {
     },
     {
       name: 'str.common.photo',
-      prop: 'sampleModel.photos',
+      prop: 'sample.sampleModel.photos',
       sortable: false,
       canAutoResize: false,
       template: PhotoCellComponent,

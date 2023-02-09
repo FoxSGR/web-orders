@@ -1,10 +1,13 @@
 import { ColumnOptions } from 'typeorm';
+import { ColumnEmbeddedOptions } from 'typeorm/decorator/options/ColumnEmbeddedOptions';
 import { Faker } from '@faker-js/faker';
+
+import { OwnedEntity } from './entity';
 
 export const commonColumns: {
   [key: string]: {
     seed: (faker: Faker) => any;
-    column: ColumnOptions;
+    column: ColumnOptions | ColumnEmbeddedOptions;
   };
 } = {
   notes: {
@@ -15,4 +18,10 @@ export const commonColumns: {
       length: 512,
     },
   },
+  ownedBase: {
+    seed: () => ({ owner: { id: 1 } }),
+    column: {
+      prefix: '',
+    }
+  }
 };

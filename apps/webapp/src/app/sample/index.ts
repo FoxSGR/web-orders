@@ -1,4 +1,4 @@
 export * from './sample.module';
 export * from './sample.service';
 export * from './store';
-export * from './sample.config';
+export * from './config/sample.config';

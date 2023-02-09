@@ -10,8 +10,6 @@ import { EntitySeederService } from '../shared';
 @Injectable()
 @EntitySeederService({ order: 300 })
 export class ClientSeeder extends EntitySeeder<Client> {
-  nested = ['address'];
-
   constructor(connection: Connection, clientService: ClientService) {
     super(Client, clientService, connection, ClientRepository);
   }

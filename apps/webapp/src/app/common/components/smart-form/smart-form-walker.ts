@@ -49,12 +49,15 @@ export class SmartFormWalker<T extends object> {
     }
 
     const value = get(this.state.values, prop);
-    this.callback(item, value, prop, targetProp);
 
     if (item.type === 'multiple') {
       this.walkMultiple(item, prop, targetProp, value);
+      this.callback(item, value, prop, targetProp);
     } else if (item.type === 'group') {
       this.walkGroup(item, prop, targetProp);
+      this.callback(item, value, prop, targetProp);
+    } else {
+      this.callback(item, value, prop, targetProp);
     }
   }
 

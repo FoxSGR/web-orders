@@ -59,6 +59,9 @@ export class SmartFormOutGenerator<T extends object> {
     switch (item.type) {
       case 'multiple':
       case 'group':
+        if (item.generation?.flatten) {
+          this.flatten(item, prop, targetProp);
+        }
         return;
       case 'entity-select':
         value = this.generateFromEntitySelect(item, value);
@@ -94,7 +97,9 @@ export class SmartFormOutGenerator<T extends object> {
     return value;
   }
 
-  private generateFromPhoneNumber(value: SmartFormPhone | undefined): string | undefined {
+  private generateFromPhoneNumber(
+    value: SmartFormPhone | undefined,
+  ): string | undefined {
     if (!value) {
       return undefined;
     }
@@ -104,17 +109,20 @@ export class SmartFormOutGenerator<T extends object> {
     return `${prefix}${phoneValue}`;
   }
 
-  private generateFromFileUpload(item: SmartFormFileUpload, value: SmartFormFiles): APIFile | APIFile[] | undefined {
+  private generateFromFileUpload(
+    item: SmartFormFileUpload,
+    value: SmartFormFiles,
+  ): APIFile | APIFile[] | undefined {
     if (!value) {
       return undefined;
     }
 
-    const files: APIFile[] = value.files.map((file) => ({
+    const files: APIFile[] = value.files.map(file => ({
       uid: file.uid,
       name: file.name,
       default: file.default || false,
       mimeType: file.mimeType,
-    }))
+    }));
 
     if (item.multiple) {
       return files;

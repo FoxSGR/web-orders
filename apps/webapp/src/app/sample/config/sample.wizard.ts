@@ -2,7 +2,6 @@ import { LoadingController } from '@ionic/angular';
 import { get, isEmpty } from 'lodash';
 
 import {
-  ComponentType,
   componentTypeConfigs,
   IFindParams,
   SeasonType,
@@ -15,15 +14,15 @@ import {
   FileService,
   shoeSizeChoices,
   WOIconItemMap,
-} from '../common';
-import { BrandService } from '../brand';
+} from '../../common';
+import { BrandService } from '../../brand';
 import {
   EntityFormWizard,
   SmartForm,
   SmartFormFiles,
   SmartFormMultiple,
   SmartFormState,
-} from '../common/types';
+} from '../../common/types';
 import { TranslateService } from '@ngx-translate/core';
 
 /**
@@ -201,6 +200,7 @@ export const sampleWizard: EntityFormWizard = {
   },
   preSave: {
     callback: async (state, injector) => {
+      // Upload photos
       const photosToUpload = (
         state.values['photos'] as SmartFormFiles
       )?.files.filter(f => f.state === 'toUpload');
@@ -236,13 +236,8 @@ export const sampleWizard: EntityFormWizard = {
  * Creates a smart form item for a shoe component.
  * @param container
  * @param key
- * @param label
  */
-const createComponentItem = (
-  container: SmartForm,
-  key: string,
-  label: string,
-) => {
+const createComponentItem = (container: SmartForm, key: string) => {
   const hidden = (state: SmartFormState, prop: string) => {
     const propParts = prop.split('.');
     const componentProp =
@@ -261,7 +256,7 @@ const createComponentItem = (
         to: 'sampleModel.components',
       },
     },
-    label,
+    label: config.label,
     children: {
       type: 'group',
       children: {
@@ -322,27 +317,6 @@ const createComponentItem = (
   } as SmartFormMultiple;
 };
 
-const componentTypeItems: { key: ComponentType; label: string }[] = [
-  { key: 'leather', label: 'str.shoeComponent.types.leather.label' },
-  { key: 'heel', label: 'str.shoeComponent.types.heel.label' },
-  { key: 'sole', label: 'str.shoeComponent.types.sole.label' },
-  { key: 'last', label: 'str.shoeComponent.types.last.label' },
-  {
-    key: 'productionInsole',
-    label: 'str.shoeComponent.types.productionInsole.label',
-  },
-  { key: 'finishInsole', label: 'str.shoeComponent.types.finishInsole.label' },
-  { key: 'backCounter', label: 'str.shoeComponent.types.backCounter.label' },
-  { key: 'laces', label: 'str.shoeComponent.types.laces.label' },
-  { key: 'frontlet', label: 'str.shoeComponent.types.frontlet.label' },
-  { key: 'lining', label: 'str.shoeComponent.types.lining.label' },
-  { key: 'ornament', label: 'str.shoeComponent.types.ornament.label' },
-];
-
-componentTypeItems.forEach(component =>
-  createComponentItem(
-    sampleWizard.steps['model'].form,
-    component.key,
-    component.label,
-  ),
+Object.keys(componentTypeConfigs).forEach(key =>
+  createComponentItem(sampleWizard.steps['model'].form, key),
 );

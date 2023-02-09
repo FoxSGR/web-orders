@@ -37,4 +37,11 @@ export const woRoutes: Routes = [
         m => m.ShoeComponentModule,
       ),
   },
+  {
+    path: 'shoe-order',
+    loadChildren: () =>
+      import('../shoe-order/shoe-order.module').then(
+        m => m.ShoeOrderModule,
+      ),
+  },
 ];

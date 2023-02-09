@@ -101,6 +101,16 @@
 >
 </wo-smart-form-color>
 
+<wo-smart-form-map
+  *ngIf="definition.type === 'map'"
+  [formDefinition]="formDefinition"
+  [definition]="definition"
+  [prop]="prop"
+  [(state)]="state"
+  (stateChange)="stateChange.emit($event)"
+>
+</wo-smart-form-map>
+
 <wo-smart-form-file-upload
   *ngIf="definition.type === 'file-upload'"
   [formDefinition]="formDefinition"

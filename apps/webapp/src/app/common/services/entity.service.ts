@@ -2,14 +2,14 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { IEntityDTO, IFindParams } from '@web-orders/api-interfaces';
+import { IFindParams } from '@web-orders/api-interfaces';
 import { environment } from '../../../environments/environment';
 import { createParams } from '../util';
 import { EntityPage } from '../wo-common.types';
 import { Entity } from '../models/entity';
 
 export interface EntityServiceConfig<T extends Entity = Entity> {
-  entityClass: { new (entity: IEntityDTO): T };
+  entityClass: { new (entity: any): T };
   route: string;
   alwaysLoadRelations?: boolean;
 }

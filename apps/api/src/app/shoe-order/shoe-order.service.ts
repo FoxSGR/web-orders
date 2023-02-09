@@ -10,7 +10,14 @@ export class ShoeOrderService extends EntityService<ShoeOrder> {
   constructor(connection: Connection) {
     super(connection, ShoeOrderRepository, {
       name: 'shoe_order',
-      relations: ['sample'],
+      relations: [
+        'sample',
+        'sample.sampleModel',
+        'sample.client',
+        'sample.client.address',
+        'sample.agent',
+        'sample.agent.address',
+      ],
     });
   }
 }

@@ -6,7 +6,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { IShoeOrder, ShoeSizes } from './shoe-order.types';
+import { ShoeSizes } from '@web-orders/api-interfaces';
+import { IShoeOrder } from './shoe-order.types';
 import { ShoeSample } from '../shoe-sample';
 import { ShoeModel } from '../shoe-model';
 import { OwnedEntity } from '../shared/entity';
@@ -18,17 +19,24 @@ export class ShoeOrder implements IShoeOrder {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Factory(faker => ({ id: faker.datatype.number(99) + 1 }))
   @ManyToOne(() => ShoeSample, { cascade: false })
   @JoinColumn()
   sample: ShoeSample;
 
-  @ManyToOne(() => ShoeModel, { cascade: false, nullable: false })
+  @ManyToOne(() => ShoeModel, { cascade: true, nullable: true })
   @JoinColumn()
   model: ShoeModel;
 
+  @Factory(faker => faker.date.recent())
   @Column({ default: null })
   dateAsked?: Date;
 
+  @Factory(faker => faker.date.future())
+  @Column({ default: null })
+  deadline?: Date;
+
+  @Factory(faker => faker.date.future())
   @Column({ default: null })
   dateDelivery?: Date;
 
@@ -36,9 +44,26 @@ export class ShoeOrder implements IShoeOrder {
   @Column(commonColumns.notes.column)
   notes?: string;
 
+  @Factory(faker => {
+    const result = {};
+
+    const min = faker.datatype.number({ min: 34, max: 38 });
+    const max = faker.datatype.number({ min: 38, max: 42 });
+    for (let i = min; i < max; i++) {
+      // Skip some sizes
+      if (faker.datatype.number({ min: 0, max: 2 }) > 1) {
+        continue;
+      }
+
+      result[i] = faker.datatype.number({ min: 1000, max: 5000 });
+    }
+
+    return result;
+  })
   @Column({ default: '{}', type: 'simple-json' })
   sizes: ShoeSizes;
 
-  @Column(() => OwnedEntity, { prefix: '' })
+  @Factory(commonColumns.ownedBase.seed)
+  @Column(() => OwnedEntity, commonColumns.ownedBase.column)
   base: OwnedEntity;
 }

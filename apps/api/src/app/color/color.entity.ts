@@ -4,6 +4,7 @@ import { Factory } from 'nestjs-seeder';
 
 import { IColor } from './color.types';
 import { OwnedEntity } from '../shared/entity';
+import { commonColumns } from '../shared/entity/common-columns';
 
 @Entity()
 export class Color implements IColor {
@@ -21,6 +22,7 @@ export class Color implements IColor {
   @Column({ precision: 3, default: null })
   color: string;
 
-  @Column(() => OwnedEntity, { prefix: '' })
+  @Factory(commonColumns.ownedBase.seed)
+  @Column(() => OwnedEntity, commonColumns.ownedBase.column)
   base: OwnedEntity;
 }

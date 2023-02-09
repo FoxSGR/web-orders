@@ -62,6 +62,9 @@ export class ShoeModel extends Entity implements IShoeModelDTO {
         ShoeModel.ComponentOrder.indexOf(c1.component.type) -
         ShoeModel.ComponentOrder.indexOf(c2.component.type),
     );
+
+    // Sort the photos so that the default becomes the first
+    this.photos?.sort((a, b) => +(b.default || 0) - +(a.default || 0));
   }
 
   groupComponents(): ShoeModelComponentGroup[] {

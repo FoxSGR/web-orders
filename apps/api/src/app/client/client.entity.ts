@@ -54,6 +54,7 @@ export class Client implements IClient {
   @Column(commonColumns.notes.column)
   notes?: string;
 
-  @Column(() => OwnedEntity, { prefix: '' })
+  @Factory(commonColumns.ownedBase.seed)
+  @Column(() => OwnedEntity, commonColumns.ownedBase.column)
   base: OwnedEntity;
 }

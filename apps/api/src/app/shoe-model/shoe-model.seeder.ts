@@ -10,8 +10,6 @@ import { ShoeModelService } from './shoe-model.service';
 @Injectable()
 @EntitySeederService({ order: 14900 })
 export class ShoeModelSeeder extends EntitySeeder<ShoeModel> {
-  nested = ['components'];
-
   constructor(connection: Connection, shoeModelService: ShoeModelService) {
     super(ShoeModel, shoeModelService, connection, ShoeModelRepository);
   }

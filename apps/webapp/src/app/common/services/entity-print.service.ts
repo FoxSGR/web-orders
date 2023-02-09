@@ -78,6 +78,7 @@ export class EntityPrintService {
             
             p {
               margin-bottom: 0 !important;
+              font-size: 12px;
             }
             
             .entity-print-group {
@@ -172,7 +173,7 @@ export class EntityPrintService {
 
     return `
       <div class="entity-print-header">
-        <h2>${title} ${subTitle}</h2>
+        <h3>${title} ${subTitle}</h3>
       </div>
     `;
   }
@@ -201,7 +202,7 @@ export class EntityPrintService {
       const title = await firstValueFrom(
         this.translate.get(group.header.title),
       );
-      header = `<h5>${title}</h5>`;
+      header = `<h5 style="font-size: 14px">${title}</h5>`;
     }
 
     let groupContent = '';

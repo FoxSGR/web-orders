@@ -23,32 +23,62 @@ export const componentTypes = [
 export type ComponentType = typeof componentTypes[number];
 
 export interface ComponentTypeConfig {
+  label: string;
+  icon: string;
   unit?: 'ft' | 'm' | 'cm' | 'amount' | 'size';
 }
+
 export const componentTypeConfigs: {
   [key in ComponentType]: ComponentTypeConfig;
 } = {
-  last: {
-    unit: 'amount',
-  },
   leather: {
+    label: 'str.shoeComponent.types.leather.label',
+    icon: 'layers',
     unit: 'ft',
   },
-  sole: {
+  last: {
+    label: 'str.shoeComponent.types.last.label',
+    icon: 'file-tray',
     unit: 'amount',
   },
-  productionInsole: {},
-  finishInsole: {},
-  backCounter: {},
+  sole: {
+    label: 'str.shoeComponent.types.sole.label',
+    icon: 'footsteps',
+    unit: 'amount',
+  },
+  productionInsole: {
+    label: 'str.shoeComponent.types.productionInsole.label',
+    icon: 'phone-landscape',
+  },
+  finishInsole: {
+    label: 'str.shoeComponent.types.finishInsole.label',
+    icon: 'phone-portrait',
+  },
+  backCounter: {
+    label: 'str.shoeComponent.types.backCounter.label',
+    icon: 'chevron-back',
+  },
   laces: {
+    label: 'str.shoeComponent.types.laces.label',
+    icon: 'options',
     unit: 'cm',
   },
-  frontlet: {},
-  lining: {},
+  frontlet: {
+    label: 'str.shoeComponent.types.frontlet.label',
+    icon: 'chevron-forward',
+  },
+  lining: {
+    label: 'str.shoeComponent.types.lining.label',
+    icon: 'unlink-outline',
+  },
   heel: {
+    label: 'str.shoeComponent.types.heel.label',
+    icon: 'swap-vertical',
     unit: 'size',
   },
   ornament: {
+    label: 'str.shoeComponent.types.ornament.label',
+    icon: 'add',
     unit: 'amount',
   },
 };

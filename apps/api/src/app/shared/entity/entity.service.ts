@@ -238,7 +238,7 @@ export class EntityService<
 
   async mapFoundEntities(entities: T[], params: FindParams<T>): Promise<void> {
     for (const entity of entities) {
-      if (this.config.owned) {
+      if (this.config.owned && entity.base) {
         entity.base.owner = params.owner;
       }
 

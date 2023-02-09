@@ -24,6 +24,7 @@ export class UserSeeder extends EntitySeeder<User> {
         roles: ['admin'],
         email: environment.admin.email,
         password: await hashPassword(environment.admin.password),
+        base: {},
       },
     ];
   }

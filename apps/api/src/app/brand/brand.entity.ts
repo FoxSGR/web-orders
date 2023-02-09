@@ -31,6 +31,7 @@ export class Brand implements IBrand {
   @ManyToMany(() => Client, client => client.brands)
   clients: Client[];
 
-  @Column(() => OwnedEntity, { prefix: '' })
+  @Factory(commonColumns.ownedBase.seed)
+  @Column(() => OwnedEntity, commonColumns.ownedBase.column)
   base: OwnedEntity;
 }

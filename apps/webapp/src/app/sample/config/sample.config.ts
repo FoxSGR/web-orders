@@ -1,5 +1,5 @@
-import { ShoeSample, WOEntityConfig } from '../common';
-import { SampleService } from './sample.service';
+import { ShoeSample, WOEntityConfig } from '../../common';
+import { SampleService } from '../sample.service';
 import { sampleListConfig } from './sample.list.config';
 import { sampleWizard } from './sample.wizard';
 import { samplePreview } from './sample.preview';

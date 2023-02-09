@@ -1,7 +1,5 @@
 import {
-  entityActions,
   entityReducer,
-  entitySelectors,
   EntityState,
   EntityStoreConfig,
   initialEntityState,
@@ -14,7 +12,3 @@ export const sampleStoreConfig: EntityStoreConfig<EntityState<ShoeSample>> = {
 };
 
 export const sampleReducer = entityReducer(sampleStoreConfig);
-export const sampleActions = entityActions(sampleStoreConfig.name);
-export const sampleSelectors = entitySelectors<ShoeSample>(
-  sampleStoreConfig.name,
-);

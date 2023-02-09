@@ -108,6 +108,12 @@ export interface SmartFormColor extends ISmartFormItem<string> {
   type: 'color';
 }
 
+export interface SmartFormMap extends ISmartFormItem<object> {
+  type: 'map';
+  keys: string[] | number[];
+  value: SmartFormItem;
+}
+
 export interface SmartFormState {
   values: { [key: string]: any };
 }
@@ -123,6 +129,7 @@ export type SmartFormItem<T = any> =
   | SmartFormFileUpload
   | SmartFormPhoneInput
   | SmartFormColor
+  | SmartFormMap
   | SmartFormMultiple
   | SmartFormGroup;
 

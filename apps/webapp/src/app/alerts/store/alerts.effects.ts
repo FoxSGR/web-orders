@@ -56,6 +56,8 @@ export class AlertsEffects {
               ],
             });
 
+            setTimeout(() => toast.dismiss(), timeout * 1000);
+
             await toast.present();
           }
         }),

@@ -4,8 +4,9 @@ import {
   EntityPreviewItemGroup,
   ShoeModelComponent,
   ShoeSample,
-} from '../common';
-import { shoeComponentConstants } from '../shoe-component';
+} from '../../common';
+import { shoeComponentConstants } from '../../shoe-component';
+import { componentTypeConfigs } from '@web-orders/api-interfaces';
 
 export const samplePreview: (
   entity: ShoeSample,
@@ -95,7 +96,6 @@ export const samplePreview: (
             icon: 'camera',
           },
       items: entity.sampleModel?.photos
-        ?.sort((a, b) => +(b.default || 0) - +(a.default || 0))
         ?.map(
           photo =>
             ({
@@ -105,7 +105,8 @@ export const samplePreview: (
               label: photo.name,
             } as EntityPreviewItem),
         )
-        ?.slice(0, print ? 1 : entity.sampleModel.photos.length),
+        ?.slice(0, print ? 1 : entity.sampleModel.photos.length) || [],
+      emptyText: 'str.sample.preview.photos.empty'
     },
     {
       columns: 1,
@@ -148,7 +149,7 @@ const buildComponentGroups: (
     return [
       {
         items: entity.sampleModel.components.map(component =>
-          buildComponentItem(component),
+          buildComponentItem(component, print),
         ),
       },
     ];
@@ -156,13 +157,14 @@ const buildComponentGroups: (
     return entity.sampleModel.groupComponents().map(group => ({
       showIndex: true,
       columns: group.components.length > 1 ? 2 : 1,
-      items: group.components.map(v => buildComponentItem(v)),
+      items: group.components.map(v => buildComponentItem(v, print)),
     }));
   }
 };
 
 const buildComponentItem = (
   shoeModelComponent: ShoeModelComponent,
+  print: boolean,
   index?: number,
 ) => {
   let indexSuffix = '';
@@ -170,8 +172,26 @@ const buildComponentItem = (
     indexSuffix = ` ${index}`;
   }
 
+  const componentConfig =
+    componentTypeConfigs[shoeModelComponent.component.type];
+
+  const amountField: any = {};
+  if (componentConfig.unit && shoeModelComponent.amount) {
+    let key = 'str.common.amount';
+    if (componentConfig.unit === 'size') {
+      key = 'str.common.size';
+    }
+
+    let unit = '';
+    if (!['amount', 'size'].includes(componentConfig.unit)) {
+      unit = ` ${componentConfig.unit}`;
+    }
+
+    amountField[key] = `${shoeModelComponent.amount}${unit}`;
+  }
+
   return {
-    icon: shoeComponentConstants.types[shoeModelComponent.component.type].icon,
+    icon: componentConfig.icon,
     value: {
       'str.shoeComponent.types.ornament.type':
         shoeModelComponent.component.type === 'ornament'
@@ -181,10 +201,14 @@ const buildComponentItem = (
         shoeModelComponent.component.reference,
       'str.shoeComponent.common.name': shoeModelComponent.component.name,
       'str.color.common.color': shoeModelComponent.color?.name,
+      'str.common.price':
+        print || !shoeModelComponent.price
+          ? undefined
+          : shoeModelComponent.price + ' €',
+      ...amountField,
       'str.common.notes': shoeModelComponent.component.notes,
     },
-    label:
-      shoeComponentConstants.types[shoeModelComponent.component.type].label,
+    label: componentConfig.label + indexSuffix,
     valueType: 'value',
   } as EntityPreviewItem;
 };

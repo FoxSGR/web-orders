@@ -9,14 +9,8 @@ import { IEntity } from './entity.types';
 import { environment } from '../../../environments/environment';
 
 export abstract class EntitySeeder<T extends IEntity> implements Seeder {
-  static readonly defaultBase = {
-    owner: { id: 1 },
-  };
-
   private repository: Repository<T>;
   private logger = new Logger(this.constructor.name);
-
-  protected nested: string[] = [];
 
   protected constructor(
     private readonly entityClass: { new (): T },
@@ -40,20 +34,9 @@ export abstract class EntitySeeder<T extends IEntity> implements Seeder {
     entities.push(...generated);
 
     for (const entity of entities) {
-      entity.base = EntitySeeder.defaultBase as any;
-
       for (const field of Object.keys(entity)) {
         entity[field] = await entity[field];
       }
-
-      this.nested.forEach(prop => {
-        const nested = get(entity, prop);
-        if (Array.isArray(nested)) {
-          nested.forEach(e => (e.base = EntitySeeder.defaultBase));
-        } else if (nested) {
-          nested.base = EntitySeeder.defaultBase;
-        }
-      });
     }
 
     const created: any[] = [];

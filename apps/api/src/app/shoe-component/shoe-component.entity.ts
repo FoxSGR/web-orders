@@ -55,6 +55,7 @@ export class ShoeComponent implements IShoeComponent {
   @Column(commonColumns.notes.column)
   notes?: string;
 
-  @Column(() => OwnedEntity, { prefix: '' })
+  @Factory(commonColumns.ownedBase.seed)
+  @Column(() => OwnedEntity, commonColumns.ownedBase.column)
   base: OwnedEntity;
 }

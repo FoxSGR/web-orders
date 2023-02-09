@@ -40,6 +40,7 @@
       "material": "Material",
       "name": "Nome",
       "notes": "Notas",
+      "pairs": "Pares",
       "photo": "Fotografia",
       "photos": "Fotografias",
       "phoneNumber": "Número de telefone",
@@ -143,6 +144,42 @@
         }
       }
     },
+    "shoeOrder": {
+      "common": {
+        "order": "Encomenda",
+        "requestedAt": "Pedida em",
+        "dateAsked": "Pedida em",
+        "dateDelivery": "Entregue em"
+      },
+      "list": {
+        "header": "Encomendas"
+      },
+      "wizard": {
+        "header": {
+          "creating": "Criar encomenda",
+          "updating": "Editar encomenda"
+        },
+        "deadline": {
+          "label": "Entregar até"
+        },
+        "notes": {
+          "placeholder": "Notas acerca da encomenda"
+        },
+        "base": {
+          "header": "Base"
+        },
+        "sizes": {
+          "header": "Quantidades",
+          "placeholder": "Quantidade de pares",
+          "label": "Quantidade por par"
+        },
+        "messages": {
+          "save": {
+            "message": "A encomenda foi gravada."
+          }
+        }
+      }
+    },
     "sample": {
       "common": {
         "sample": "Amostra",
@@ -161,6 +198,9 @@
       "preview": {
         "components": {
           "empty": "Não foram definidos os componentes do modelo."
+        },
+        "photos": {
+          "empty": "Não foram definidas fotografias."
         }
       },
       "wizard": {

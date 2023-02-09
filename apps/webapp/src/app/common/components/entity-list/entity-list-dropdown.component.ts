@@ -11,16 +11,24 @@ import {
   EntityHelperService,
   EntityPrintService,
 } from '../../services';
+import { WOActionItem } from '../../wo-common.types';
 
 @Component({
   template: `
     <ion-list>
-      <ion-item button (click)="print()">{{
-        'str.list.actions.print' | translate
-      }}</ion-item>
-      <ion-item button (click)="delete()">{{
-        'str.list.actions.delete' | translate
-      }}</ion-item>
+      <ion-item
+        button
+        *ngFor="let action of actions"
+        (click)="action.action()"
+        lines="full"
+      >
+        <ion-icon
+          [name]="action.icon"
+          slot="start"
+          style="margin-inline-end: 16px;"
+        ></ion-icon>
+        <ion-label>{{ action.label | translate }}</ion-label>
+      </ion-item>
     </ion-list>
   `,
 })
@@ -28,6 +36,19 @@ export class EntityListDropdownComponent<T extends Entity> {
   @Input() entity: T;
   @Input() entityConfig: EntityConfig<T>;
   @Input() refresh: () => void;
+
+  actions: WOActionItem[] = [
+    {
+      label: 'str.list.actions.print',
+      icon: 'print',
+      action: () => this.print(),
+    },
+    {
+      label: 'str.list.actions.delete',
+      icon: 'trash',
+      action: () => this.delete(),
+    },
+  ];
 
   constructor(
     private store: Store,
@@ -71,9 +92,6 @@ export class EntityListDropdownComponent<T extends Entity> {
       this.entityConfig.entityType,
     );
 
-    this.entityPrintService.printEntity(
-      entity,
-      this.entityConfig.entityType,
-    );
+    this.entityPrintService.printEntity(entity, this.entityConfig.entityType);
   }
 }

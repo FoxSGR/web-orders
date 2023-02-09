@@ -14,6 +14,7 @@ export const entityTypes = [
   'brand',
   'color',
   'shoe-component',
+  'shoe-order',
 ] as const;
 export type EntityType = typeof entityTypes[number];
 

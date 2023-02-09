@@ -30,7 +30,10 @@
               let i = index
             "
           >
-            <div class="wo-stepper-step" *ngIf="stepEntry.value as step">
+            <div
+              class="wo-stepper-step flex flex-column center-everything"
+              *ngIf="stepEntry.value as step"
+            >
               <ion-fab-button
                 class="wo-stepper-step-button"
                 [color]="buttonColor(i, step)"
