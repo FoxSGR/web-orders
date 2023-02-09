@@ -1,0 +1,10 @@
+{
+  "formatter.prettier.enabled": true,
+  "formatter.prettier.glob": "{**/*,*}.{js,ts,jsx,tsx,css,scss,less}",
+  "formatter": {
+    "prettier": {
+      "enabled": true,
+      "glob": "{**/*,*}.{js,ts,jsx,tsx,css,scss,less}"
+    }
+  }
+}

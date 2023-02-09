@@ -12,9 +12,9 @@ TO-DO
 
 ## Installation
 
-Install dependencies with yarn:
+Install dependencies with pnpm:
 ```bash
-yarn
+pnpm i
 ```
     
 ## Development
@@ -22,7 +22,7 @@ yarn
 Start the whole application (front- and back-end):
 
 ```bash
-  yarn start
+  pnpm run start
 ```
 
 
