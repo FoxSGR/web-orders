@@ -9,6 +9,10 @@ const subRoutes: Routes = [
     path: 'base',
     component: cc.SampleWizardBaseComponent,
   },
+  {
+    path: '',
+    redirectTo: 'base'
+  }
 ];
 
 @NgModule({

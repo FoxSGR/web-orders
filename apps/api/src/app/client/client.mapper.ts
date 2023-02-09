@@ -34,11 +34,6 @@ export class ClientMapper extends EntityMapper<IClient, ClientDTO> {
       delete client.agent.clients;
     }
 
-    if (client.address?.id === 73) {
-      console.log(client.address)
-      console.log(this.fieldToResponse(this.addressMapper, client.address))
-    }
-
     const agentMapper = new AgentMapper(this, this.addressMapper); // cannot inject because they depend on each other
     return {
       ...super.entityToResponse(client),

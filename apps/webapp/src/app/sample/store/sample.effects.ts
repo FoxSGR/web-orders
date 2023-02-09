@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { tap } from 'rxjs/operators';
@@ -18,14 +19,17 @@ export class SampleEffects extends EntityEffects<ShoeSample> {
     () =>
       this.actions.pipe(
         ofType(this.entityActions.wizard),
-        tap(({ id }) => {
-
-        }),
+        tap(({ id }) => this.router.navigate(['sample/wizard'])),
       ),
     { dispatch: false },
   );
 
-  constructor(store: Store, actions: Actions, sampleService: SampleService) {
+  constructor(
+    store: Store,
+    actions: Actions,
+    sampleService: SampleService,
+    private router: Router,
+  ) {
     super(store, actions, sampleService, sampleStoreConfig.name);
   }
 }

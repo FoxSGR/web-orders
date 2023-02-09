@@ -24,6 +24,6 @@ export const entityActions = <T>(entityName: EntityName) => ({
   ),
   wizard: createAction(
     `[${entityName}] wizard`,
-    props<{ id: Id }>(),
+    props<{ id?: Id }>(),
   ),
 });

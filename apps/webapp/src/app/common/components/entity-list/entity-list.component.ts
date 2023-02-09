@@ -294,6 +294,6 @@ export class EntityListComponent<T extends Entity>
   }
 
   create() {
-    this.entityActions.wizard();
+    this.store.dispatch(this.entityActions.wizard({}));
   }
 }
