@@ -1,6 +1,6 @@
 import {
   Component,
-  Directive,
+  ComponentFactoryResolver,
   Injector,
   Input,
   OnInit,
@@ -22,12 +22,17 @@ import { Entity } from '../../models/entity';
 import { EntityPage } from '../../wo-common.types';
 import { EntityListDropdownComponent } from './entity-list-dropdown.component';
 import { EntityService } from '../../services';
-import { EntityName, entitySelectors } from '../../store';
-import { sampleActions } from '../../../sample';
-import { BasicCellComponent } from '../../../sample/components/sample-list/basic-cell/basic-cell.component';
-import { ENTITY_LIST_TOKEN } from './entity-list.token';
+import {
+  entityActions,
+  EntityName,
+  entitySelectors,
+  EntityStatus,
+} from '../../store';
+import { BasicCellComponent } from './cells';
+import { ENTITY_LIST_TOKEN, EntityListCellData } from './entity-list.token';
+import { Observable } from 'rxjs';
 
-interface EntityListConfig<T extends Entity> {
+export interface EntityListConfig<T extends Entity> {
   searchables: EntityListSearchable[];
   entityName: EntityName;
   columns: (TableColumn & { template?: any })[];
@@ -58,10 +63,9 @@ export class EntityListComponent<T extends Entity>
   @ViewChildren('templates') templates!: QueryList<TemplateRef<any>>;
 
   @Input() showHeader = false;
+  @Input() config!: EntityListConfig<T>;
 
-  rows: T[] = [];
-
-  status = this.store.select(entitySelectors(this.config.entityName).getStatus);
+  status$: Observable<EntityStatus>;
 
   ColumnMode = ColumnMode;
   SortType = SortType;
@@ -80,31 +84,37 @@ export class EntityListComponent<T extends Entity>
     direction: 'desc',
   };
 
-  searchbars: EntityListSearchbar[] = [
-    {
-      ...this.config.searchables[0],
-      value: undefined,
-    },
-  ];
-
-  private readonly popoverController: PopoverController;
-  private readonly modalController: ModalController;
-  private readonly loadingController: LoadingController;
+  searchbars: EntityListSearchbar[];
 
   private currentActionsDropdown: HTMLIonPopoverElement | null = null;
 
+  private entityActions = entityActions('sample'); // call this just to get the type (overriden below)
+
+  private injectorCache = {};
+
   constructor(
-    private readonly injector: Injector,
-    public readonly config: EntityListConfig<T>,
+    injector: Injector,
+    private readonly popoverController: PopoverController,
+    private readonly modalController: ModalController,
+    private readonly loadingController: LoadingController,
   ) {
     super(injector);
-    this.popoverController = injector.get(PopoverController);
-    this.modalController = injector.get(ModalController);
-    this.loadingController = injector.get(LoadingController);
   }
 
   override ngOnInit(): void {
     super.ngOnInit();
+
+    this.status$ = this.store.select(
+      entitySelectors(this.config.entityName).getStatus,
+    );
+    this.searchbars = [
+      {
+        ...this.config.searchables[0],
+        value: undefined,
+      },
+    ];
+    this.entityActions = entityActions(this.config.entityName);
+
     this.load({ page: 0 });
     this.store
       .select(entitySelectors(this.config.entityName).getPage)
@@ -122,7 +132,6 @@ export class EntityListComponent<T extends Entity>
         col.template = BasicCellComponent;
       }
     });
-    console.log(this.templates);
   }
 
   ngAfterViewInit() {
@@ -132,7 +141,7 @@ export class EntityListComponent<T extends Entity>
   }
 
   load({ page }: { page?: number } = {}): void {
-    page = page || this.page.offset;
+    page = page === undefined ? this.page.offset : page;
 
     const filter: IFindFilter[] = this.searchbars
       .filter(s => s.value?.trim())
@@ -143,7 +152,7 @@ export class EntityListComponent<T extends Entity>
       }));
 
     this.store.dispatch(
-      sampleActions.loadPage({
+      this.entityActions.loadPage({
         params: {
           offset: page * this.pageSize,
           filter,
@@ -194,18 +203,31 @@ export class EntityListComponent<T extends Entity>
       },
     });
 
-    this.currentActionsDropdown.present();
+    await this.currentActionsDropdown.present();
   }
 
-  templateInjector(col: TableColumn, entity: T) {
-    return Injector.create({
+  templateInjector(column: TableColumn, entity: T) {
+    const idx = `${column.name}-${entity.id}`;
+    if (this.injectorCache[idx]) {
+      return this.injectorCache[idx];
+    }
+
+    const data: EntityListCellData<T> = {
+      entity,
+      column,
+    };
+
+    const injector = Injector.create({
+      parent: this.injector,
       providers: [
         {
           provide: ENTITY_LIST_TOKEN,
-          useValue: entity,
+          useValue: data,
         },
       ],
     });
+    this.injectorCache[idx] = injector;
+    return injector;
   }
 
   search() {

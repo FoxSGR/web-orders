@@ -33,7 +33,7 @@ export class AccountService {
             username: data.user.email,
             token: data.token,
           },
-        }))
+        })),
       );
   }
 }

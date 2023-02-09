@@ -78,7 +78,7 @@
     [offset]="page.offset"
     [limit]="pageSize"
     (page)="load({ page: $event.offset })"
-    [loadingIndicator]="(status | async) === 'loading'"
+    [loadingIndicator]="(status$ | async) === 'loading'"
     [scrollbarH]="true"
     [virtualization]="false"
     [messages]="{ emptyMessage: 'str.list.empty' | translate }"

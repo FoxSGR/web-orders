@@ -25,7 +25,9 @@ export class AlertsEffects {
 
           if (position === 'toast') {
             const toast = await this.toastController.create({
-              message: await firstValueFrom(this.translate.get(action.alert.message)),
+              message: await firstValueFrom(
+                this.translate.get(action.alert.message),
+              ),
               duration: timeout * 1000,
             });
 

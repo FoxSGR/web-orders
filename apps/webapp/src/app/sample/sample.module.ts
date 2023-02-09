@@ -9,23 +9,28 @@ import { EffectsModule } from '@ngrx/effects';
 
 import { WOCommonModule } from '../common';
 import { SampleListModule } from './components/sample-list';
+import { SampleWizardModule } from './components/sample-wizard';
 
 import { SampleEffects, sampleReducer, sampleStoreConfig } from './store';
 import { persistReducer } from '../common/util/persist.reducer';
 
 import * as cc from './components';
 
-const components = [
-  cc.SamplesComponent,
-  cc.SamplePreviewComponent,
-];
+const components = [cc.SamplesComponent, cc.SamplePreviewComponent];
 
 @NgModule({
   declarations: components,
   imports: [
     RouterModule.forChild([
       {
-        path: '',
+        path: 'wizard',
+        loadChildren: () =>
+          import('./components/sample-wizard/sample-wizard.module').then(
+            m => m.SampleWizardModule,
+          ),
+      },
+      {
+        path: 'list',
         component: cc.SamplesComponent,
       },
     ]),
@@ -47,6 +52,7 @@ const components = [
     TranslateModule,
     WOCommonModule,
     IonicModule,
+    SampleWizardModule,
   ],
 })
 export class SampleModule {}

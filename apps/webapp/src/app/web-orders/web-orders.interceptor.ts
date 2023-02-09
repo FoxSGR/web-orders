@@ -33,7 +33,7 @@ export class WebOrdersInterceptor implements HttpInterceptor {
    */
   intercept(
     req: HttpRequest<any>,
-    next: HttpHandler
+    next: HttpHandler,
   ): Observable<HttpEvent<any>> {
     if (!req.url.startsWith(environment.apiUrl) || req.url.endsWith('/auth')) {
       return next.handle(req);
@@ -68,8 +68,8 @@ export class WebOrdersInterceptor implements HttpInterceptor {
               }
             }
           }
-        }
-      )
+        },
+      ),
     );
   }
 }

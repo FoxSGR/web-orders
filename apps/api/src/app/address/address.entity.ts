@@ -2,8 +2,8 @@ import { ValidateIf } from 'class-validator';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { Factory } from 'nestjs-seeder';
 
+import { countries } from '@web-orders/api-interfaces';
 import { IAddress } from './address.types';
-import { countries } from './countries';
 import { EntityBase } from '../common/entity/entity';
 
 @Entity()
@@ -27,7 +27,7 @@ export class Address implements IAddress {
   zipCode: string;
 
   @ValidateIf((country: string) => (country ? !!countries[country] : true))
-  @Factory(faker => faker.address.country())
+  @Factory(faker => faker.address.countryCode())
   @Column({ default: null })
   country: string;
 

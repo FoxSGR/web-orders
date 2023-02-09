@@ -11,7 +11,7 @@ import { WOAppService } from '../../service/wo-app.service';
 export class WOContainerComponent extends BaseViewComponent {
   override requiresAuth = true;
 
-  constructor(private injector: Injector, private appService: WOAppService) {
+  constructor(injector: Injector, private appService: WOAppService) {
     super(injector);
   }
 

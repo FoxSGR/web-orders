@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 import { EntityMapper } from '../common/entity/entity.mapper';
 import { IClient } from './client.types';
@@ -12,7 +12,6 @@ import { AgentMapper } from '../agent/agent.mapper';
 @Injectable()
 export class ClientMapper extends EntityMapper<IClient, ClientDTO> {
   constructor(
-    @Inject(forwardRef(() => ClientMapper))
     private addressMapper: AddressMapper,
     private agentService: AgentService,
   ) {
@@ -33,6 +32,11 @@ export class ClientMapper extends EntityMapper<IClient, ClientDTO> {
     // no need to list the client's agents
     if (client.agent) {
       delete client.agent.clients;
+    }
+
+    if (client.address?.id === 73) {
+      console.log(client.address)
+      console.log(this.fieldToResponse(this.addressMapper, client.address))
     }
 
     const agentMapper = new AgentMapper(this, this.addressMapper); // cannot inject because they depend on each other

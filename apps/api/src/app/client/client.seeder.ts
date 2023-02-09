@@ -9,6 +9,8 @@ import { EntitySeederService } from '../common';
 @Injectable()
 @EntitySeederService()
 export class ClientSeeder extends EntitySeeder<Client> {
+  nested = ['address'];
+
   constructor(@InjectRepository(Client) repository: Repository<Client>) {
     super(Client, repository);
   }

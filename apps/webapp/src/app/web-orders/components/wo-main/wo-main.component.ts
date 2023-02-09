@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationStart, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { map } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 
 import { WOAppService } from '../../service/wo-app.service';
 import { WebOrdersState } from '../../web-orders.types';
@@ -14,7 +14,11 @@ import { getAccount, logout } from '../../../account';
   styleUrls: ['./wo-main.component.scss'],
 })
 export class WOMainComponent {
-  user$ = this.store.select(getAccount).pipe(map((acc) => acc?.user));
+  user$ = this.store.select(getAccount).pipe(map(acc => acc?.user));
+  route$ = this.router.events.pipe(
+    filter(event => event instanceof NavigationStart),
+    map(event => (event as NavigationStart).url),
+  );
 
   menuItems: MenuItem[] = [
     {
@@ -25,7 +29,7 @@ export class WOMainComponent {
     {
       icon: 'camera',
       label: 'str.menu.sample',
-      route: 'sample',
+      route: 'sample/list',
     },
     {
       icon: 'cube',
@@ -47,7 +51,7 @@ export class WOMainComponent {
   constructor(
     private store: Store<WebOrdersState>,
     private router: Router,
-    private appService: WOAppService
+    private appService: WOAppService,
   ) {}
 
   toggleMenu(): void {

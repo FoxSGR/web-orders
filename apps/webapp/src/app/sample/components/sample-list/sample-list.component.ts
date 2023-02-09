@@ -1,87 +1,113 @@
-import { ChangeDetectionStrategy, Component, Injector } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
-import { DatePipe, ShoeSample } from '../../../common';
+import {
+  AdvancedCellComponent,
+  DatePipe,
+  EntityListConfig,
+  ShoeSample,
+} from '../../../common';
 import { sampleStoreConfig } from '../../store';
 import { SampleService } from '../../sample.service';
-import { EntityListComponent } from '../../../common';
 import { SamplePreviewComponent } from '../sample-preview/sample-preview.component';
+import { countries } from '@web-orders/api-interfaces';
 
 @Component({
   selector: 'wo-sample-list',
-  templateUrl:
-    '../../../common/components/entity-list/entity-list.component.html',
-  styleUrls: [
-    '../../../common/components/entity-list/entity-list.component.scss',
-  ],
+  templateUrl: './sample-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SampleListComponent extends EntityListComponent<ShoeSample> {
-  constructor(injector: Injector, entityService: SampleService) {
-    super(injector, {
-      entityName: sampleStoreConfig.name,
-      searchables: [
-        {
-          label: 'str.model.common.reference',
-          prop: 'sampleModel.reference',
-        },
-        {
-          label: 'str.client.common.client',
-          prop: 'client.name',
-        },
-        {
-          label: 'str.agent.common.agent',
-          prop: 'agent.name',
-        },
-        {
-          label: 'str.brand.common.brand',
-          prop: 'brand.name',
-        },
-        {
-          label: 'str.common.notes',
-          prop: 'notes',
-        },
-      ],
-      service: entityService,
-      preview: {
-        component: SamplePreviewComponent,
+export class SampleListComponent {
+  @Input() showHeader = false;
+
+  config: EntityListConfig<ShoeSample> = {
+    entityName: sampleStoreConfig.name,
+    searchables: [
+      {
+        label: 'str.model.common.reference',
+        prop: 'sampleModel.reference',
       },
-      columns: [
-        {
-          name: 'Id',
-          prop: 'id',
-          sortable: true,
-          canAutoResize: false,
-          width: 50,
-        },
-        {
-          name: 'str.model.common.model',
-          prop: 'sampleModel.reference',
-          sortable: true,
-          canAutoResize: false,
-          width: 75,
-        },
-        {
-          name: 'str.client.common.client',
-          prop: 'client.name',
-          sortable: true,
-          canAutoResize: true,
-        },
-        {
-          name: 'str.sample.common.requestedAt',
-          prop: 'dateAsked',
-          sortable: true,
-          flexGrow: 2,
-          pipe: new DatePipe(),
-          width: 90,
-          canAutoResize: false,
-        },
-        {
-          name: 'str.common.photo',
-          prop: 'photo',
-          sortable: true,
-          canAutoResize: false
-        },
-      ],
-    });
+      {
+        label: 'str.client.common.client',
+        prop: 'client.name',
+      },
+      {
+        label: 'str.agent.common.agent',
+        prop: 'agent.name',
+      },
+      {
+        label: 'str.brand.common.brand',
+        prop: 'brand.name',
+      },
+      {
+        label: 'str.common.notes',
+        prop: 'notes',
+      },
+    ],
+    service: this.entityService,
+    preview: {
+      component: SamplePreviewComponent,
+    },
+    columns: [
+      {
+        name: 'Id',
+        prop: 'id',
+        sortable: true,
+        canAutoResize: false,
+        width: 50,
+      },
+      {
+        name: 'str.model.common.model',
+        prop: 'sampleModel.reference',
+        sortable: true,
+        canAutoResize: false,
+        width: 75,
+      },
+      {
+        name: 'str.client.common.client',
+        prop: 'client.name',
+        sortable: true,
+        canAutoResize: true,
+        summaryTemplate: [
+          {
+            name: 'str.client.common.client',
+            prop: 'client.name',
+            inline: (entity: ShoeSample) => this.inlineFlag(entity, 'client'),
+          },
+          {
+            name: 'str.agent.common.agent',
+            prop: 'agent.name',
+            inline: (entity: ShoeSample) => this.inlineFlag(entity, 'agent'),
+          },
+        ],
+        template: AdvancedCellComponent,
+      },
+      {
+        name: 'str.sample.common.requestedAt',
+        prop: 'dateAsked',
+        sortable: true,
+        flexGrow: 2,
+        pipe: new DatePipe(),
+        width: 120,
+        canAutoResize: false,
+      },
+      {
+        name: 'str.common.photo',
+        prop: 'photo',
+        sortable: true,
+        canAutoResize: false,
+      },
+    ],
+  };
+
+  constructor(private readonly entityService: SampleService) {}
+
+  private inlineFlag(entity: ShoeSample, field: string) {
+    const countryCode = entity[field]?.address?.country?.toLowerCase();
+    if (!countryCode) {
+      return '';
+    }
+
+    const countryName = countries[countryCode];
+    return `<span class="fi fi-${countryCode}" title="${countryName}"></span>`;
   }
 }

@@ -26,7 +26,15 @@
             class="wo-menu-icon"
             slot="start"
           ></ion-icon>
-          <ion-label>{{ item.label | translate }}</ion-label>
+          <ion-label
+            [ngStyle]="{
+              fontWeight: (route$ | async)?.startsWith('/' + item.route!)
+                ? 500
+                : 400
+            }"
+          >
+            {{ item.label | translate }}
+          </ion-label>
         </ion-item>
       </ion-list>
     </ion-content>

@@ -32,8 +32,8 @@ export class Agent implements IAgent {
   @Column({ default: null })
   vat?: string;
 
-  @Factory(() => DataFactory.createForClass(Address))
-  @OneToOne(() => Address, { cascade: true })
+  @Factory(() => DataFactory.createForClass(Address).generate(1)[0])
+  @OneToOne(() => Address, { cascade: true, eager: true })
   @JoinColumn()
   address?: Address;
 

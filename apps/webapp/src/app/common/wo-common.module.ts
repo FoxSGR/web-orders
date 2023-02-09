@@ -5,6 +5,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 
+import { EntityListModule } from './components';
+
 import * as components from './components';
 import * as directives from './directives';
 import * as pipes from './pipes';
@@ -28,8 +30,10 @@ import * as pipes from './pipes';
     HttpClientModule,
     IonicModule,
     TranslateModule,
+    EntityListModule,
   ],
   exports: [
+    EntityListModule,
     components.EntityPreviewActionComponent,
     components.EntityPreviewCloseComponent,
     components.EntityPreviewListComponent,

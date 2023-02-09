@@ -32,12 +32,12 @@ export class Client implements IClient {
   @Column({ default: null })
   vat?: string;
 
-  @Factory(() => DataFactory.createForClass(Address))
-  @OneToOne(() => Address, { cascade: true })
+  @Factory(() => DataFactory.createForClass(Address).generate(1)[0])
+  @OneToOne(() => Address, { cascade: true, eager: true })
   @JoinColumn()
   address: Address;
 
-  @Factory(() => DataFactory.createForClass(Agent))
+  @Factory(() => DataFactory.createForClass(Agent).generate(1)[0])
   @ManyToOne(() => Agent, agent => agent.clients, { cascade: false })
   @JoinColumn({ name: 'agentId' })
   agent: Agent;

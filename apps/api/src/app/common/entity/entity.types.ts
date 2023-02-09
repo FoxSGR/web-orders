@@ -15,4 +15,3 @@ export interface EntityFieldMapping {
   prop: string;
   filterMode?: 'auto' | 'dirty';
 }
-
