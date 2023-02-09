@@ -2,23 +2,24 @@
   <h4>
     {{ definition.label | translate }}
   </h4>
-
-  <ion-list>
-    <ion-item *ngFor="let key of $any(definition.keys); trackBy: trackBy">
-      <ion-row class="w100">
-        <ion-col size="6" class="flex align-center">
-          {{ key }}
-        </ion-col>
-        <ion-col size="6" class="p0">
-          <wo-smart-form-item
-            [formDefinition]="formDefinition"
-            [definition]="definition.value"
-            [prop]="childProp(key)"
-            [(state)]="state"
-            (stateChange)="stateChange.emit($event)"
-          ></wo-smart-form-item>
-        </ion-col>
-      </ion-row>
-    </ion-item>
-  </ion-list>
 </ion-text>
+
+<ion-list>
+  <ion-item *ngFor="let key of $any(definition.keys); trackBy: trackBy">
+    <ion-row class="w100">
+      <ion-col size="6" class="flex align-center">
+        {{ key }}
+      </ion-col>
+      <ion-col size="6" class="p0">
+        <wo-smart-form-item
+          [formDefinition]="formDefinition"
+          [definition]="definition.value"
+          [prop]="childProp(key)"
+          [(state)]="state"
+          (stateChange)="stateChange.emit($event)"
+          [change]="change"
+        ></wo-smart-form-item>
+      </ion-col>
+    </ion-row>
+  </ion-item>
+</ion-list>

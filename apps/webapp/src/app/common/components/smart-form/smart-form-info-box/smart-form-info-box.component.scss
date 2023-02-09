@@ -1,0 +1,9 @@
+$borderColor: var(
+  --ion-item-border-color,
+  var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13)))
+);
+.sf-info-box {
+  border-radius: 5px;
+  border: solid 0.5px $borderColor;
+  min-height: 150px;
+}

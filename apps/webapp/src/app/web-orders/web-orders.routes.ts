@@ -40,8 +40,6 @@ export const woRoutes: Routes = [
   {
     path: 'shoe-order',
     loadChildren: () =>
-      import('../shoe-order/shoe-order.module').then(
-        m => m.ShoeOrderModule,
-      ),
+      import('../shoe-order/shoe-order.module').then(m => m.ShoeOrderModule),
   },
 ];

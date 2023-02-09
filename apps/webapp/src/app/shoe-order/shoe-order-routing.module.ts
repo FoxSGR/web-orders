@@ -20,7 +20,9 @@ import { ShoeOrderComponent } from './shoe-order.component';
           {
             path: 'wizard',
             loadChildren: () =>
-              import('./shoe-order.wizard.module').then(m => m.ShoeOrderWizardModule),
+              import('./shoe-order.wizard.module').then(
+                m => m.ShoeOrderWizardModule,
+              ),
           },
           {
             path: '',

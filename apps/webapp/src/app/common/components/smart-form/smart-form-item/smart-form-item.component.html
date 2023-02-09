@@ -9,6 +9,7 @@
   [prop]="prop"
   [(state)]="state"
   (stateChange)="stateChange.emit($event)"
+  [change]="change"
 ></wo-smart-form-entity-select>
 
 <wo-smart-form-text-input
@@ -18,6 +19,7 @@
   [prop]="prop"
   [(state)]="state"
   (stateChange)="stateChange.emit($event)"
+  [change]="change"
 >
 </wo-smart-form-text-input>
 
@@ -28,6 +30,7 @@
   [prop]="prop"
   [(state)]="state"
   (stateChange)="stateChange.emit($event)"
+  [change]="change"
 >
 </wo-smart-form-text-area>
 
@@ -38,6 +41,7 @@
   [prop]="prop"
   [(state)]="state"
   (stateChange)="stateChange.emit($event)"
+  [change]="change"
 >
 </wo-smart-form-number-input>
 
@@ -48,6 +52,7 @@
   [prop]="prop"
   [(state)]="state"
   (stateChange)="stateChange.emit($event)"
+  [change]="change"
 >
 </wo-smart-form-date>
 
@@ -58,6 +63,7 @@
   [prop]="prop"
   [(state)]="state"
   (stateChange)="stateChange.emit($event)"
+  [change]="change"
 >
 </wo-smart-form-multiple>
 
@@ -68,6 +74,7 @@
   [prop]="prop"
   [(state)]="state"
   (stateChange)="stateChange.emit($event)"
+  [change]="change"
 >
 </wo-smart-form-group>
 
@@ -78,6 +85,7 @@
   [prop]="prop"
   [(state)]="state"
   (stateChange)="stateChange.emit($event)"
+  [change]="change"
 >
 </wo-smart-form-choices>
 
@@ -88,6 +96,7 @@
   [prop]="prop"
   [(state)]="state"
   (stateChange)="stateChange.emit($event)"
+  [change]="change"
 >
 </wo-smart-form-phone-input>
 
@@ -98,6 +107,7 @@
   [prop]="prop"
   [(state)]="state"
   (stateChange)="stateChange.emit($event)"
+  [change]="change"
 >
 </wo-smart-form-color>
 
@@ -108,8 +118,20 @@
   [prop]="prop"
   [(state)]="state"
   (stateChange)="stateChange.emit($event)"
+  [change]="change"
 >
 </wo-smart-form-map>
+
+<wo-smart-form-info-box
+  *ngIf="definition.type === 'info-box'"
+  [formDefinition]="formDefinition"
+  [definition]="definition"
+  [prop]="prop"
+  [(state)]="state"
+  (stateChange)="stateChange.emit($event)"
+  [change]="change"
+>
+</wo-smart-form-info-box>
 
 <wo-smart-form-file-upload
   *ngIf="definition.type === 'file-upload'"
@@ -118,5 +140,6 @@
   [prop]="prop"
   [(state)]="state"
   (stateChange)="stateChange.emit($event)"
+  [change]="change"
 >
 </wo-smart-form-file-upload>

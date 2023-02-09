@@ -1,4 +1,4 @@
-import { APIFile } from "@web-orders/api-interfaces";
+import { APIFile } from '@web-orders/api-interfaces';
 
 export type FileState = 'toUpload' | 'stored';
 

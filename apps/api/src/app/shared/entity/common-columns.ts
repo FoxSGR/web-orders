@@ -22,6 +22,6 @@ export const commonColumns: {
     seed: () => ({ owner: { id: 1 } }),
     column: {
       prefix: '',
-    }
-  }
+    },
+  },
 };

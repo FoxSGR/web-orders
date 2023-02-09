@@ -34,7 +34,7 @@ export class AccountService {
           account: {
             username: data.user.email,
             resourcesFolder: data.user.resourcesFolder,
-            token: data.token
+            token: data.token,
           },
         })),
       );

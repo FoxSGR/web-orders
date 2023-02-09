@@ -1,20 +1,28 @@
 import {
+  AfterViewChecked,
   Directive,
   EventEmitter,
   Input,
+  OnChanges,
+  OnInit,
   Output,
-  SimpleChanges,
 } from '@angular/core';
 import { cloneDeep, get, set } from 'lodash';
+import { Observable } from 'rxjs';
 
 import { SmartForm, SmartFormItem, SmartFormState } from '../../types';
 import { BaseComponent } from '../base.component';
 
 @Directive()
-export class SmartFormAbstractItemComponent<
-  T,
-  S extends SmartFormItem<T>,
-> extends BaseComponent {
+export class SmartFormAbstractItemComponent<T, S extends SmartFormItem<T>>
+  extends BaseComponent
+  implements OnInit, AfterViewChecked, OnChanges
+{
+  /**
+   * Observable to keep up with changes.
+   */
+  @Input() change: Observable<SmartFormState>;
+
   /**
    * Full definition of the form.
    */
@@ -87,10 +95,9 @@ export class SmartFormAbstractItemComponent<
 
   /**
    * Finds the value of the current item in the state.
-   * @param state
    * @protected
    */
-  protected getValue(state = this.state) {
+  protected getValue() {
     return get(this.state.values, this.prop);
   }
 

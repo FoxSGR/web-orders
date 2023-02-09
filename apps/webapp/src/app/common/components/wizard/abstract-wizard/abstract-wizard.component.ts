@@ -259,7 +259,7 @@ export abstract class AbstractWizardComponent<T extends Entity>
       );
 
       // :) TODO: improve this
-      setTimeout(() => window.location.reload(), 5000);
+      setTimeout(() => window.location.reload(), 2000);
     });
   }
 

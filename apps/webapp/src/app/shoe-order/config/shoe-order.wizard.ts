@@ -65,6 +65,22 @@ export const shoeOrderWizard: EntityFormWizard = {
               placeholder: 'str.shoeOrder.wizard.sizes.placeholder',
             },
           },
+          preview: {
+            type: 'info-box',
+            label: 'str.shoeOrder.wizard.preview.header',
+            execute: state => {
+              let totalPairs = 0;
+
+              for (const amount of Object.values(state.values['sizes'] || {})) {
+                if (typeof amount === 'number') {
+                  totalPairs += amount;
+                }
+              }
+
+              console.log(totalPairs);
+              return { totalPairs };
+            },
+          },
         },
       },
     },

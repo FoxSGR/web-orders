@@ -26,6 +26,7 @@ import { ThumbnailComponent } from '../thumbnail/thumbnail.component';
     components.SmartFormPhoneInputComponent,
     components.SmartFormColorComponent,
     components.SmartFormMapComponent,
+    components.SmartFormInfoBoxComponent,
     components.SmartFormGroupComponent,
     components.SmartFormItemComponent,
     components.SmartFormMultipleComponent,

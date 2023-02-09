@@ -28,7 +28,10 @@ export class EntityPreviewListComponent<T extends Entity> {
   @Input()
   indexed = false;
 
-  constructor(private previewService: EntityPreviewService, private fileService: FileService) {}
+  constructor(
+    private previewService: EntityPreviewService,
+    private fileService: FileService,
+  ) {}
 
   icon(item: EntityPreviewItem): string {
     return typeof item.icon === 'function' ? item.icon() : item.icon;

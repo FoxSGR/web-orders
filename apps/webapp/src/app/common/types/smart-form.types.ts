@@ -114,6 +114,12 @@ export interface SmartFormMap extends ISmartFormItem<object> {
   value: SmartFormItem;
 }
 
+export interface SmartFormInfoBox extends ISmartFormItem<void> {
+  type: 'info-box';
+  execute: (state: SmartFormState) => object;
+  debounce?: number;
+}
+
 export interface SmartFormState {
   values: { [key: string]: any };
 }
@@ -130,6 +136,7 @@ export type SmartFormItem<T = any> =
   | SmartFormPhoneInput
   | SmartFormColor
   | SmartFormMap
+  | SmartFormInfoBox
   | SmartFormMultiple
   | SmartFormGroup;
 

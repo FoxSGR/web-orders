@@ -26,6 +26,7 @@
                 [prop]="childProp(i)"
                 [(state)]="state"
                 (stateChange)="stateChange.emit($event); updateCanAdd()"
+                [change]="change"
               >
               </wo-smart-form-item>
               <div class="sf-multiple-item-actions">

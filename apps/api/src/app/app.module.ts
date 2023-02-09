@@ -30,7 +30,7 @@ import { AppController } from './app.controller';
     ServeStaticModule.forRoot({
       rootPath: path.join('.', 'resources'),
       serveRoot: '/resources',
-      renderPath: '/resources'
+      renderPath: '/resources',
     }),
     TypeOrmModule.forRoot({
       // eslint-disable-next-line

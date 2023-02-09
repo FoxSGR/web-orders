@@ -171,7 +171,10 @@
         "sizes": {
           "header": "Quantidades",
           "placeholder": "Quantidade de pares",
-          "label": "Quantidade por par"
+          "label": "Quantidade por tamanho"
+        },
+        "preview": {
+          "header": "Previsão"
         },
         "messages": {
           "save": {

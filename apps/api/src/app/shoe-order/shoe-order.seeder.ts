@@ -10,16 +10,8 @@ import { EntitySeederService } from '../shared';
 @Injectable()
 @EntitySeederService({ order: 16000 })
 export class ShoeOrderSeeder extends EntitySeeder<ShoeOrder> {
-  constructor(
-    connection: Connection,
-    shoeComponentService: ShoeOrderService,
-  ) {
-    super(
-      ShoeOrder,
-      shoeComponentService,
-      connection,
-      ShoeOrderRepository,
-    );
+  constructor(connection: Connection, shoeComponentService: ShoeOrderService) {
+    super(ShoeOrder, shoeComponentService, connection, ShoeOrderRepository);
   }
 
   protected identifier(): string {

@@ -72,6 +72,8 @@ export class SmartFormOutGenerator<T extends object> {
       case 'file-upload':
         value = this.generateFromFileUpload(item, value);
         break;
+      case 'info-box':
+        return;
     }
 
     this.setValue(targetProp, value);

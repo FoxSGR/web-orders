@@ -95,18 +95,19 @@ export const samplePreview: (
             title: 'str.common.photos',
             icon: 'camera',
           },
-      items: entity.sampleModel?.photos
-        ?.map(
-          photo =>
-            ({
-              type: 'photo',
-              value: photo,
-              icon: 'camera',
-              label: photo.name,
-            } as EntityPreviewItem),
-        )
-        ?.slice(0, print ? 1 : entity.sampleModel.photos.length) || [],
-      emptyText: 'str.sample.preview.photos.empty'
+      items:
+        entity.sampleModel?.photos
+          ?.map(
+            photo =>
+              ({
+                type: 'photo',
+                value: photo,
+                icon: 'camera',
+                label: photo.name,
+              } as EntityPreviewItem),
+          )
+          ?.slice(0, print ? 1 : entity.sampleModel.photos.length) || [],
+      emptyText: 'str.sample.preview.photos.empty',
     },
     {
       columns: 1,
