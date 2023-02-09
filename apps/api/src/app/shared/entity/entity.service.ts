@@ -52,6 +52,11 @@ export class EntityService<
     this.repository = connection.getCustomRepository(repositoryClass);
   }
 
+  /**
+   * Finds a page of entities matching the given filters.
+   * @param params
+   * @param realFilters
+   */
   async findPage(
     params: FindParams<T>,
     realFilters: IFindFilter[] = null,
@@ -69,6 +74,11 @@ export class EntityService<
     };
   }
 
+  /**
+   * Finds all entities matching the given filters.
+   * @param params
+   * @param realFilters
+   */
   async findAll(
     params: FindParams<T>,
     realFilters: IFindFilter[] = null,
@@ -81,6 +91,11 @@ export class EntityService<
     return entities;
   }
 
+  /**
+   * Finds all entities with the given ids.
+   * @param params
+   * @param ids
+   */
   async findByIds(params: FindParams<T>, ids: Id[]): Promise<T[]> {
     const uniqueIds = uniq(ids);
 
@@ -97,6 +112,13 @@ export class EntityService<
     return ids.map(id => entities.find(e => e.id === id));
   }
 
+  /**
+   * Finds one entity with the given id.
+   * @param id
+   * @param user
+   * @param required
+   * @param realFilters
+   */
   async findOne(
     id: Id,
     user?: IUser,
@@ -121,6 +143,12 @@ export class EntityService<
     return entity;
   }
 
+  /**
+   * Saves an entity.
+   * @param entity
+   * @param id
+   * @param user
+   */
   save(entity: Partial<T>, id?: Id, user?: IUser) {
     if (id) {
       return this.update(id, entity, user);
@@ -129,6 +157,12 @@ export class EntityService<
     }
   }
 
+  /**
+   * Creates an entity.
+   * @param entity
+   * @param user
+   * @protected
+   */
   protected async create(entity: Partial<T>, user?: IUser): Promise<T> {
     if (this.config.owned) {
       entity['base'] = { owner: user } as any;
@@ -154,6 +188,13 @@ export class EntityService<
     }
   }
 
+  /**
+   * Updates an entity.
+   * @param id
+   * @param entity
+   * @param user
+   * @protected
+   */
   protected async update(id: Id, entity: Partial<T>, user?: IUser): Promise<T> {
     const found = await this.findOne(id, user);
     if (!found) {
@@ -171,6 +212,11 @@ export class EntityService<
     } as any);
   }
 
+  /**
+   * Deletes an entity.
+   * @param id
+   * @param user
+   */
   async delete(id: Id, user: IUser): Promise<T> {
     const entity = await this.findOne(id, user);
     if (!entity) {
@@ -181,6 +227,24 @@ export class EntityService<
     return entity;
   }
 
+  /**
+   * Counts the number of entities matching the given filters.
+   * @param params
+   * @param realFilters
+   */
+  async count(
+    params: FindParams<T>,
+    realFilters: IFindFilter[] = null,
+  ): Promise<number> {
+    return this.repository.count(this.buildFindOptions(params, realFilters));
+  }
+
+  /**
+   * Applies the given filters to the given query builder.
+   * @param queryBuilder
+   * @param filters
+   * @param map
+   */
   applyFilterToQueryBuilder(
     queryBuilder: SelectQueryBuilder<any>,
     filters: IFindFilter[],
@@ -236,6 +300,11 @@ export class EntityService<
     });
   }
 
+  /**
+   * Maps entities.
+   * @param entities
+   * @param params
+   */
   async mapFoundEntities(entities: T[], params: FindParams<T>): Promise<void> {
     for (const entity of entities) {
       if (this.config.owned && entity.base) {
@@ -248,6 +317,11 @@ export class EntityService<
     }
   }
 
+  /**
+   * Loads entity relations.
+   * @param entity
+   * @private
+   */
   private async loadRelations(entity: any) {
     for (const relation in entity) {
       entity[relation] = await entity[relation];
@@ -257,6 +331,12 @@ export class EntityService<
     }
   }
 
+  /**
+   * Builds options for the find method from the given params.
+   * @param params
+   * @param realFilters
+   * @private
+   */
   private buildFindOptions(
     params: FindParams<T>,
     realFilters: IFindFilter[] = null,
@@ -272,6 +352,11 @@ export class EntityService<
     };
   }
 
+  /**
+   * Builds the order object for the find method from the given params.
+   * @param params
+   * @private
+   */
   private buildOrder(params: FindParams<T>) {
     const order: any = {};
     if (!params.sortField) {
@@ -288,6 +373,12 @@ export class EntityService<
     return order;
   }
 
+  /**
+   * Builds a "where query builder" for the find method from the given params.
+   * @param params
+   * @param realFilters
+   * @private
+   */
   private buildWhere(params: FindParams<T>, realFilters: IFindFilter[] = null) {
     return (queryBuilder: SelectQueryBuilder<T>) => {
       if (this.config.owned) {
@@ -306,6 +397,12 @@ export class EntityService<
     };
   }
 
+  /**
+   * Maps the given filter value.
+   * @param field
+   * @param value
+   * @private
+   */
   private mapFilterValue(field: IFindFilter, value: any) {
     if (field.type === 'contains') {
       return `%${value}%`;
@@ -314,6 +411,11 @@ export class EntityService<
     }
   }
 
+  /**
+   * Returns the field mapping for the given key.
+   * @param key
+   * @private
+   */
   private fieldMapping(key: string): EntityFieldMapping {
     if (key === 'id') {
       return {

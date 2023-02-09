@@ -7,7 +7,7 @@ import type { IUser } from '../../user';
 
 export abstract class FindParams<T extends IEntity> implements IFindParams<T> {
   @IsOptional()
-  owner: IUser;
+  owner?: IUser;
 
   @IsOptional()
   @IsIn(['true', 'false', true, false])
