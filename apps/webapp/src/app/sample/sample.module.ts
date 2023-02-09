@@ -8,9 +8,6 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
 import { WOCommonModule } from '../common';
-import { SampleListModule } from './components/sample-list';
-import { SampleWizardModule } from './components/sample-wizard';
-
 import { SampleEffects, sampleReducer, sampleStoreConfig } from './store';
 import { persistReducer } from '../common/util/persist.reducer';
 
@@ -23,15 +20,24 @@ const components = [cc.SamplesComponent, cc.SamplePreviewComponent];
   imports: [
     RouterModule.forChild([
       {
-        path: 'wizard',
-        loadChildren: () =>
-          import('./components/sample-wizard/sample-wizard.module').then(
-            m => m.SampleWizardModule,
-          ),
-      },
-      {
-        path: 'list',
+        path: '',
         component: cc.SamplesComponent,
+        children: [
+          {
+            path: 'list',
+            loadChildren: () =>
+              import('./components/sample-list/sample-list.module').then(
+                m => m.SampleListModule,
+              ),
+          },
+          {
+            path: 'wizard',
+            loadChildren: () =>
+              import('./components/sample-wizard/sample-wizard.module').then(
+                m => m.SampleWizardModule,
+              ),
+          },
+        ],
       },
     ]),
     CommonModule,
@@ -48,11 +54,9 @@ const components = [cc.SamplesComponent, cc.SamplePreviewComponent];
       ],
     }),
     EffectsModule.forFeature([SampleEffects]),
-    SampleListModule,
     TranslateModule,
     WOCommonModule,
     IonicModule,
-    SampleWizardModule,
   ],
 })
 export class SampleModule {}

@@ -62,7 +62,7 @@ export class EntityListComponent<T extends Entity>
 {
   @ViewChildren('templates') templates!: QueryList<TemplateRef<any>>;
 
-  @Input() showHeader = false;
+  @Input() showSearch = false;
   @Input() config!: EntityListConfig<T>;
 
   status$: Observable<EntityStatus>;

@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 import { WOCommonModule } from '../../../common';
@@ -6,7 +7,7 @@ import { WOCommonModule } from '../../../common';
 import * as components from './components';
 
 @NgModule({
-  imports: [NgxDatatableModule, WOCommonModule],
+  imports: [CommonModule, NgxDatatableModule, WOCommonModule],
   declarations: [components.SampleListComponent],
   exports: [components.SampleListComponent],
 })

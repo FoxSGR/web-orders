@@ -17,7 +17,7 @@ import { countries } from '@web-orders/api-interfaces';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SampleListComponent {
-  @Input() showHeader = false;
+  @Input() showSearch = false;
 
   config: EntityListConfig<ShoeSample> = {
     entityName: sampleStoreConfig.name,
