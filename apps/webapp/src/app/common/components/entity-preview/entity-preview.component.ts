@@ -1,15 +1,14 @@
 import { Component, Injector, Input, OnInit } from '@angular/core';
-import { LoadingController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { firstValueFrom } from 'rxjs';
 import { Store } from '@ngrx/store';
 
+import { Id } from '@web-orders/api-interfaces';
 import type { Entity } from '../../models/entity';
-import { EntityConfig, EntityType } from '../../types';
+import { EntityType } from '../../types';
 import { EntityPreviewConfig } from './entity-preview.types';
 import { EntityConfigRegister } from '../../entity-config.register';
 import { AbstractModalComponent } from '../abstract-modal/abstract-modal.component';
-import { alertActions } from '../../../alerts';
+import { EntityHelperService, EntityPrintService } from '../../services';
 
 @Component({
   selector: 'wo-entity-preview',
@@ -21,16 +20,17 @@ export class EntityPreviewComponent<T extends Entity>
   implements OnInit
 {
   @Input() entity: T;
-  @Input() entityId?: T;
+  @Input() entityId?: Id;
   @Input() entityType: EntityType;
 
   previewData!: EntityPreviewConfig;
 
   constructor(
     protected translate: TranslateService,
-    protected loadingController: LoadingController,
     protected store: Store,
     protected injector: Injector,
+    private entityHelperService: EntityHelperService,
+    private entityPrintService: EntityPrintService,
   ) {
     super();
   }
@@ -38,12 +38,15 @@ export class EntityPreviewComponent<T extends Entity>
   override async ngOnInit() {
     super.ngOnInit();
 
-    const entityConfig = EntityConfigRegister.getDefinition<T>(this.entityType);
     if (this.entityId && !this.entity) {
-      await this.loadEntity(entityConfig);
+      this.entity = await this.entityHelperService.findEntity<T>(
+        this.entityId,
+        this.entityType,
+      );
     }
 
-    this.previewData = entityConfig.previewConfig!(this.entity);
+    const entityConfig = EntityConfigRegister.getDefinition<T>(this.entityType);
+    this.previewData = entityConfig.previewConfig!(this.entity, false);
   }
 
   edit() {
@@ -51,28 +54,7 @@ export class EntityPreviewComponent<T extends Entity>
     this.close();
   }
 
-  private async loadEntity(config: EntityConfig<T>) {
-    const loading = await this.loadingController.create();
-    await loading.present();
-
-    try {
-      config.service = this.injector.get(config.serviceClass);
-      this.entity = await firstValueFrom(
-        config.service!.findById(this.entityId!),
-      );
-    } catch (e) {
-      console.error(e);
-      this.store.dispatch(
-        alertActions.showAlert({
-          alert: {
-            type: 'error',
-            message: 'str.entity.preview.alerts.error.message',
-          },
-        }),
-      );
-      return;
-    } finally {
-      await loading.dismiss();
-    }
+  async print() {
+    await this.entityPrintService.printEntity(this.entity, this.entityType);
   }
 }

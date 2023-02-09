@@ -105,4 +105,12 @@ export class SmartFormAbstractItemComponent<
 
     this.value = cloneDeep(this.definition.default || this.defaultValue);
   }
+
+  /**
+   * Restores the default value.
+   * @protected
+   */
+  protected restoreDefaultValue() {
+    this.value = cloneDeep(this.definition.default || this.defaultValue);
+  }
 }

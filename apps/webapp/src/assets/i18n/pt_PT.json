@@ -61,6 +61,9 @@
           "required": {
             "message": "O campo \"{{field}}\" é obrigatório."
           }
+        },
+        "fileUpload": {
+          "pick": "Escolher"
         }
       }
     },
@@ -115,6 +118,11 @@
         "compare": {
           "accept": "Aceitar",
           "title": "Escolha a versão que pretende restaurar"
+        },
+        "print": {
+          "error": {
+            "message": "Não foi possível imprimir."
+          }
         }
       },
       "delete": {
@@ -309,6 +317,9 @@
         },
         "name": {
           "placeholder": "Nome do componente"
+        },
+        "description": {
+          "placeholder": "Descrição do componente"
         },
         "reference": {
           "placeholder": "Referência do componente"

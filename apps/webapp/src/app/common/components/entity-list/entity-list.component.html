@@ -45,33 +45,31 @@
       class="entity-list-search flex flex-wrap"
       *ngFor="let searchBar of searchBars; trackBy: trackByProp"
     >
-      <ion-item
-        class="entity-list-search-field"
-        lines="none"
-        *ngIf="config.searchables.length > 1"
-      >
-        <ion-select
-          interface="popover"
-          [selectedText]="searchBar.label | translate"
-          (ionChange)="changeSearchbar(searchBar, $any($event))"
-        >
-          <ion-select-option
-            *ngFor="
-              let searchable of availableSearchFields(searchBar);
-              trackBy: trackByProp
-            "
-            [value]="searchable"
+      <ion-card class="m0 p0 entity-list-search-field">
+        <ion-item lines="none" *ngIf="config.searchables.length > 1">
+          <ion-select
+            interface="popover"
+            [selectedText]="searchBar.label | translate"
+            (ionChange)="changeSearchbar(searchBar, $any($event))"
           >
-            {{ searchable.label | translate }}
-          </ion-select-option>
-          <ion-select-option
-            *ngIf="searchBars.length > 1"
-            [value]="{ prop: '#remove' }"
-          >
-            — {{ 'str.list.actions.remove' | translate }}
-          </ion-select-option>
-        </ion-select>
-      </ion-item>
+            <ion-select-option
+              *ngFor="
+                let searchable of availableSearchFields(searchBar);
+                trackBy: trackByProp
+              "
+              [value]="searchable"
+            >
+              {{ searchable.label | translate }}
+            </ion-select-option>
+            <ion-select-option
+              *ngIf="searchBars.length > 1"
+              [value]="{ prop: '#remove' }"
+            >
+              — {{ 'str.list.actions.remove' | translate }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-card>
 
       <ion-searchbar
         *ngIf="!searchBar.choices"

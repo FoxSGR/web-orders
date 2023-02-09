@@ -1,16 +1,26 @@
 import { Injectable } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngrx/store';
+import { Observable, of, switchMap } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { get } from 'lodash';
+import dayjs from 'dayjs';
 
 import { Id } from '@web-orders/api-interfaces';
 import { Entity } from '../models/entity';
 import { EntityType } from '../types';
 import { EntityPreviewComponent } from '../components/entity-preview/entity-preview.component';
 import { EntityPreviewCompareComponent } from '../components/entity-preview/entity-preview-compare/entity-preview-compare.component';
+import { EntityPreviewItem } from '../components';
 
 @Injectable({ providedIn: 'root' })
 export class EntityPreviewService {
-  constructor(private store: Store, private modalController: ModalController) {}
+  constructor(
+    private store: Store,
+    private translate: TranslateService,
+    private modalController: ModalController,
+  ) {}
 
   /**
    * Displays an entity preview as a modal.
@@ -82,5 +92,42 @@ export class EntityPreviewService {
 
     const result = await modal.onDidDismiss();
     return result.data || left;
+  }
+
+  itemValue(item: EntityPreviewItem, model: any): any {
+    let value: Observable<any>;
+    if (typeof item.value === 'function') {
+      value = item.value();
+      if (!(value instanceof Observable)) {
+        value = of(value);
+      }
+    } else if (!item.valueType || item.valueType === 'prop') {
+      if (item.value) {
+        value = of(get(model, item.value as string));
+      } else {
+        value = of(model as any);
+      }
+    } else {
+      value = of(item.value);
+    }
+
+    return value.pipe(
+      switchMap(v => {
+        if (typeof v === 'string' && item.choices?.[v]) {
+          return this.translate.get(item.choices[v]?.label);
+        } else if (typeof v === 'string' && v.startsWith('str.')) {
+          return this.translate.get(v);
+        } else {
+          return of(v);
+        }
+      }),
+      map(v => {
+        if (v instanceof Date) {
+          v = dayjs(v).format('DD/MM/YYYY');
+        }
+
+        return v;
+      }),
+    );
   }
 }

@@ -7,18 +7,16 @@
       size-xs="12"
     >
       <ion-item
-        class="ion-no-padding transparent"
+        class="ion-no-padding transparent wo-entity-preview-item"
         *ngIf="!item.hidden || !item.hidden(model)"
       >
         <ion-icon [name]="icon(item)" class="ion-padding-end"></ion-icon>
         <ion-label [ngClass]="{ flex: item.type === 'color' }">
           <p style="display: inline; font-weight: 500" class="m0">
-            <ng-container *ngIf="!indexed || items.length === 1; else indexTpl">
-              {{ item.label | translate }}
-            </ng-container>
-            <ng-template #indexTpl>
-              {{ item.label | translate }} {{ i + 1 }}
-            </ng-template>
+            {{ item.label | translate }}
+            <span *ngIf="indexed && items.length > 1">
+              {{ i + 1 }}
+            </span>
             <span
               *ngIf="!isObject(value(item) | async) || item.type === 'color'"
               style="margin-left: -0.2em"

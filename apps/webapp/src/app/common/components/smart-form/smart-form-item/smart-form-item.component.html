@@ -100,3 +100,13 @@
   (stateChange)="stateChange.emit($event)"
 >
 </wo-smart-form-color>
+
+<wo-smart-form-file-upload
+  *ngIf="definition.type === 'file-upload'"
+  [formDefinition]="formDefinition"
+  [definition]="definition"
+  [prop]="prop"
+  [(state)]="state"
+  (stateChange)="stateChange.emit($event)"
+>
+</wo-smart-form-file-upload>

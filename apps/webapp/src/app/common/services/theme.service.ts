@@ -16,20 +16,11 @@ export class ThemeService {
   }
 
   /**
-   * Whether the app is in printing mode.
-   */
-  printMode = false;
-
-  /**
    * Changes the value of dark mode.
    * @see _darkTheme$
    * @param value
    */
   changeDarkTheme(value: boolean) {
-    if (this.printMode) {
-      return;
-    }
-
     document.body.classList.toggle('dark', value);
     this._darkTheme$.next(value);
   }

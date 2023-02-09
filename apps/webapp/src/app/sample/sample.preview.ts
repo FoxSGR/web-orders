@@ -1,22 +1,27 @@
 import {
   EntityPreviewConfig,
+  EntityPreviewItem,
   EntityPreviewItemGroup,
+  ShoeModelComponent,
   ShoeSample,
 } from '../common';
 import { shoeComponentConstants } from '../shoe-component';
 
 export const samplePreview: (
   entity: ShoeSample,
-) => EntityPreviewConfig = entity => ({
+  print: boolean,
+) => EntityPreviewConfig = (entity, print) => ({
   header: {
     title: 'str.sample.common.sample',
     subTitle: entity.id,
   },
   groups: [
     {
-      header: {
-        title: 'str.dialogs.preview.overview',
-      },
+      header: print
+        ? undefined
+        : {
+            title: 'str.dialogs.preview.overview',
+          },
       items: [
         {
           icon: 'construct',
@@ -41,7 +46,7 @@ export const samplePreview: (
       ],
     },
     {
-      columns: 1,
+      columns: print ? 2 : 1,
       items: [
         {
           icon: () => {
@@ -79,6 +84,10 @@ export const samplePreview: (
           label: 'str.common.deadline',
           value: 'deadline',
         },
+      ],
+    },
+    {
+      items: [
         {
           icon: 'reader',
           label: 'str.common.notes',
@@ -95,33 +104,66 @@ export const samplePreview: (
       columns: 1,
       showIndex: true,
       type: 'groups',
-      items: buildComponentGroups(entity),
+      items: buildComponentGroups(entity, print),
       emptyText: 'str.sample.preview.components.empty',
     },
   ],
 });
 
-const buildComponentGroups: (entity: ShoeSample) => EntityPreviewItemGroup[] = (
+const buildComponentGroups: (
   entity: ShoeSample,
-) => {
+  print: boolean,
+) => EntityPreviewItemGroup[] = (entity: ShoeSample, print: boolean) => {
   if (!entity.sampleModel) {
     return [];
   }
 
-  return entity.sampleModel.groupComponents().map(group => ({
-    items: group.components.map(v => ({
-      icon: shoeComponentConstants.types[v.component.type].icon,
-      value: {
-        'str.shoeComponent.types.ornament.type':
-          v.component.type === 'ornament'
-            ? `str.shoeComponent.types.${v.component.ornamentType}.label`
-            : undefined,
-        'str.shoeComponent.common.reference': v.component.reference,
-        'str.shoeComponent.common.name': v.component.name,
-        'str.color.common.color': v.color?.name,
+  if (print) {
+    if (!entity.sampleModel.components) {
+      return [];
+    }
+
+    const counts: any = {};
+
+    return [
+      {
+        items: entity.sampleModel.components.map(component =>
+          buildComponentItem(component),
+        ),
       },
-      label: shoeComponentConstants.types[v.component.type].label,
-      valueType: 'value',
-    })),
-  }));
+    ];
+  } else {
+    return entity.sampleModel.groupComponents().map(group => ({
+      showIndex: true,
+      items: group.components.map(v => buildComponentItem(v)),
+    }));
+  }
+};
+
+const buildComponentItem = (
+  shoeModelComponent: ShoeModelComponent,
+  index?: number,
+) => {
+  let indexSuffix = '';
+  if (index) {
+    indexSuffix = ` ${index}`;
+  }
+
+  return {
+    icon: shoeComponentConstants.types[shoeModelComponent.component.type].icon,
+    value: {
+      'str.shoeComponent.types.ornament.type':
+        shoeModelComponent.component.type === 'ornament'
+          ? `str.shoeComponent.types.${shoeModelComponent.component.ornamentType}.label`
+          : undefined,
+      'str.shoeComponent.common.reference':
+        shoeModelComponent.component.reference,
+      'str.shoeComponent.common.name': shoeModelComponent.component.name,
+      'str.color.common.color': shoeModelComponent.color?.name,
+      'str.common.notes': shoeModelComponent.component.notes,
+    },
+    label:
+      shoeComponentConstants.types[shoeModelComponent.component.type].label,
+    valueType: 'value',
+  } as EntityPreviewItem;
 };

@@ -80,10 +80,16 @@ export interface SmartFormChoices<T extends string>
   choices: WOItemMap<T> | WOIconItemMap<T>;
 }
 
+export interface SmartFormFiles {
+  files: File[];
+  default?: File;
+}
+
 export interface SmartFormFileUpload extends ISmartFormItem<any> {
   type: 'file-upload';
   mimeType: string;
-  dropzoneText: string;
+  multiple: boolean;
+  maxSizeMB: number;
 }
 
 export interface SmartFormPhone {

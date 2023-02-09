@@ -1,7 +1,7 @@
-<ng-container *ngIf="previewData && modal">
+<ng-container *ngIf="modal">
   <ion-header>
     <ion-toolbar>
-      <ion-title>
+      <ion-title *ngIf="previewData">
         {{ previewData.header.title | translate }}
         <small
           *ngIf="previewData.header.subTitle"
@@ -18,22 +18,27 @@
     </ion-toolbar>
   </ion-header>
 
-  <wo-entity-preview-action (edit)="edit()"></wo-entity-preview-action>
+  <wo-entity-preview-action
+    (edit)="edit()"
+    (print)="print()"
+  ></wo-entity-preview-action>
 
   <ion-content class="ion-padding wo-preview-content">
     <ng-container *ngTemplateOutlet="previewContent"></ng-container>
   </ion-content>
 </ng-container>
 
-<ng-container *ngIf="previewData && !modal">
+<ng-container *ngIf="!modal">
   <ng-container *ngTemplateOutlet="previewContent"></ng-container>
 </ng-container>
 
 <ng-template #previewContent>
-  <wo-entity-preview-group
-    *ngFor="let group of previewData.groups"
-    [group]="group"
-    [entity]="entity"
-  >
-  </wo-entity-preview-group>
+  <ng-container *ngIf="previewData">
+    <wo-entity-preview-group
+      *ngFor="let group of previewData.groups"
+      [group]="group"
+      [entity]="entity"
+    >
+    </wo-entity-preview-group>
+  </ng-container>
 </ng-template>

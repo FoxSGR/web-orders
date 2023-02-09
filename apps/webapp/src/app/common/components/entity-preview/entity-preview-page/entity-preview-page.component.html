@@ -1,5 +1,15 @@
-<wo-entity-preview
-  *ngIf="entityId && entityType"
-  [entityType]="entityType"
-  [entityId]="entityId"
-></wo-entity-preview>
+<div *ngIf="entity && entityType" class="wo-entity-preview-page">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title class="pl0 ml0">
+        Web Orders
+        <br />
+        <small>{{ entity.id }} - {{ label() }}</small>
+      </ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <wo-entity-preview
+    [entityType]="entityType"
+    [entity]="entity"
+  ></wo-entity-preview>
+</div>

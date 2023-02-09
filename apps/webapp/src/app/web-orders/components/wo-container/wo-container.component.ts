@@ -1,6 +1,6 @@
 import { Component, Injector } from '@angular/core';
 
-import { BaseViewComponent, ThemeService } from '../../../common';
+import { BaseViewComponent } from '../../../common';
 import { WOAppService } from '../../service/wo-app.service';
 
 @Component({
@@ -11,14 +11,7 @@ import { WOAppService } from '../../service/wo-app.service';
 export class WOContainerComponent extends BaseViewComponent {
   override requiresAuth = true;
 
-  /**
-   * Whether the app is in printing mode.
-   */
-  get printMode() {
-    return this.themeService.printMode;
-  }
-
-  constructor(injector: Injector, private appService: WOAppService, private themeService: ThemeService) {
+  constructor(injector: Injector, private appService: WOAppService) {
     super(injector);
   }
 

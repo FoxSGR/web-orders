@@ -1,0 +1,22 @@
+.sf-file-list {
+  padding-left: 16px;
+
+  .sf-file-name,
+  ion-reorder,
+  ion-icon {
+    font-size: 14px;
+  }
+
+  .sf-file-name,
+  .sf-file-list-icon {
+    opacity: 0.8;
+  }
+
+  ion-reorder {
+    margin-top: -2px;
+  }
+
+  .sf-file-list-file * {
+    vertical-align: middle;
+  }
+}

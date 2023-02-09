@@ -37,11 +37,4 @@ export const woRoutes: Routes = [
         m => m.ShoeComponentModule,
       ),
   },
-  {
-    path: 'entity-preview',
-    loadChildren: () =>
-      import('../common/components/entity-preview/entity-preview.module').then(
-        m => m.EntityPreviewModule,
-      ),
-  },
 ];

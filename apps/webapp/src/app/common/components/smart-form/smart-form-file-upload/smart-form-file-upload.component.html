@@ -1,9 +1,62 @@
-<input #uploadInput type="file" style="display: none" onChange="{setImage}" />
+<input
+  #uploadInput
+  type="file"
+  style="display: none"
+  [accept]="definition.mimeType || '*'"
+  [multiple]="definition.multiple"
+  (change)="onFilePick()"
+/>
 
-<ion-item>
+<ion-item [lines]="value!.files.length === 0 ? 'full' : 'none'">
   <ion-label *ngIf="definition.label">
     {{ definition.label | translate }}
   </ion-label>
 
-  <ion-input></ion-input>
+  <ion-button
+    (click)="uploadInput.click()"
+    size="medium"
+    fill="outline"
+    color="medium"
+  >
+    <ion-icon slot="start" icon="attach"></ion-icon>
+    {{ 'str.common.smartForm.fileUpload.pick' | translate }}
+  </ion-button>
 </ion-item>
+
+<div *ngIf="value!.files.length > 0">
+  <ion-list class="sf-file-list">
+    <ion-reorder-group [disabled]="false">
+      <ion-item
+        *ngFor="let file of value!.files"
+        class="sf-file-list-file"
+        lines="full"
+      >
+        <ion-icon
+          slot="start"
+          color="medium"
+          name="image"
+          class="sf-file-list-icon"
+        ></ion-icon>
+        <ion-label class="sf-file-name">
+          {{ file.name }}
+        </ion-label>
+        <div slot="end" class="flex">
+          <ion-reorder *ngIf="value!.files.length > 1">
+            <ion-icon name="menu" color="medium"></ion-icon>
+          </ion-reorder>
+          <ion-button
+            (click)="removeFile(file)"
+            shape="circle"
+            fill="clear"
+            size="medium"
+            class="sf-file-remove"
+          >
+            <ion-icon name="close" color="medium"></ion-icon>
+          </ion-button>
+        </div>
+      </ion-item>
+    </ion-reorder-group>
+  </ion-list>
+
+  <ion-item-divider style="min-height: 16px"></ion-item-divider>
+</div>

@@ -173,6 +173,13 @@ export const sampleWizard: EntityFormWizard<ShoeSample> = {
             label: 'str.common.amount',
             placeholder: 'str.sample.wizard.amount.placeholder',
           },
+          photo: {
+            type: 'file-upload',
+            label: 'str.common.photo',
+            mimeType: 'image/*',
+            multiple: true,
+            maxSizeMB: 5,
+          },
           notes: {
             type: 'text-area',
             label: 'str.common.notes',
@@ -278,6 +285,7 @@ const componentTypeItems: { key: ComponentType; label: string }[] = [
   { key: 'leather', label: 'str.shoeComponent.types.leather.label' },
   { key: 'heel', label: 'str.shoeComponent.types.heel.label' },
   { key: 'sole', label: 'str.shoeComponent.types.sole.label' },
+  { key: 'last', label: 'str.shoeComponent.types.last.label' },
   {
     key: 'productionInsole',
     label: 'str.shoeComponent.types.productionInsole.label',

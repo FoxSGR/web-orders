@@ -203,6 +203,12 @@ export class EntityListComponent<T extends Entity>
         value: undefined,
       },
     ];
+    if (!this.config.searchables.find(s => s.prop === 'id')) {
+      this.config.searchables.push({
+        prop: 'id',
+        label: 'Id',
+      });
+    }
 
     this.status = 'unloaded';
     this.entityActions = entityActions(this.entityConfig.entityType);

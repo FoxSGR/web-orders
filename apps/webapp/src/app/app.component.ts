@@ -6,18 +6,9 @@ import { ThemeService } from './common';
   templateUrl: './app.component.html',
 })
 export class AppComponent implements OnInit {
-  /**
-   * Whether the app is in print mode.
-   * @private
-   */
-  private printMode = false;
-
   constructor(private themeService: ThemeService) {}
 
   ngOnInit() {
-    const urlParams = new URLSearchParams(window.location.search);
-    this.themeService.printMode = urlParams.get('print') === 'true';
-
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
     this._toggleDarkTheme(prefersDark.matches);
     prefersDark.addEventListener('change', mediaQuery =>

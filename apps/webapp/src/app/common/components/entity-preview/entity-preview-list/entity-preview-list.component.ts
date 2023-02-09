@@ -1,15 +1,12 @@
 import { Component, Input } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
-import { Observable, of, switchMap } from 'rxjs';
-import { map } from 'rxjs/operators';
-import dayjs from 'dayjs';
-import { get } from 'lodash';
+import { Observable } from 'rxjs';
 
 import {
   EntityPreviewColumns,
   EntityPreviewItem,
 } from '../entity-preview.types';
 import { Entity } from '../../../models/entity';
+import { EntityPreviewService } from '../../../services';
 
 @Component({
   selector: 'wo-entity-preview-list',
@@ -29,47 +26,14 @@ export class EntityPreviewListComponent<T extends Entity> {
   @Input()
   indexed = false;
 
-  constructor(private translate: TranslateService) {}
+  constructor(private previewService: EntityPreviewService) {}
 
   icon(item: EntityPreviewItem): string {
     return typeof item.icon === 'function' ? item.icon() : item.icon;
   }
 
   value(item: EntityPreviewItem): Observable<string> {
-    let value: Observable<any>;
-    if (typeof item.value === 'function') {
-      value = item.value();
-      if (!(value instanceof Observable)) {
-        value = of(value);
-      }
-    } else if (!item.valueType || item.valueType === 'prop') {
-      if (item.value) {
-        value = of(get(this.model, item.value as string));
-      } else {
-        value = of(this.model as any);
-      }
-    } else {
-      value = of(item.value);
-    }
-
-    return value.pipe(
-      switchMap(v => {
-        if (typeof v === 'string' && item.choices?.[v]) {
-          return this.translate.get(item.choices[v]?.label);
-        } else if (typeof v === 'string' && v.startsWith('str.')) {
-          return this.translate.get(v);
-        } else {
-          return of(v);
-        }
-      }),
-      map(v => {
-        if (v instanceof Date) {
-          v = dayjs(v).format('DD/MM/YYYY');
-        }
-
-        return v;
-      }),
-    );
+    return this.previewService.itemValue(item, this.model);
   }
 
   isObject(value: any): boolean {

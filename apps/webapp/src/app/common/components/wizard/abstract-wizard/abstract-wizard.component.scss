@@ -73,7 +73,7 @@ $stepper-button-size: 45px;
   position: sticky;
   bottom: -16px;
   padding: 5px 0;
-  background: var(--ion-background-color);
+  background: var(--ion-background-color, #fff);
   z-index: 999;
 }
 

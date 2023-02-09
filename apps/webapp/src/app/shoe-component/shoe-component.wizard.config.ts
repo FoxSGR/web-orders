@@ -23,8 +23,8 @@ export const shoeComponentWizardConfig: EntityFormWizard<ShoeComponent> = {
           },
           name: {
             type: 'text-input',
-            label: 'str.common.name',
-            placeholder: 'str.shoeComponent.wizard.name.placeholder',
+            label: 'str.common.description',
+            placeholder: 'str.shoeComponent.wizard.description.placeholder',
           },
           type: {
             type: 'choices',

@@ -99,13 +99,6 @@ export class WOMainComponent {
     return this.themeService.darkTheme$;
   }
 
-  /**
-   * Whether the app is in printing mode.
-   */
-  get printMode() {
-    return this.themeService.printMode;
-  }
-
   trackByRoute = (_index: number, item: MenuItem) => item.route;
 
   constructor(

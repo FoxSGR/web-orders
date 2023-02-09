@@ -52,11 +52,7 @@
 </ng-template>
 
 <ion-split-pane contentId="main" [disabled]="(user$ | async) === undefined">
-  <ion-menu
-    contentId="main"
-    [ngClass]="{ dark: darkTheme$ | async }"
-    *ngIf="!printMode"
-  >
+  <ion-menu contentId="main" [ngClass]="{ dark: darkTheme$ | async }">
     <ion-header>
       <ion-toolbar class="ion-translucent" translucent>
         <ion-title>Web Orders</ion-title>

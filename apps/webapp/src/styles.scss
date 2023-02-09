@@ -14,9 +14,14 @@ ion-button[shape='circle'] {
     width: 56px;
     height: 56px;
   }
-  &.medium {
+  &[size='medium'] {
     width: 46px;
     height: 46px;
+    margin: 0;
+  }
+  &[size='small'] {
+    width: 27px;
+    height: 27px;
     margin: 0;
   }
 }
@@ -110,6 +115,9 @@ ion-textarea textarea {
 .p0 {
   padding: 0;
 }
+.pl0 {
+  padding-left: 0;
+}
 .p5 {
   padding: 5px;
 }
@@ -125,6 +133,9 @@ ion-textarea textarea {
 .m0 {
   margin: 0 !important;
   margin-inline: 0 !important;
+}
+.ml0 {
+  margin-left: 0;
 }
 .ml5 {
   margin-left: 5px;

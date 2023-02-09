@@ -8,6 +8,13 @@ export const routes: Routes = [
     component: LoginComponent,
   },
   {
+    path: 'entity-preview',
+    loadChildren: () =>
+      import('./common/components/entity-preview/entity-preview.module').then(
+        m => m.EntityPreviewModule,
+      ),
+  },
+  {
     path: '',
     loadChildren: () =>
       import('./web-orders/web-orders.module').then(m => m.WebOrdersModule),

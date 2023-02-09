@@ -3,6 +3,8 @@ $searchbarHeight: 40px;
 
 .entity-list-top {
   gap: $gap;
+  padding: 0 0 $gap 0;
+  align-items: flex-start;
 
   .entity-list-searches {
     flex-grow: 1;
@@ -19,10 +21,6 @@ $searchbarHeight: 40px;
       padding-right: 5px;
     }
   }
-}
-
-.entity-list-top {
-  padding: 0 0 $gap 0;
 }
 
 .entity-list-search > * {
@@ -79,6 +77,17 @@ $searchbarHeight: 40px;
 :host::ng-deep .ngx-datatable {
   box-shadow: none !important;
 
+  $border: solid 1px
+    var(
+      --ion-item-border-color,
+      var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13)))
+    ) !important;
+  border: $border;
+  .datatable-body-row {
+    border-top: $border;
+    border-bottom: none !important;
+  }
+
   .datatable-body-row {
     cursor: pointer;
   }
@@ -108,19 +117,6 @@ $searchbarHeight: 40px;
     }
     &:not(.disabled):hover a {
       background: var(--ion-toolbar-background) !important;
-    }
-  }
-
-  $border: solid 1px
-    var(
-      --ion-item-border-color,
-      var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13)))
-    ) !important;
-  &.dark {
-    border: $border;
-    .datatable-body-row {
-      border-top: $border;
-      border-bottom: none !important;
     }
   }
   // End: tweaks to make dark look better
