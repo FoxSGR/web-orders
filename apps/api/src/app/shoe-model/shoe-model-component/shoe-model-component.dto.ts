@@ -1,10 +1,14 @@
-import { IsNumber, IsOptional } from 'class-validator';
+import { IsNumber, IsOptional, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
-import { Id } from '../../common';
+import { EntityDTO } from '../../common/entity/entity.dto';
+import { ColorDTO } from '../../color';
+import { ShoeComponentDTO } from '../../shoe-component';
 
-export class ShoeModelComponentDTO {
-  component: Id;
+export class ShoeModelComponentDTO extends EntityDTO {
+  @ValidateNested()
+  @Type(() => ShoeComponentDTO)
+  component: ShoeComponentDTO;
 
   @IsNumber()
   @IsOptional()
@@ -15,7 +19,6 @@ export class ShoeModelComponentDTO {
   @IsOptional()
   price?: number;
 
-  @Type(() => Number)
-  @IsOptional()
-  color?: number;
+  @Type(() => ColorDTO)
+  color?: ColorDTO;
 }

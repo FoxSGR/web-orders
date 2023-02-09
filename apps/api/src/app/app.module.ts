@@ -12,6 +12,8 @@ import { Color, ColorModule } from './color';
 import { ShoeComponent, ShoeComponentModule } from './shoe-component';
 import { ShoeModel, ShoeModelModule } from './shoe-model';
 import { ShoeModelComponent } from './shoe-model/shoe-model-component';
+import { ShoeOrder, ShoeOrderModule } from './shoe-order';
+import { ShoeSample, ShoeSampleModule } from './shoe-sample';
 import { User, UserModule } from './user';
 
 import { AppController } from './app.controller';
@@ -30,8 +32,10 @@ import { SeedService } from './cli/seed.service';
         Client,
         Color,
         ShoeComponent,
+        ShoeOrder,
         ShoeModel,
         ShoeModelComponent,
+        ShoeSample,
         User,
       ],
     }),
@@ -42,7 +46,9 @@ import { SeedService } from './cli/seed.service';
     ClientModule,
     ColorModule,
     ShoeComponentModule,
+    ShoeOrderModule,
     ShoeModelModule,
+    ShoeSampleModule,
     UserModule,
   ],
   controllers: [AppController],

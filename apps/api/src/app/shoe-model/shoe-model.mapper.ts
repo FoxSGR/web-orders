@@ -29,23 +29,27 @@ export class ShoeModelMapper extends EntityMapper<IShoeModel, ShoeModelDTO> {
     if (body.components) {
       const components = await this.componentService.findByIds(
         { owner: user },
-        body.components.map((component) => component.component)
+        body.components.map((component) => component.component.id)
       );
 
       const colors = await this.colorService.findByIds(
         { owner: user },
-        body.components.filter((c) => c.color).map((c) => c.color)
+        body.components.filter((c) => c.color).map((c) => c.color.id)
       );
 
       // create the model to component link
       modelComponents = components.map((component) => {
-        const input = body.components.find((c) => c.component === component.id);
+        console.log(component);
+        const input = body.components.find(
+          (c) => c.component.id === component.id
+        );
+        console.log(input);
         return {
           component,
           amount: input.amount,
           price: input.price,
           color: input.color
-            ? colors.find((c) => c.id === input.color)
+            ? colors.find((c) => c.id === input.color.id)
             : undefined,
           base: { owner: user },
         };
@@ -64,6 +68,9 @@ export class ShoeModelMapper extends EntityMapper<IShoeModel, ShoeModelDTO> {
           }
         : undefined,
       notes: body.notes,
+      base: {
+        owner: user,
+      },
     };
   }
 
