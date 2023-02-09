@@ -24,6 +24,7 @@ import {
   SmartFormMultiple,
   SmartFormState,
 } from '../common/types';
+import { TranslateService } from '@ngx-translate/core';
 
 /**
  * Structure definition of the sample wizard.
@@ -50,6 +51,7 @@ export const sampleWizard: EntityFormWizard = {
             config: {
               selection: 'single',
             },
+            required: true,
             onChange: (value: Client[], state: SmartFormState) => {
               const client = value[0];
               if (!client) {
@@ -108,6 +110,7 @@ export const sampleWizard: EntityFormWizard = {
           season: {
             type: 'choices',
             label: 'str.sample.common.season',
+            required: true,
             choices: {
               spring_summer: {
                 label: 'str.sample.season.springSummer',
@@ -149,6 +152,7 @@ export const sampleWizard: EntityFormWizard = {
             type: 'text-input',
             label: 'str.model.common.reference',
             placeholder: 'str.sample.wizard.reference.placeholder',
+            required: true,
             generation: {
               prop: 'sampleModel.reference',
             },
@@ -195,7 +199,7 @@ export const sampleWizard: EntityFormWizard = {
       },
     },
   },
-  postSave: {
+  preSave: {
     callback: async (state, injector) => {
       const photosToUpload = (
         state.values['photos'] as SmartFormFiles
@@ -205,8 +209,11 @@ export const sampleWizard: EntityFormWizard = {
       }
 
       const loadingController = injector.get(LoadingController);
+      const translate = injector.get(TranslateService);
       const loading = await loadingController.create({
-        message: 'str.sample.wizard.postSave.uploadingPhotos',
+        message: translate.instant(
+          'str.sample.wizard.postSave.uploadingPhotos',
+        ),
       });
       loading.present();
 

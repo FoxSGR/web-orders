@@ -1,14 +1,15 @@
 /**
- * Represents a user.
+ * Represents account data.
  */
-export interface User {
+export interface Account {
   username: string;
   token: string;
+  resourcesFolder: string;
 }
 
 /**
- * Represents an account.
+ * Represents account state.
  */
-export interface Account {
-  user?: User;
+export interface AccountState {
+  account?: Account;
 }

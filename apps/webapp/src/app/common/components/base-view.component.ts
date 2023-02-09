@@ -2,7 +2,7 @@ import { Directive, Injector, Input, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { BaseComponent } from './base.component';
-import { getAccount } from '../../account';
+import { getAccountState } from '../../account';
 
 /**
  * A template for views in the apps.
@@ -65,10 +65,10 @@ export class BaseViewComponent extends BaseComponent implements OnInit {
     }
 
     this.store
-      .select(getAccount)
+      .select(getAccountState)
       .pipe(takeUntil(this.ngDestroyed$))
       .subscribe(account => {
-        if (account.user) {
+        if (account.account) {
           return;
         }
 

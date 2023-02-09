@@ -18,6 +18,13 @@ export interface EntityFormWizard {
     icon: string;
   };
   steps: { [key: string]: EntityFormWizardStep };
+  preSave?: {
+    callback?: (
+      state: SmartFormState,
+      injector: Injector,
+    ) => Promise<void> | void;
+    proceedConfirmationMessage?: string;
+  };
   postSave?: {
     callback?: (
       state: SmartFormState,

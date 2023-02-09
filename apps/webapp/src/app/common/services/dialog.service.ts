@@ -10,7 +10,10 @@ export class DialogService {
     private translate: TranslateService,
   ) {}
 
-  async confirm(callback: () => void, message = 'str.dialogs.common.text') {
+  async confirm(
+    callback?: () => void,
+    message = 'str.dialogs.common.text',
+  ): Promise<boolean> {
     const alert = await this.alertController.create({
       message: await lastValueFrom(this.translate.get(message)),
       buttons: [
@@ -18,17 +21,24 @@ export class DialogService {
           text: await lastValueFrom(
             this.translate.get('str.dialogs.common.cancel'),
           ),
+          handler: () => alert.dismiss(false),
         },
         {
           text: await lastValueFrom(
             this.translate.get('str.dialogs.common.confirm'),
           ),
           id: 'confirm-button',
-          handler: () => callback(),
+          handler: () => {
+            callback?.();
+            alert.dismiss(true);
+          },
         },
       ],
     });
 
-    alert.present();
+    await alert.present();
+
+    const result = await alert.onDidDismiss();
+    return result.data || false;
   }
 }

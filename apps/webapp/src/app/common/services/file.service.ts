@@ -1,12 +1,15 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { firstValueFrom, tap } from 'rxjs';
 import * as uuid from 'uuid';
+import { deburr } from 'lodash';
 
 import { environment } from '../../../environments/environment';
 import { alertActions } from '../../alerts';
 import { FileData, FileState } from '../types';
+import { Account, getAccount } from '../../account';
+import { takeUntil } from 'rxjs/operators';
 
 /**
  * Service to manage file uploads.
@@ -14,13 +17,23 @@ import { FileData, FileState } from '../types';
 @Injectable({ providedIn: 'root' })
 export class FileService {
   /**
+   * Authenticated account data.
+   * @private
+   */
+  private account!: Account;
+
+  /**
    * Files to upload.
    * This is used so that the files can be persisted in memory across component
    * cycles.
    */
   private files: { [key: string]: FileData } = {};
 
-  constructor(private http: HttpClient, private store: Store) {}
+  constructor(private http: HttpClient, private store: Store) {
+    this.store
+      .select(getAccount)
+      .subscribe(account => (this.account = account!));
+  }
 
   addFile(file: File, state: FileState): FileData {
     const uid = uuid.v4();
@@ -29,7 +42,7 @@ export class FileService {
       state,
       file,
       uid,
-      name: file.name,
+      name: deburr(file.name),
       mimeType: file.type,
     };
     this.files[uid] = fileData;
@@ -60,19 +73,29 @@ export class FileService {
     );
   }
 
+  buildUrl(fileData: FileData) {
+    return `${environment.resources}/${this.account.resourcesFolder}/${fileData.uid}_${fileData.name}`;
+  }
+
   async uploadFile(fileData: FileData) {
     const file = this.files[fileData.uid];
-    if (!file) {
+    if (!file?.file) {
       throw new Error('File is not loaded');
     }
 
+    const newFileName = fileData.uid + '_' + fileData.name;
+    const newFile = new File([file.file], newFileName, {
+      lastModified: file.file.lastModified,
+      type: file.file.type,
+    });
+
     const formData = new FormData();
-    formData.append('file', fileData.file!);
+    formData.append('file', newFile);
 
     try {
       return await firstValueFrom(
         this.http
-          .post(`${environment.api}/file`, formData)
+          .post(`${environment.api}/resources/file`, formData)
           .pipe(tap(() => this.unloadFile(fileData.uid))),
       );
     } catch (e: any) {

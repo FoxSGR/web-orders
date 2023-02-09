@@ -24,7 +24,7 @@ const components = [cc.LoginComponent];
     StoreModule.forFeature('account', accountReducer, {
       initialState: initialAccountState,
       metaReducers: [
-        persistReducer(initialAccountState, { user: true }, 'account'),
+        persistReducer(initialAccountState, { account: true }, 'account'),
       ],
     }),
     EffectsModule.forFeature([AccountEffects]),

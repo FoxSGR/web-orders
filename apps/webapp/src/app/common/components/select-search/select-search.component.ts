@@ -151,7 +151,7 @@ export class SelectSearchComponent<T = any>
     }
 
     this.selectedOption = this.options.find(
-      option => option.value === this.model,
+      option => option.value == this.model,
     );
   }
 }

@@ -11,6 +11,7 @@ import { EntityPreviewListComponent } from './entity-preview-list/entity-preview
 import { EntityPreviewGroupComponent } from './entity-preview-group/entity-preview-group.component';
 import { EntityPreviewCompareComponent } from './entity-preview-compare/entity-preview-compare.component';
 import { ColorIndicatorComponent } from '../elements';
+import { ThumbnailComponent } from '../thumbnail/thumbnail.component';
 
 @NgModule({
   imports: [
@@ -19,6 +20,7 @@ import { ColorIndicatorComponent } from '../elements';
     TranslateModule,
     DatePipe,
     ColorIndicatorComponent,
+    ThumbnailComponent,
   ],
   declarations: [
     EntityPreviewActionComponent,

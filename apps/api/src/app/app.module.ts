@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import * as path from 'path';
 
 import { environment } from '../environments/environment';
 
@@ -17,6 +19,7 @@ import { ShoeOrder, ShoeOrderModule } from './shoe-order';
 import { ShoeSample, ShoeSampleModule } from './shoe-sample';
 import { UILogModule } from './ui-log';
 import { User, UserModule } from './user';
+import { ResourcesModule } from './resources/resources.module';
 
 import { SeedService } from './shared/service';
 
@@ -24,6 +27,11 @@ import { AppController } from './app.controller';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: path.join('.', 'resources'),
+      serveRoot: '/resources',
+      renderPath: '/resources'
+    }),
     TypeOrmModule.forRoot({
       // eslint-disable-next-line
       ...(environment.database as any),
@@ -55,6 +63,7 @@ import { AppController } from './app.controller';
     ShoeSampleModule,
     UILogModule,
     UserModule,
+    ResourcesModule,
   ],
   controllers: [AppController],
   providers: [SeedService],

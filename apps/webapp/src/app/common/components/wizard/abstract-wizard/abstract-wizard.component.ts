@@ -212,6 +212,8 @@ export abstract class AbstractWizardComponent<T extends Entity>
         return;
       }
 
+      await this.preSave(state);
+
       // save the entity
       const service = this.injector.get(this.entityConfig.serviceClass);
       if (this.id === '_') {
@@ -360,6 +362,29 @@ export abstract class AbstractWizardComponent<T extends Entity>
     } catch (e) {
       // ignore because the show must go on
       console.error(e);
+    }
+  }
+
+  private async preSave(state: SmartFormState) {
+    if (!this.wizard.preSave?.callback) {
+      return;
+    }
+
+    try {
+      await this.wizard.preSave.callback(state, this.injector);
+    } catch (e) {
+      console.error(e);
+
+      if (this.wizard.preSave.proceedConfirmationMessage) {
+        const proceed = await this.dialogService.confirm(
+          undefined,
+          this.wizard.preSave.proceedConfirmationMessage,
+        );
+
+        if (!proceed) {
+          throw e;
+        }
+      }
     }
   }
 

@@ -6,7 +6,7 @@ import { filter, map } from 'rxjs/operators';
 import { WOAppService } from '../../service/wo-app.service';
 import { WebOrdersState } from '../../web-orders.types';
 import { MenuItem } from './menu-item';
-import { getAccount, logout } from '../../../account';
+import { getAccountState, logout } from '../../../account';
 import { DialogService, padWithSlashes, ThemeService } from '../../../common';
 
 // init services
@@ -21,7 +21,7 @@ export class WOMainComponent {
   /**
    * The current user.
    */
-  user$ = this.store.select(getAccount).pipe(map(acc => acc?.user));
+  user$ = this.store.select(getAccountState).pipe(map(acc => acc?.account));
 
   /**
    * The current route url.

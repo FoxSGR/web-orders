@@ -23,6 +23,7 @@ export class UserMapper extends EntityMapper<IUser, UserDTO> {
       firstName: input.firstName,
       lastName: input.lastName,
       roles: input.roles,
+      resourcesFolder: input.resourcesFolder,
     };
   }
 }

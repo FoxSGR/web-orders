@@ -23,7 +23,6 @@ export const alertsReducer = createReducer<AlertsState>(
       {
         ...alert,
         id: uuid.v4(),
-        timeout: alert.timeout || 5,
       },
     ],
   })),

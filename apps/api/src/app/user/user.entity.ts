@@ -35,6 +35,10 @@ export class User implements IUser {
   @Exclude()
   password: string;
 
+  @IsNotEmpty()
+  @Column()
+  resourcesFolder: string;
+
   @Column({ type: 'simple-json' })
   @Factory(() => ['normal'])
   @IsNotEmpty()

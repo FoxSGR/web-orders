@@ -6,4 +6,5 @@ export class UserDTO extends EntityDTO implements IUserDTO {
   firstName: string;
   lastName: string;
   roles: string[];
+  resourcesFolder: string;
 }

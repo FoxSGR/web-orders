@@ -1,12 +1,15 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { Account } from './account.types';
+import { AccountState } from './account.types';
 
 /**
  * Selector to get the full account state.
  */
-export const getAccount = createFeatureSelector<Account>('account');
+export const getAccountState = createFeatureSelector<AccountState>('account');
 
 /**
- * Selector to get the user.
+ * Selector to get the account.
  */
-export const getUser = createSelector(getAccount, state => state.user);
+export const getAccount = createSelector(
+  getAccountState,
+  state => state.account,
+);

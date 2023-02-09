@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { IAuthResponse } from '@web-orders/api-interfaces';
-import { Account } from './store/account.types';
+import { AccountState } from './store/account.types';
 import { environment } from '../../environments/environment';
 
 /**
@@ -23,7 +23,7 @@ export class AccountService {
    * @param username the user's username.
    * @param password the user's password.
    */
-  login(username: string, password: string): Observable<Account> {
+  login(username: string, password: string): Observable<AccountState> {
     return this.http
       .post<IAuthResponse>(`${environment.api}${AccountService.ENDPOINT}`, {
         email: username,
@@ -31,9 +31,10 @@ export class AccountService {
       })
       .pipe(
         map((data: IAuthResponse) => ({
-          user: {
+          account: {
             username: data.user.email,
-            token: data.token,
+            resourcesFolder: data.user.resourcesFolder,
+            token: data.token
           },
         })),
       );

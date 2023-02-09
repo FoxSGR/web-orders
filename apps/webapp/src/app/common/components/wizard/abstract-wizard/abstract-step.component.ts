@@ -87,8 +87,6 @@ export abstract class AbstractStepComponent<T extends Entity>
     //       return;
     //     }
     //
-    //     console.log(cloneDeep(state))
-    //
     //     this.state = state;
     //     this.cdr.detectChanges();
     //   });

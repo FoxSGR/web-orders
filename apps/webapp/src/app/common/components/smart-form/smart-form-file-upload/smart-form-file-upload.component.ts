@@ -10,6 +10,9 @@ import {
 import { DialogService, FileService } from '../../../services';
 import { SmartFormFiles, SmartFormFileUpload } from '../../../types';
 import { SmartFormAbstractItemComponent } from '../smart-form-abstract-item.component';
+import { environment } from '../../../../../environments/environment';
+import { Account, getAccount } from '../../../../account';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'wo-smart-form-file-upload',
@@ -76,19 +79,12 @@ export class SmartFormFileUploadComponent
     this.cdr.detectChanges();
   }
 
-  removeFile(uid: string) {
-    this.dialogService.confirm(() => {
-      const file = this.value!.files.find(f => f.uid === uid)!;
-
-      this.value!.files = this.value!.files.filter(file => file.uid !== uid);
-      this.fileService.unloadFile(uid);
-
-      if (file.default && this.value!.files.length > 0) {
-        this.value!.files[0].default = true;
-      }
-
-      this.onChange();
-    });
+  remove(uid: string, event: MouseEvent) {
+    if (event.shiftKey) {
+      this.removeFile(uid);
+    } else {
+      this.dialogService.confirm(() => this.removeFile(uid));
+    }
   }
 
   handleReorder(event: any) {
@@ -137,5 +133,31 @@ export class SmartFormFileUploadComponent
 
   isImage(mimeType: string): boolean {
     return mimeType.startsWith('image/');
+  }
+
+  fileUrl(uid: string) {
+    const fileData = this.value!.files.find(f => f.uid === uid);
+    if (
+      !fileData ||
+      fileData.state !== 'stored' ||
+      !this.isImage(fileData.mimeType)
+    ) {
+      return undefined;
+    }
+
+    return this.fileService.buildUrl(fileData);
+  }
+
+  private removeFile(uid: string) {
+    const file = this.value!.files.find(f => f.uid === uid)!;
+
+    this.value!.files = this.value!.files.filter(file => file.uid !== uid);
+    this.fileService.unloadFile(uid);
+
+    if (file.default && this.value!.files.length > 0) {
+      this.value!.files[0].default = true;
+    }
+
+    this.onChange();
   }
 }

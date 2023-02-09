@@ -2,6 +2,7 @@ import {
   AdvancedCellComponent,
   DatePipe,
   inlineFlag,
+  PhotoCellComponent,
   ShoeSample,
 } from '../common';
 import { EntityListConfig } from '../common/components/entity-list/entity-list.types';
@@ -84,9 +85,11 @@ export const sampleListConfig: EntityListConfig<ShoeSample> = {
     },
     {
       name: 'str.common.photo',
-      prop: 'photo',
-      sortable: true,
+      prop: 'sampleModel.photos',
+      sortable: false,
       canAutoResize: false,
+      template: PhotoCellComponent,
+      width: 150,
     },
   ],
 };

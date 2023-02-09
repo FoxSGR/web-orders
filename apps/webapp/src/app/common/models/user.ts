@@ -7,4 +7,5 @@ export class User extends Entity implements IUserDTO {
   email: string;
   username: string;
   roles: Role[];
+  resourcesFolder: string;
 }

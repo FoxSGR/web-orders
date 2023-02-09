@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 import { ColorIndicatorComponent } from '../elements';
+import { ThumbnailComponent } from '../thumbnail/thumbnail.component';
 
 import { EntityListDropdownComponent } from './entity-list-dropdown.component';
 import { EntityListComponent } from './entity-list.component';
@@ -21,6 +22,7 @@ import * as cells from './cells';
     cells.FlagCellComponent,
     cells.ChoiceCellComponent,
     cells.ColorCellComponent,
+    cells.PhotoCellComponent,
   ],
   imports: [
     CommonModule,
@@ -29,6 +31,7 @@ import * as cells from './cells';
     FormsModule,
     NgxDatatableModule,
     ColorIndicatorComponent,
+    ThumbnailComponent,
   ],
   exports: [EntityListComponent],
 })

@@ -5,5 +5,6 @@ export interface IUser extends IEntity {
   firstName: string;
   lastName: string;
   email: string;
+  resourcesFolder: string;
   roles: Role[];
 }

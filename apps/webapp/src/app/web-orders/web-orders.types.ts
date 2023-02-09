@@ -1,7 +1,7 @@
 import { AlertsState } from '../alerts';
-import { Account } from '../account';
+import { AccountState } from '../account';
 
 export interface WebOrdersState {
-  account: Account;
+  account: AccountState;
   alerts: AlertsState;
 }

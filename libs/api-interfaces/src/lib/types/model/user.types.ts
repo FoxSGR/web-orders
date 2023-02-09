@@ -5,4 +5,5 @@ export interface IUserDTO extends IEntityDTO {
   firstName: string;
   lastName: string;
   roles: string[];
+  resourcesFolder: string;
 }

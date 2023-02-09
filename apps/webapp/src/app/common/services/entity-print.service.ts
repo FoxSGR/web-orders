@@ -4,7 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { firstValueFrom } from 'rxjs';
 
 import { Entity } from '../models/entity';
-import { EntityConfig, EntityType } from '../types';
+import { EntityConfig, EntityType, FileData } from '../types';
 import { EntityConfigRegister } from '../entity-config.register';
 import {
   EntityPreviewConfig,
@@ -13,6 +13,7 @@ import {
   EntityPreviewItemGroup,
 } from '../components';
 import { EntityPreviewService } from './entity-preview.service';
+import { FileService } from './file.service';
 
 @Injectable({ providedIn: 'root' })
 export class EntityPrintService {
@@ -24,6 +25,7 @@ export class EntityPrintService {
     private translate: TranslateService,
     private loadingController: LoadingController,
     private previewService: EntityPreviewService,
+    private fileService: FileService,
   ) {}
 
   async printEntity(entity: Entity, entityType: EntityType) {
@@ -35,7 +37,6 @@ export class EntityPrintService {
     loading.present();
 
     const html = await this.generateHtml();
-    console.log(html);
 
     const previewFrame = document.createElement('IFRAME') as HTMLIFrameElement;
     document.body.appendChild(previewFrame);
@@ -247,7 +248,11 @@ export class EntityPrintService {
       return '';
     }
 
-    const value = await firstValueFrom(
+    if (item.type === 'photo') {
+      return this.generatePhotoItem(item.value as any);
+    }
+
+    const value: any = await firstValueFrom(
       this.previewService.itemValue(item, this.entity),
     );
 
@@ -309,5 +314,23 @@ export class EntityPrintService {
         </p>
       `;
     }
+  }
+
+  private generatePhotoItem(value: FileData) {
+    const src = this.fileService.buildUrl(value);
+
+    return `
+      <div style="height: 120px; width: 100%">
+        <img
+          src="${src}"
+          style="
+            height: 100%;
+            width: 100%;
+            object-fit: contain;
+            object-position: left;
+          "
+        >
+      </div>
+    `;
   }
 }

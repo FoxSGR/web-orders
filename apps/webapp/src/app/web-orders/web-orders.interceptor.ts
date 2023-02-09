@@ -11,16 +11,16 @@ import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { WebOrdersState } from './web-orders.types';
-import { Account, getAccount, logout } from '../account';
+import { AccountState, getAccountState, logout } from '../account';
 import { environment } from '../../environments/environment';
 
 @Injectable()
 export class WebOrdersInterceptor implements HttpInterceptor {
-  private account: Account = {};
+  private account: AccountState = {};
 
   constructor(private router: Router, private store: Store<WebOrdersState>) {
     this.store
-      .select(getAccount)
+      .select(getAccountState)
       .subscribe(account => (this.account = account));
   }
 
@@ -39,12 +39,10 @@ export class WebOrdersInterceptor implements HttpInterceptor {
       return next.handle(req);
     }
 
-    const headers: any = {
-      'Content-Type': 'application/json',
-    };
+    const headers: any = {};
 
-    if (this.account.user) {
-      headers['Authorization'] = `Bearer ${this.account.user.token}`;
+    if (this.account.account) {
+      headers['Authorization'] = `Bearer ${this.account.account.token}`;
     }
 
     const newRequest = req.clone({

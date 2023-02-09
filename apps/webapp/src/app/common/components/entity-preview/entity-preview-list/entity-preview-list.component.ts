@@ -6,7 +6,8 @@ import {
   EntityPreviewItem,
 } from '../entity-preview.types';
 import { Entity } from '../../../models/entity';
-import { EntityPreviewService } from '../../../services';
+import { EntityPreviewService, FileService } from '../../../services';
+import { FileData } from '../../../types';
 
 @Component({
   selector: 'wo-entity-preview-list',
@@ -27,13 +28,13 @@ export class EntityPreviewListComponent<T extends Entity> {
   @Input()
   indexed = false;
 
-  constructor(private previewService: EntityPreviewService) {}
+  constructor(private previewService: EntityPreviewService, private fileService: FileService) {}
 
   icon(item: EntityPreviewItem): string {
     return typeof item.icon === 'function' ? item.icon() : item.icon;
   }
 
-  value(item: EntityPreviewItem): Observable<string> {
+  value(item: EntityPreviewItem): Observable<any> {
     return this.previewService.itemValue(item, this.model);
   }
 
@@ -46,5 +47,9 @@ export class EntityPreviewListComponent<T extends Entity> {
       string,
       string,
     ][];
+  }
+
+  fileUrl(fileData: FileData): string {
+    return this.fileService.buildUrl(fileData);
   }
 }

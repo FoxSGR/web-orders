@@ -10,7 +10,7 @@ import { CellComponent } from './cell.component';
     <ion-label *ngIf="shouldShow()">
       <span style="font-weight: 500;">{{ data.column.name! | translate }}</span>
       <br />
-      <span>{{ (value | translate) || '&nbsp;' }}</span>
+      <span>{{ (value! | translate) || '&nbsp;' }}</span>
     </ion-label>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,7 +22,7 @@ export class ChoiceCellComponent<T extends Entity> extends CellComponent<
   /**
    * The value to show.
    */
-  value: any;
+  value?: any;
 
   override ngOnInit() {
     super.ngOnInit();

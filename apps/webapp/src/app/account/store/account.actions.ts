@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { Account } from './account.types';
+import { AccountState } from './account.types';
 
 /**
  * Requests login to be made.
@@ -20,7 +20,7 @@ export const login = createAction(
  */
 export const loginSuccess = createAction(
   '[account] login success',
-  props<{ account: Account }>(),
+  props<{ account: AccountState }>(),
 );
 
 /**

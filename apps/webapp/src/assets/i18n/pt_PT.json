@@ -41,6 +41,7 @@
       "name": "Nome",
       "notes": "Notas",
       "photo": "Fotografia",
+      "photos": "Fotografias",
       "phoneNumber": "Número de telefone",
       "placeholders": {
         "search": "Pesquisar",
@@ -197,6 +198,9 @@
         },
         "amount": {
           "placeholder": "Quantidade de pares"
+        },
+        "postSave": {
+          "uploadingPhotos": "Guardando as fotos..."
         }
       }
     },
@@ -358,6 +362,7 @@
       "empty": "Sem resultados.",
       "actions": {
         "delete": "Apagar",
+        "print": "Imprimir",
         "newFilter": "Novo filtro",
         "remove": "Remover",
         "edit": "Editar"

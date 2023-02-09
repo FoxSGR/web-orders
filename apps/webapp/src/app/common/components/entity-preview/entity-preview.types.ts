@@ -4,11 +4,11 @@ import { Entity } from '../../models/entity';
 import { WOItemMap } from '../../wo-common.types';
 
 export interface EntityPreviewItem<T extends Entity = Entity> {
-  icon: string | (() => string);
-  label: string;
   value: string | object | Date | (() => Observable<any> | any);
+  label: string;
+  icon: string | (() => string);
   valueType?: 'prop' | 'value';
-  type?: 'simple' | 'text' | 'color';
+  type?: 'simple' | 'text' | 'color' | 'photo';
   hidden?: (entity: Entity) => boolean;
   choices?: WOItemMap;
 }

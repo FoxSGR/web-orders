@@ -6,6 +6,14 @@ import { firstValueFrom } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 import { alertActions } from './alerts.actions';
+import { AlertType } from './alerts.types';
+
+const icons: { [key in AlertType]: string } = {
+  success: 'checkmark',
+  info: 'information',
+  error: 'close',
+  warning: 'alert',
+};
 
 // noinspection JSUnusedGlobalSymbols
 /**
@@ -32,6 +40,8 @@ export class AlertsEffects {
                 ),
               ),
               duration: timeout * 1000,
+              animated: true,
+              icon: icons[action.alert.type],
               buttons: [
                 ...(action.alert.buttons || []).map(button => ({
                   text: button.text,

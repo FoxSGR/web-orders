@@ -47,6 +47,7 @@
               ? getFile(fileData.uid)
               : undefined
           "
+          [url]="fileUrl(fileData.uid)"
         ></wo-thumbnail>
         <ion-icon
           slot="start"
@@ -75,7 +76,7 @@
             <ion-icon name="menu" color="medium"></ion-icon>
           </ion-reorder>
           <ion-button
-            (click)="removeFile(fileData.uid)"
+            (click)="remove(fileData.uid, $event)"
             shape="circle"
             fill="clear"
             size="small"

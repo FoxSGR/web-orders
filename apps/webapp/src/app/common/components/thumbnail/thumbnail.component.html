@@ -1,12 +1,14 @@
 <div class="wo-thumbnail-container" [ngStyle]="{ width: size, height: size }">
-  <img
+  <ion-img
     #img
     [id]="id"
+    (click)="onClick($event)"
     [ngStyle]="{ visibility: loaded ? 'unset' : 'hidden' }"
     [title]="showTitle ? name : ''"
     alt="photo thumbnail"
-    class="wo-thumbnail-img ion-activatable ripple-parent"
-  />
+    class="wo-thumbnail-img"
+  >
+  </ion-img>
 </div>
 
 <ion-modal

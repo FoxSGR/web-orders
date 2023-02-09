@@ -3,14 +3,13 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  ElementRef,
   Input,
   OnChanges,
   Renderer2,
   ViewChild,
 } from '@angular/core';
 import { NgStyle } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, IonImg } from '@ionic/angular';
 import * as uuid from 'uuid';
 
 @Component({
@@ -22,7 +21,7 @@ import * as uuid from 'uuid';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ThumbnailComponent implements AfterViewInit, OnChanges {
-  @ViewChild('img') img: ElementRef<HTMLImageElement>;
+  @ViewChild('img', { read: IonImg }) img: IonImg;
 
   @Input() file?: File;
   @Input() url?: string;
@@ -55,27 +54,31 @@ export class ThumbnailComponent implements AfterViewInit, OnChanges {
       return;
     }
 
-    const image = this.img.nativeElement;
-
     if (this.file) {
       const reader = new FileReader();
       await new Promise<void>(resolve => {
         reader.onloadend = () => {
-          this.renderer.setAttribute(image, 'src', reader.result as string);
+          this.img.src = reader.result as string;
           resolve();
         };
         reader.readAsDataURL(this.file!);
       });
     } else if (this.url) {
-      await new Promise<void>(resolve => {
-        this.renderer.setProperty(image, 'onload', () => resolve());
-        this.renderer.setAttribute(image, 'src', this.url!);
-      });
+      // must be marked as loaded right after the URL is set otherwise ionic
+      // will not load the image
+      this.img.src = this.url;
+
+      // for some reason another markForCheck is required
+      setTimeout(() => this.cdr.markForCheck());
     }
 
     this.loaded = true;
 
     // markForCheck allows parents to quickly know if it was loaded
     this.cdr.markForCheck();
+  }
+
+  onClick(event: MouseEvent) {
+    event.stopPropagation();
   }
 }

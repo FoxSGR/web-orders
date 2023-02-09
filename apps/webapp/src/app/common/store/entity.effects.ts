@@ -50,7 +50,6 @@ export class EntityEffects<T extends Entity> {
           alert: {
             type: 'success',
             message: 'str.entity.delete.alerts.success.message',
-            timeout: 5,
           },
         }),
       ]),

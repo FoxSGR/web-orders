@@ -87,6 +87,28 @@ export const samplePreview: (
       ],
     },
     {
+      type: 'items',
+      header: print
+        ? undefined
+        : {
+            title: 'str.common.photos',
+            icon: 'camera',
+          },
+      items: entity.sampleModel?.photos
+        ?.sort((a, b) => +(b.default || 0) - +(a.default || 0))
+        ?.map(
+          photo =>
+            ({
+              type: 'photo',
+              value: photo,
+              icon: 'camera',
+              label: photo.name,
+            } as EntityPreviewItem),
+        )
+        ?.slice(0, print ? 1 : entity.sampleModel.photos.length),
+    },
+    {
+      columns: 1,
       items: [
         {
           icon: 'reader',
@@ -123,8 +145,6 @@ const buildComponentGroups: (
       return [];
     }
 
-    const counts: any = {};
-
     return [
       {
         items: entity.sampleModel.components.map(component =>
@@ -135,6 +155,7 @@ const buildComponentGroups: (
   } else {
     return entity.sampleModel.groupComponents().map(group => ({
       showIndex: true,
+      columns: group.components.length > 1 ? 2 : 1,
       items: group.components.map(v => buildComponentItem(v)),
     }));
   }

@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  Injector,
   OnChanges,
   OnInit,
 } from '@angular/core';
@@ -10,6 +11,7 @@ import * as uuid from 'uuid';
 import { SmartFormAbstractItemComponent } from '../smart-form-abstract-item.component';
 import { SmartFormMultiple } from '../../../types';
 import { customEquals } from '../../../util';
+import { DialogService } from '../../../services';
 
 @Component({
   selector: 'wo-smart-form-multiple',
@@ -37,6 +39,10 @@ export class SmartFormMultipleComponent
   }
   private _dragging = false;
 
+  constructor(injector: Injector, private dialogService: DialogService) {
+    super(injector);
+  }
+
   override ngOnInit() {
     super.ngOnInit();
     this.assignUids();
@@ -62,15 +68,12 @@ export class SmartFormMultipleComponent
     this.updateCanAdd();
   }
 
-  remove(index: number) {
-    if (this.value!.length === 1) {
-      this.value![0] = cloneDeep(this.definition.default);
+  remove(index: number, event: MouseEvent) {
+    if (event.shiftKey) {
+      this.removeGroup(index);
     } else {
-      this.value!.splice(index, 1);
+      this.dialogService.confirm(() => this.removeGroup(index));
     }
-
-    this.stateChange.emit(this.state);
-    this.updateCanAdd();
   }
 
   isHidden(index: number): boolean {
@@ -108,6 +111,17 @@ export class SmartFormMultipleComponent
     event.detail.complete();
 
     this.onChange();
+    this.updateCanAdd();
+  }
+
+  private removeGroup(index: number) {
+    if (this.value!.length === 1) {
+      this.value![0] = cloneDeep(this.definition.default);
+    } else {
+      this.value!.splice(index, 1);
+    }
+
+    this.stateChange.emit(this.state);
     this.updateCanAdd();
   }
 
