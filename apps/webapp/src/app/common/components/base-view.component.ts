@@ -17,12 +17,6 @@ export class BaseViewComponent extends BaseComponent implements OnInit {
   requiresAuth = false;
 
   /**
-   * The route of the page.
-   */
-  @Input()
-  route?: string;
-
-  /**
    * The query params on the active page.
    * @private
    */
@@ -80,6 +74,7 @@ export class BaseViewComponent extends BaseComponent implements OnInit {
 
         const encoded = encodeURIComponent(this.router.url);
         this.router.navigate(['login', { callback: encoded }]);
+        this.ngDestroyed$.next(); // prevent navigating again
       });
   }
 }

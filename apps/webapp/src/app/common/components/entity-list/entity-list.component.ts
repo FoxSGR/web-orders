@@ -1,6 +1,5 @@
 import {
   Component,
-  ComponentFactoryResolver,
   Injector,
   Input,
   OnInit,
@@ -8,6 +7,7 @@ import {
   TemplateRef,
   ViewChildren,
 } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import {
   LoadingController,
   ModalController,
@@ -15,6 +15,7 @@ import {
   SelectChangeEventDetail,
 } from '@ionic/angular';
 import { ColumnMode, SortType, TableColumn } from '@swimlane/ngx-datatable';
+import { Observable } from 'rxjs';
 
 import { IFindFilter } from '@web-orders/api-interfaces';
 import { BaseComponent } from '../base.component';
@@ -30,7 +31,6 @@ import {
 } from '../../store';
 import { BasicCellComponent } from './cells';
 import { ENTITY_LIST_TOKEN, EntityListCellData } from './entity-list.token';
-import { Observable } from 'rxjs';
 
 export interface EntityListConfig<T extends Entity> {
   searchables: EntityListSearchable[];
@@ -97,12 +97,14 @@ export class EntityListComponent<T extends Entity>
     private readonly popoverController: PopoverController,
     private readonly modalController: ModalController,
     private readonly loadingController: LoadingController,
+    private readonly route: ActivatedRoute,
   ) {
     super(injector);
   }
 
   override ngOnInit(): void {
     super.ngOnInit();
+    this.syncRouteData(this.route, ['showSearch']);
 
     this.status$ = this.store.select(
       entitySelectors(this.config.entityName).getStatus,
@@ -289,5 +291,9 @@ export class EntityListComponent<T extends Entity>
     return this.config.searchables.filter(
       searchable => !this.searchbars.find(s => s.prop === searchable.prop),
     );
+  }
+
+  create() {
+    this.entityActions.wizard();
   }
 }

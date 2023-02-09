@@ -11,7 +11,7 @@ import { Entity } from '../models/entity';
 import { alertActions } from '../../alerts';
 
 export class EntityEffects<T extends Entity> {
-  private entityActions = entityActions<T>(this.entityName);
+  protected entityActions = entityActions<T>(this.entityName);
   private entitySelectors = entitySelectors(this.entityName);
 
   loadPage$ = createEffect(() =>
@@ -61,9 +61,9 @@ export class EntityEffects<T extends Entity> {
   );
 
   constructor(
-    private store: Store,
-    private actions: Actions,
-    private service: EntityService<T>,
+    protected store: Store,
+    protected actions: Actions,
+    protected service: EntityService<T>,
     private entityName: EntityName,
   ) {}
 }

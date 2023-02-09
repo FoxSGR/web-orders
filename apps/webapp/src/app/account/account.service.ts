@@ -14,6 +14,8 @@ import { environment } from '../../environments/environment';
   providedIn: 'root',
 })
 export class AccountService {
+  static readonly ENDPOINT = '/auth/login';
+
   constructor(private http: HttpClient) {}
 
   /**
@@ -23,7 +25,7 @@ export class AccountService {
    */
   login(username: string, password: string): Observable<Account> {
     return this.http
-      .post<IAuthResponse>(`${environment.apiUrl}/auth/login`, {
+      .post<IAuthResponse>(`${environment.apiUrl}${AccountService.ENDPOINT}`, {
         email: username,
         password,
       })

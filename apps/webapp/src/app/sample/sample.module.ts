@@ -12,8 +12,9 @@ import { SampleEffects, sampleReducer, sampleStoreConfig } from './store';
 import { persistReducer } from '../common/util/persist.reducer';
 
 import * as cc from './components';
+import { SampleComponent } from './sample.component';
 
-const components = [cc.SamplesComponent, cc.SamplePreviewComponent];
+const components = [cc.SamplePreviewComponent, SampleComponent];
 
 @NgModule({
   declarations: components,
@@ -21,7 +22,7 @@ const components = [cc.SamplesComponent, cc.SamplePreviewComponent];
     RouterModule.forChild([
       {
         path: '',
-        component: cc.SamplesComponent,
+        component: SampleComponent,
         children: [
           {
             path: 'list',

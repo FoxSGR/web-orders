@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 
-import { IFindParams } from '@web-orders/api-interfaces';
+import { Id, IFindParams } from '@web-orders/api-interfaces';
 import { EntityPage } from '../wo-common.types';
 import { EntityName } from './entity.types';
 
@@ -21,5 +21,9 @@ export const entityActions = <T>(entityName: EntityName) => ({
   delete: createAction(
     `[${entityName}] delete`,
     props<{ entity: Partial<T> }>(),
+  ),
+  wizard: createAction(
+    `[${entityName}] wizard`,
+    props<{ id: Id }>(),
   ),
 });

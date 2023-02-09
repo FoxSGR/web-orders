@@ -60,10 +60,13 @@ export class WebOrdersInterceptor implements HttpInterceptor {
           if (err instanceof HttpErrorResponse) {
             switch (err.status) {
               case 401: {
-                const urlTree = this.router.parseUrl(this.router.url);
-                delete urlTree.queryParams['callback'];
-                const encoded = encodeURIComponent(urlTree.toString());
-                this.router.navigate(['login', { callback: encoded }]);
+                if (!req.url.endsWith('/api/auth/login')) {
+                  const urlTree = this.router.parseUrl(this.router.url);
+                  delete urlTree.queryParams['callback'];
+                  const encoded = encodeURIComponent(urlTree.toString());
+                  this.router.navigate(['login', { callback: encoded }]);
+                }
+
                 break;
               }
             }

@@ -1,23 +1,29 @@
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import * as cc from './components';
 
+const subRoutes: Routes = [
+  {
+    path: 'base',
+    component: cc.SampleWizardBaseComponent,
+  },
+];
+
 @NgModule({
   declarations: [cc.SampleWizardComponent, cc.SampleWizardBaseComponent],
-  exports: [cc.SampleWizardComponent],
   imports: [
     RouterModule.forChild([
       {
         path: ':id',
         component: cc.SampleWizardComponent,
-        children: [
-          {
-            path: 'base',
-            component: cc.SampleWizardBaseComponent,
-          },
-        ],
+        children: subRoutes,
+      },
+      {
+        path: '',
+        component: cc.SampleWizardComponent,
+        children: subRoutes,
       },
     ]),
     IonicModule,
