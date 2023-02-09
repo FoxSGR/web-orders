@@ -1,4 +1,4 @@
-import { IEntityDTO } from '@web-orders/api-interfaces';
+import { IEntityDTO } from '.';
 
 export interface IBrandDTO extends IEntityDTO {
   name: string;

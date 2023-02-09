@@ -9,12 +9,13 @@ import {
   Query,
 } from '@nestjs/common';
 
+import { Id } from '@web-orders/api-interfaces';
 import { EntityController } from '../common/entity';
 import { ColorService } from './color.service';
 import { ColorMapper } from './color.mapper';
 import { IColor } from './color.types';
 import { ColorDTO } from './color.dto';
-import { CurrentUser, FindParams, Id, Page } from '../common';
+import { CurrentUser, FindParams, Page } from '../common';
 import { IUser } from '../user';
 
 @Controller('/color')

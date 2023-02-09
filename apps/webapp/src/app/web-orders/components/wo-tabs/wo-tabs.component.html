@@ -1,0 +1,34 @@
+<wo-menu></wo-menu>
+
+<ion-tabs title="Web Orders">
+  <!-- Header on top -->
+
+  <ion-header translucent class="ion-no-border">
+    <ion-toolbar class="ion-text-center">
+      <!-- Menu Button -->
+      <ion-buttons slot="start">
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+
+      <!-- Title -->
+      <ion-title>Web Orders</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <!-- Tab bar -->
+
+  <!-- Ugly workaround for slot not working with ternary if -->
+  <ion-tab-bar slot="bottom" *ngIf="platform.is('mobile')">
+    <ion-tab-button [tab]="tab.id" *ngFor="let tab of tabs">
+      <ion-icon [name]="tab.icon"></ion-icon>
+      <ion-label>{{ tab.title | translate }}</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+
+  <ion-tab-bar slot="top" *ngIf="platform.is('desktop')" title="Web Orders">
+    <ion-tab-button [tab]="tab.id" *ngFor="let tab of tabs">
+      <ion-icon [name]="tab.icon"></ion-icon>
+      <ion-label>{{ tab.title | translate }}</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-tabs>

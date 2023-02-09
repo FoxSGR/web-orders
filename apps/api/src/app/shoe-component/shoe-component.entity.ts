@@ -1,11 +1,8 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { IsNotEmpty, IsString, Min, Validate } from 'class-validator';
 
-import {
-  ComponentType,
-  componentTypes,
-  IShoeComponent,
-} from './shoe-component.types';
+import { ComponentType, componentTypes } from '@web-orders/api-interfaces';
+import { IShoeComponent } from './shoe-component.types';
 import { OwnedEntity } from '../common/entity';
 
 @Entity()

@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { IsString, Min } from 'class-validator';
 
-import { Id } from '../../common';
+import { Id } from '@web-orders/api-interfaces';
 import { IShoeModelComponent } from './shoe-model-component.types';
 import { ShoeComponent } from '../../shoe-component';
 import { Color } from '../../color/color.entity';
@@ -18,7 +18,7 @@ import { ShoeModel } from '../shoe-model.entity';
 @Entity()
 export class ShoeModelComponent implements IShoeModelComponent {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: Id;
 
   @ManyToOne(() => ShoeModel, (model) => model.components)
   @JoinColumn({ name: 'modelId' })

@@ -1,0 +1,18 @@
+<ngx-datatable
+  class="material"
+  [rows]="page.items"
+  [columns]="columns"
+  [headerHeight]="50"
+  [footerHeight]="50"
+  rowHeight="auto"
+  [externalPaging]="true"
+  [externalSorting]="true"
+  [columnMode]="ColumnMode.force"
+  [count]="page.total"
+  [offset]="page.offset"
+  [limit]="pageSize"
+  (page)="setPage($event)"
+  [loadingIndicator]="status === 'loading'"
+  [messages]="{ emptyMessage: 'str.list.empty' | translate }"
+>
+</ngx-datatable>

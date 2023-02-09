@@ -6,7 +6,8 @@ import {
 import { FindConditions, In, Repository } from 'typeorm';
 import _ from 'lodash';
 
-import { FindParams, Id, IEntity, Page } from '../types';
+import { Id } from '@web-orders/api-interfaces';
+import { FindParams, IEntity, Page } from '../types';
 import type { IUser } from '../../user/user.types';
 
 interface EntityServiceConfig {

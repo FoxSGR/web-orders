@@ -1,6 +1,4 @@
-import { IEntityDTO } from './entity.types';
-
-export interface IAddressDTO extends IEntityDTO {
+export interface IAddressDTO {
   line1: string;
   line2: string;
   zipCode: string;

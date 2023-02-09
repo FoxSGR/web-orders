@@ -9,12 +9,13 @@ import {
   Query,
 } from '@nestjs/common';
 
+import { Id } from '@web-orders/api-interfaces';
 import { EntityController } from '../common/entity';
 import { ShoeModelService } from './shoe-model.service';
 import { ShoeModelMapper } from './shoe-model.mapper';
 import { IShoeModel } from './shoe-model.types';
 import { ShoeModelDTO } from './shoe-model.dto';
-import { CurrentUser, FindParams, Id, Page } from '../common';
+import { CurrentUser, FindParams, Page } from '../common';
 import { IUser } from '../user';
 
 @Controller('/shoe-model')

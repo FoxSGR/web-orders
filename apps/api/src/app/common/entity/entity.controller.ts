@@ -1,8 +1,9 @@
 import { ForbiddenException } from '@nestjs/common';
 
+import { Id } from '@web-orders/api-interfaces';
 import { EntityService } from './entity.service';
 import { Mapper } from '../mapper';
-import { FindParams, Id, IEntity, Page, ResponseFormat } from '../types';
+import { FindParams, IEntity, Page, ResponseFormat } from '../types';
 import { IUser } from '../../user';
 import { DeepPartial } from 'typeorm';
 

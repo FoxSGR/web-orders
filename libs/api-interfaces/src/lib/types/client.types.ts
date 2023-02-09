@@ -1,8 +1,4 @@
-import type {
-  IAddressDTO,
-  IAgentDTO,
-  IEntityDTO,
-} from '@web-orders/api-interfaces';
+import type { IAddressDTO, IAgentDTO, IEntityDTO } from '.';
 
 export interface IClientDTO extends IEntityDTO {
   name: string;

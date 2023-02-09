@@ -8,14 +8,15 @@ import {
   Validate,
   ValidateNested,
 } from 'class-validator';
-import { Type } from 'class-transformer';
 
+import { ISeasonDTO, IShoeModelDTO } from '@web-orders/api-interfaces';
+import { Type } from 'class-transformer';
 import { EntityDTO } from '../common/entity/entity.dto';
 import { ShoeModelType } from './shoe-model.types';
 import { ShoeModelComponentDTO } from './shoe-model-component/shoe-model-component.dto';
 import { SeasonType, seasonTypes } from '../common';
 
-export class SeasonDTO {
+export class SeasonDTO implements ISeasonDTO {
   @IsNotEmpty()
   @IsInt()
   @Min(1900)
@@ -28,7 +29,7 @@ export class SeasonDTO {
   seasons: SeasonType;
 }
 
-export class ShoeModelDTO extends EntityDTO {
+export class ShoeModelDTO extends EntityDTO implements IShoeModelDTO {
   @IsString()
   @IsOptional()
   @Type(() => String)

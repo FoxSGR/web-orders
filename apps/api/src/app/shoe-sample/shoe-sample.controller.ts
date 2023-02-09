@@ -9,11 +9,12 @@ import {
   Query,
 } from '@nestjs/common';
 
+import { Id } from '@web-orders/api-interfaces';
 import { ShoeSampleService } from './shoe-sample.service';
 import { ShoeSampleMapper } from './shoe-sample.mapper';
 import { IShoeSample } from './shoe-sample.types';
 import { ShoeSampleDTO } from './shoe-sample.dto';
-import { CurrentUser, FindParams, Id, Page } from '../common';
+import { CurrentUser, FindParams, Page } from '../common';
 import { EntityController } from '../common/entity';
 import { IUser } from '../user';
 

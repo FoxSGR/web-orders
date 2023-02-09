@@ -1,0 +1,37 @@
+{
+  "str": {
+    "toolbar": {
+      "home": "Página Inicial",
+      "sample": "Amostras",
+      "orders": "Encomendas",
+      "management": "Gestão"
+    },
+    "sample": {
+      "list": {
+        "header": "Amostras"
+      }
+    },
+    "model": {
+      "common": {
+        "reference": "Referência"
+      }
+    },
+    "list": {
+      "empty": "Sem resultados."
+    },
+    "account": {
+      "username": "Username",
+      "password": "Password",
+      "logout": "Terminar sessão",
+      "loggedOut": "A sessão foi terminada.",
+      "form": {
+        "login": "Login",
+        "enterYourUsername": "Introduza o nome de utilizador",
+        "enterYourPassword": "Introduza a password"
+      },
+      "login": {
+        "error": "Ocorreu um erro ao iniciar sessão."
+      }
+    }
+  }
+}

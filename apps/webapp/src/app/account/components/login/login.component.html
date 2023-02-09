@@ -1,0 +1,54 @@
+<ion-content>
+  <div class="login">
+    <ion-img class="logo" src="assets/images/package.png"></ion-img>
+
+    <ion-text class="ion-text-center">
+      <h5 class="main-header">Web Orders</h5>
+      <h6 class="login-header">{{ 'str.account.form.login' | translate }}</h6>
+    </ion-text>
+
+    <div class="login-fields ion-text-center">
+      <form [formGroup]="loginForm" (ngSubmit)="login()">
+        <ion-item class="login-field">
+          <ion-label position="floating">{{
+            'str.account.username' | translate
+          }}</ion-label>
+          <ion-input
+            [placeholder]="'str.account.form.enterYourUsername' | translate"
+            (keyup.enter)="login()"
+            woAutoFocus
+            type="text"
+            formControlName="username"
+          >
+          </ion-input>
+        </ion-item>
+        <ion-item class="login-field">
+          <ion-label position="floating">{{
+            'str.account.password' | translate
+          }}</ion-label>
+          <ion-input
+            [placeholder]="'str.account.form.enterYourPassword' | translate"
+            (keyup.enter)="login()"
+            type="password"
+            formControlName="password"
+          >
+          </ion-input>
+        </ion-item>
+
+        <ion-button
+          [formGroup]="loginForm"
+          [disabled]="loginForm.invalid || loggingIn"
+          class="login-button"
+          type="submit"
+        >
+          <ng-container *ngIf="!loggingIn; else loading">
+            {{ 'str.account.form.login' | translate }}
+          </ng-container>
+          <ng-template #loading>
+            <ion-spinner></ion-spinner>
+          </ng-template>
+        </ion-button>
+      </form>
+    </div>
+  </div>
+</ion-content>

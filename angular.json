@@ -72,7 +72,7 @@
       "projectType": "application",
       "root": "apps/webapp",
       "sourceRoot": "apps/webapp/src",
-      "prefix": "web-orders",
+      "prefix": "wo",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",

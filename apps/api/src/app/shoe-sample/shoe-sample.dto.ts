@@ -1,13 +1,14 @@
 import { IsOptional, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
+import { IShoeSampleDTO } from '@web-orders/api-interfaces';
 import { EntityDTO } from '../common/entity/entity.dto';
 import { ShoeModelDTO } from '../shoe-model';
 import { ClientDTO } from '../client';
 import { AgentDTO } from '../agent';
 import { BrandDTO } from '../brand';
 
-export class ShoeSampleDTO extends EntityDTO {
+export class ShoeSampleDTO extends EntityDTO implements IShoeSampleDTO {
   @ValidateNested()
   @IsOptional({ groups: ['update'] })
   @Type(() => ShoeModelDTO)

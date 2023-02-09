@@ -3,8 +3,8 @@ import { IsArray, IsNotEmpty, Validate, ValidateNested } from 'class-validator';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Factory } from 'nestjs-seeder';
 
+import { Role, roles } from '@web-orders/api-interfaces';
 import type { IUser } from './user.types';
-import { Role, roles } from './roles';
 import { EntityBase } from '../common/entity/entity';
 import { Client } from '../client/client.entity';
 import { hashPassword } from '../auth/auth';
@@ -40,7 +40,7 @@ export class User implements IUser {
   @IsNotEmpty()
   @IsArray()
   @ValidateNested({ each: true })
-  @Validate((role) => !!roles[role])
+  @Validate((role: string) => !!roles[role])
   roles: Role[];
 
   @Column(() => EntityBase, { prefix: '' })

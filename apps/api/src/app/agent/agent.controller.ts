@@ -9,11 +9,12 @@ import {
   Query,
 } from '@nestjs/common';
 
+import { Id } from '@web-orders/api-interfaces';
 import { AgentService } from './agent.service';
 import { AgentMapper } from './agent.mapper';
 import { IAgent } from './agent.types';
 import { AgentDTO } from './agent.dto';
-import { CurrentUser, FindParams, Id, Page } from '../common';
+import { CurrentUser, FindParams, Page } from '../common';
 import { EntityController } from '../common/entity';
 import { IUser } from '../user';
 

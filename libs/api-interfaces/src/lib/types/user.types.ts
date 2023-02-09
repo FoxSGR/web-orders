@@ -1,4 +1,4 @@
-import { IEntityDTO } from '@web-orders/api-interfaces';
+import { IEntityDTO } from '.';
 
 export interface IUserDTO extends IEntityDTO {
   email: string;
