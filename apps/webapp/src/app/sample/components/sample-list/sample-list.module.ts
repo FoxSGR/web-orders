@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { WOCommonModule } from '../../../common';
 
 import * as components from './components';
+import { IonicModule } from '@ionic/angular';
 
 @NgModule({
   imports: [
@@ -21,6 +22,7 @@ import * as components from './components';
         },
       },
     ]),
+    IonicModule,
   ],
   declarations: [components.SampleListComponent],
   exports: [components.SampleListComponent],

@@ -23,14 +23,13 @@
           <ion-ripple-effect class="wo-menu-ripple"></ion-ripple-effect>
           <ion-icon
             [name]="item.icon"
+            [color]="routeMatches(item, route$ | async) ? 'dark' : 'medium'"
             class="wo-menu-icon"
             slot="start"
           ></ion-icon>
           <ion-label
             [ngStyle]="{
-              fontWeight: (route$ | async)?.startsWith('/' + item.route!)
-                ? 500
-                : 400
+              fontWeight: routeMatches(item, route$ | async) ? 500 : 400
             }"
           >
             {{ item.label | translate }}

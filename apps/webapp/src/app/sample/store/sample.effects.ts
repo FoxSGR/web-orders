@@ -6,7 +6,7 @@ import { tap } from 'rxjs/operators';
 
 import { EntityEffects, ShoeSample } from '../../common';
 import { SampleService } from '../sample.service';
-import { sampleStoreConfig } from './sample.config';
+import { sampleStoreConfig } from './sample.store';
 
 /**
  * Account related effects.
@@ -19,7 +19,7 @@ export class SampleEffects extends EntityEffects<ShoeSample> {
     () =>
       this.actions.pipe(
         ofType(this.entityActions.wizard),
-        tap(({ id }) => this.router.navigate(['sample/wizard'])),
+        tap(({ id }) => this.router.navigate(['sample/wizard/_'])),
       ),
     { dispatch: false },
   );

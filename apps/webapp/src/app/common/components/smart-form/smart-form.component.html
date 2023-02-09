@@ -1,0 +1,12 @@
+<ng-container *ngFor="let item of config.items">
+  <ng-container *ngIf="item.type === 'entity-select'">
+    <ion-item>
+      <ion-accordion value="first">
+        <ion-item slot="header" color="light">
+          <ion-label>First Accordion</ion-label>
+        </ion-item>
+        <div class="ion-padding" slot="content">First Content</div>
+      </ion-accordion>
+    </ion-item>
+  </ng-container>
+</ng-container>

@@ -11,6 +11,11 @@ export class ClientService extends EntityService<Client> {
     super(clientRepository, {
       name: 'client',
       relations: ['address', 'agent'],
+      mapping: {
+        name: {
+          prop: 'name',
+        },
+      },
     });
   }
 }

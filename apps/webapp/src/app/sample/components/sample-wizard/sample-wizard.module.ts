@@ -1,36 +1,41 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
+
+import { WOCommonModule } from '../../../common';
 
 import * as cc from './components';
 
-const subRoutes: Routes = [
-  {
-    path: 'base',
-    component: cc.SampleWizardBaseComponent,
-  },
-  {
-    path: '',
-    redirectTo: 'base'
-  }
-];
-
 @NgModule({
-  declarations: [cc.SampleWizardComponent, cc.SampleWizardBaseComponent],
+  declarations: [
+    cc.SampleWizardComponent,
+    cc.SampleWizardBaseComponent,
+    cc.SampleWizardModelComponent,
+  ],
   imports: [
     RouterModule.forChild([
       {
         path: ':id',
         component: cc.SampleWizardComponent,
-        children: subRoutes,
-      },
-      {
-        path: '',
-        component: cc.SampleWizardComponent,
-        children: subRoutes,
+        children: [
+          {
+            path: 'base',
+            component: cc.SampleWizardBaseComponent,
+          },
+          {
+            path: 'model',
+            component: cc.SampleWizardModelComponent,
+          },
+          {
+            path: '',
+            redirectTo: 'base',
+            pathMatch: 'full',
+          },
+        ],
       },
     ]),
     IonicModule,
+    WOCommonModule,
   ],
 })
 export class SampleWizardModule {}

@@ -3,7 +3,14 @@ import {
   HttpException,
   NotFoundException,
 } from '@nestjs/common';
-import { FindConditions, FindManyOptions, In, Like, Repository } from 'typeorm';
+import {
+  FindConditions,
+  FindManyOptions,
+  In,
+  Like,
+  Repository,
+  SelectQueryBuilder,
+} from 'typeorm';
 import _ from 'lodash';
 
 import { Id, IFindFilter } from '@web-orders/api-interfaces';
@@ -29,7 +36,10 @@ const defaultConfig: EntityServiceConfig = {
   mapping: {},
 };
 
-export class EntityService<T extends IEntity> {
+export class EntityService<
+  T extends IEntity,
+  R extends Repository<T> = Repository<T>,
+> {
   private get config(): EntityServiceConfig {
     return this._config;
   }
@@ -40,10 +50,7 @@ export class EntityService<T extends IEntity> {
 
   private _config: EntityServiceConfig;
 
-  constructor(
-    protected repository: Repository<T>,
-    config: Partial<EntityServiceConfig>,
-  ) {
+  constructor(protected repository: R, config: Partial<EntityServiceConfig>) {
     this.config = config;
   }
 
@@ -141,10 +148,10 @@ export class EntityService<T extends IEntity> {
       .filter(key => entity[key] === undefined)
       .forEach(key => delete entity[key]);
 
-    return (await this.repository.save({
+    return this.repository.save({
       ...found,
       ...entity,
-    } as any)) as any;
+    } as any);
   }
 
   async delete(id: Id, user: IUser): Promise<T> {
@@ -157,17 +164,40 @@ export class EntityService<T extends IEntity> {
     return entity;
   }
 
+  applyFilterToQueryBuilder(
+    queryBuilder: SelectQueryBuilder<any>,
+    filter: IFindFilter[],
+    prefix?: string,
+  ) {
+    filter.forEach(f => {
+      const mapping = this.fieldMapping(f.prop);
+      let condition;
+      if (Array.isArray(f.value)) {
+        const values = f.value.map(v => this.mapFilterValue(f, v)).join(',');
+        condition = `IN (${values})`;
+      } else {
+        condition = `LIKE '${this.mapFilterValue(f, f.value)}'`;
+      }
+
+      if (prefix) {
+        prefix += '.';
+      } else {
+        prefix = '';
+      }
+
+      queryBuilder = queryBuilder.andWhere(
+        `${prefix}${mapping.prop} ${condition}`,
+      );
+    });
+
+    return queryBuilder;
+  }
+
   protected async setupFoundEntities(
     entities: T[],
     params: FindParams<T>,
   ): Promise<void> {
-    // const dirtyFilters =
-    //   params.filter?.filter(
-    //     field => this.fieldMapping(field.prop).filterMode === 'dirty',
-    //   ) || [];
-
-    for (let i = 0; i < entities.length; i++) {
-      const entity = entities[i];
+    for (const entity of entities) {
       if (this.config.owned) {
         entity.base.owner = params.owner;
       }
@@ -175,16 +205,6 @@ export class EntityService<T extends IEntity> {
       if (params.loadRelations && this.config.relations) {
         await this.loadRelations(entity);
       }
-
-      // if (
-      //   dirtyFilters.find(
-      //     field =>
-      //       !dirtyFilter(entity, field.value, this.fieldMapping(field.prop)),
-      //   )
-      // ) {
-      //   console.log('remove')
-      //   entities.splice(i, 1);
-      // }
     }
   }
 
@@ -231,10 +251,6 @@ export class EntityService<T extends IEntity> {
     if (params.filter) {
       for (const field of params.filter) {
         const mapping = this.fieldMapping(field.prop);
-        if (mapping.filterMode === 'dirty') {
-          continue;
-        }
-
         let value = field.value;
         if (Array.isArray(value)) {
           value = In(value.map(v => this.mapFilterValue(field, v)));

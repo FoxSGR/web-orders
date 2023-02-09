@@ -5,7 +5,7 @@ import { IClient } from './client.types';
 import { ClientDTO } from './client.dto';
 import { AddressMapper } from '../address';
 import { IUser } from '../user';
-import { Promial } from '../common';
+import { Promial, ResponseFormat } from '../common';
 import { AgentService } from '../agent/agent.service';
 import { AgentMapper } from '../agent/agent.mapper';
 
@@ -28,20 +28,27 @@ export class ClientMapper extends EntityMapper<IClient, ClientDTO> {
     };
   }
 
-  entityToResponse(client: IClient): Partial<ClientDTO> {
+  entityToResponse(client: IClient, type?: ResponseFormat): Partial<ClientDTO> {
     // no need to list the client's agents
     if (client.agent) {
       delete client.agent.clients;
     }
 
-    const agentMapper = new AgentMapper(this, this.addressMapper); // cannot inject because they depend on each other
+    let agent = undefined;
+    let address = undefined;
+    if (type === 'full') {
+      const agentMapper = new AgentMapper(this, this.addressMapper); // cannot inject because they depend on each other
+      agent = this.fieldToResponse(agentMapper, client.agent);
+      address = this.fieldToResponse(this.addressMapper, client.address);
+    }
+
     return {
-      ...super.entityToResponse(client),
-      address: this.fieldToResponse(this.addressMapper, client.address),
       name: client.name,
       phoneNumber: client.phoneNumber,
       vat: client.vat,
-      agent: this.fieldToResponse(agentMapper, client.agent),
+      address,
+      agent,
+      ...super.entityToResponse(client),
     };
   }
 }

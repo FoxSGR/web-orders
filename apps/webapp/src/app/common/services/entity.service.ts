@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators';
 
 import { IEntityDTO, IFindParams } from '@web-orders/api-interfaces';
 import { environment } from '../../../environments/environment';
-import { createParams } from '../util/requests';
+import { createParams } from '../util';
 import { EntityPage } from '../wo-common.types';
 import { Entity } from '../models/entity';
 
@@ -19,19 +19,20 @@ const defaultConfig: Partial<EntityServiceConfig> = {
 };
 
 export class EntityService<T extends Entity> {
-  constructor(private http: HttpClient, protected config: EntityServiceConfig) {
+  constructor(
+    protected http: HttpClient,
+    protected config: EntityServiceConfig,
+  ) {
     this.config = { ...defaultConfig, ...config };
   }
 
   findPage(params: IFindParams<T>): Observable<EntityPage<T>> {
-    const filter = params.filter ? JSON.stringify(params.filter) : undefined;
-    delete params.filter;
+    this._prepareParams(params);
 
     return this.http
       .get<EntityPage<T>>(`${environment.apiUrl}/${this.config.route}`, {
         params: createParams({
           ...params,
-          filter,
           loadRelations: this.config.alwaysLoadRelations,
         }),
       })
@@ -68,6 +69,12 @@ export class EntityService<T extends Entity> {
     return this.http
       .delete<T>(`${environment.apiUrl}/${this.config.route}/${id}`)
       .pipe(map(e => this.mapOne(e)!));
+  }
+
+  protected _prepareParams(params: IFindParams<any>) {
+    if (params.filter) {
+      params.filter = JSON.stringify(params.filter) as any;
+    }
   }
 
   private mapOne(entity: T | undefined): T | undefined {

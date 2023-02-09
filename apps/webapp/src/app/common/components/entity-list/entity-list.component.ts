@@ -1,20 +1,29 @@
 import {
+  AfterViewInit,
   Component,
+  EventEmitter,
   Injector,
   Input,
   OnInit,
+  Output,
   QueryList,
   TemplateRef,
+  ViewChild,
   ViewChildren,
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import {
   LoadingController,
   ModalController,
   PopoverController,
   SelectChangeEventDetail,
 } from '@ionic/angular';
-import { ColumnMode, SortType, TableColumn } from '@swimlane/ngx-datatable';
+import {
+  ColumnMode,
+  DatatableComponent,
+  SelectionType,
+  SortType,
+  TableColumn,
+} from '@swimlane/ngx-datatable';
 import { Observable } from 'rxjs';
 
 import { IFindFilter } from '@web-orders/api-interfaces';
@@ -32,11 +41,19 @@ import {
 import { BasicCellComponent } from './cells';
 import { ENTITY_LIST_TOKEN, EntityListCellData } from './entity-list.token';
 
+export interface EntityListColumn extends TableColumn {
+  template?: any;
+}
+
 export interface EntityListConfig<T extends Entity> {
+  hideSearch?: boolean;
   searchables: EntityListSearchable[];
   entityName: EntityName;
-  columns: (TableColumn & { template?: any })[];
-  service: EntityService<T>;
+  columns: EntityListColumn[];
+  serviceClass?: { new (...t: any): EntityService<T> };
+  service?: EntityService<T>;
+  label: (entity: T) => string;
+  selection?: 'single' | 'multiple';
   preview?: {
     component: { new (t: any): any };
   };
@@ -51,6 +68,8 @@ interface EntityListSearchbar extends EntityListSearchable {
   value?: string;
 }
 
+type EntityMap<T> = { [key: number]: T };
+
 @Component({
   selector: 'wo-entity-list',
   templateUrl: './entity-list.component.html',
@@ -58,12 +77,17 @@ interface EntityListSearchbar extends EntityListSearchable {
 })
 export class EntityListComponent<T extends Entity>
   extends BaseComponent
-  implements OnInit
+  implements OnInit, AfterViewInit
 {
   @ViewChildren('templates') templates!: QueryList<TemplateRef<any>>;
+  @ViewChild('datatable') datatable: DatatableComponent;
 
-  @Input() showSearch = false;
   @Input() config!: EntityListConfig<T>;
+
+  selected: EntityMap<T> = {};
+
+  @Output()
+  pick = new EventEmitter<EntityMap<T>>();
 
   status$: Observable<EntityStatus>;
 
@@ -88,7 +112,7 @@ export class EntityListComponent<T extends Entity>
 
   private currentActionsDropdown: HTMLIonPopoverElement | null = null;
 
-  private entityActions = entityActions('sample'); // call this just to get the type (overriden below)
+  private entityActions = entityActions('sample'); // call this just to get the type (overridden below)
 
   private injectorCache = {};
 
@@ -97,14 +121,16 @@ export class EntityListComponent<T extends Entity>
     private readonly popoverController: PopoverController,
     private readonly modalController: ModalController,
     private readonly loadingController: LoadingController,
-    private readonly route: ActivatedRoute,
   ) {
     super(injector);
   }
 
   override ngOnInit(): void {
     super.ngOnInit();
-    this.syncRouteData(this.route, ['showSearch']);
+
+    if (!this.config.service && this.config.serviceClass) {
+      this.config.service = this.injector.get(this.config.serviceClass);
+    }
 
     this.status$ = this.store.select(
       entitySelectors(this.config.entityName).getStatus,
@@ -137,6 +163,7 @@ export class EntityListComponent<T extends Entity>
   }
 
   ngAfterViewInit() {
+    // update cellTemplates from rendered templates
     for (let i = 0; i < this.templates.length; i++) {
       this.config.columns[i].cellTemplate = this.templates.get(i);
     }
@@ -165,11 +192,14 @@ export class EntityListComponent<T extends Entity>
     );
   }
 
-  async preview(entity: T) {
+  async preview({ id }, event: Event) {
+    event.stopPropagation();
+    event.preventDefault();
+
     const loading = await this.loadingController.create();
     await loading.present();
 
-    this.config.service.findById(entity.id).subscribe(async entity => {
+    this.config.service!.findById(id).subscribe(async entity => {
       await loading.dismiss();
 
       const previewConfig = this.config.preview!;
@@ -190,6 +220,9 @@ export class EntityListComponent<T extends Entity>
   }
 
   async actionsDropdown(event: Event, entity: T) {
+    event.stopPropagation();
+    event.preventDefault();
+
     await this.currentActionsDropdown?.dismiss();
 
     this.currentActionsDropdown = await this.popoverController.create({
@@ -200,7 +233,7 @@ export class EntityListComponent<T extends Entity>
       showBackdrop: false,
       componentProps: {
         entity,
-        service: this.config.service,
+        service: this.config.serviceClass,
         entityName: this.config.entityName,
       },
     });
@@ -245,7 +278,7 @@ export class EntityListComponent<T extends Entity>
     return [
       searchbar,
       ...this.config.searchables.filter(
-        searchbar => !this.searchbars.find(s => s.prop === searchbar.prop),
+        searchBar => !this.searchbars.find(s => s.prop === searchBar.prop),
       ),
     ];
   }
@@ -277,7 +310,7 @@ export class EntityListComponent<T extends Entity>
 
   newSearchBar() {
     const searchable = this.config.searchables.find(
-      searchable => !this.searchbars.find(s => s.prop === searchable.prop),
+      it => !this.searchbars.find(s => s.prop === it.prop),
     );
     if (searchable) {
       this.searchbars.push({
@@ -295,5 +328,34 @@ export class EntityListComponent<T extends Entity>
 
   create() {
     this.store.dispatch(this.entityActions.wizard({}));
+  }
+
+  selectionType(): any {
+    if (this.config.selection === 'single') {
+      return SelectionType.single;
+    } else if (this.config.selection === 'multiple') {
+      return SelectionType.multiClick;
+    } else {
+      return undefined;
+    }
+  }
+
+  onSelect({ selected }) {
+    this.selected = {};
+    for (const item of selected) {
+      this.selected[item.id] = item;
+    }
+
+    this.pick.emit(this.selected);
+  }
+
+  selectedIds(): number[] {
+    return Object.keys(this.selected) as any;
+  }
+
+  unselect(id: number) {
+    delete this.selected[id];
+    this.datatable.selected = this.datatable.selected.filter(e => e.id != id);
+    this.datatable.recalculate();
   }
 }

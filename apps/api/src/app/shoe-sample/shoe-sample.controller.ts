@@ -17,13 +17,19 @@ import { ShoeSampleDTO } from './shoe-sample.dto';
 import { CurrentUser, FindParams, Page } from '../common';
 import { EntityController } from '../common/entity';
 import { IUser } from '../user';
+import { ClientMapper } from '../client';
 
 @Controller('/shoe-sample')
 export class ShoeSampleController extends EntityController<
   IShoeSample,
-  ShoeSampleDTO
+  ShoeSampleDTO,
+  ShoeSampleService
 > {
-  constructor(service: ShoeSampleService, mapper: ShoeSampleMapper) {
+  constructor(
+    service: ShoeSampleService,
+    mapper: ShoeSampleMapper,
+    private clientMapper: ClientMapper,
+  ) {
     super();
     this.mapper = mapper;
     this.service = service;
@@ -68,5 +74,20 @@ export class ShoeSampleController extends EntityController<
     @Param('id') id: Id,
   ): Promise<ShoeSampleDTO> {
     return super.delete(user, id);
+  }
+
+  @Get('/top/clients')
+  public async top(
+    @CurrentUser() user: IUser,
+    @Query() params?: FindParams<IShoeSample>,
+  ) {
+    if (params.filter) {
+      params.filter = JSON.parse(params.filter as any);
+    }
+
+    const data = await this.service.topClients(params, user);
+    return {
+      items: data.map(client => this.clientMapper.entityToResponse(client)),
+    };
   }
 }

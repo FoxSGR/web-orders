@@ -1,10 +1,39 @@
+<div
+  *ngIf="config.selection === 'multiple'"
+  class="round shaded flex align-center w100"
+  style="
+    margin-bottom: 20px;
+    padding: 5px;
+    min-height: 50px;
+    border-radius: 25px;
+  "
+>
+  <div *ngIf="selectedIds().length > 0; else emptySelection">
+    <ion-chip
+      *ngFor="let id of selectedIds()"
+      (click)="unselect(id)"
+      [outline]="true"
+    >
+      {{ config.label(selected[id]) }}
+      <ion-icon name="close"></ion-icon>
+    </ion-chip>
+  </div>
+  <ng-template #emptySelection>
+    <div style="margin: auto">Os items selecionados aparecerão aqui</div>
+  </ng-template>
+</div>
+
+<!-- Start column template setup -->
 <ng-template *ngFor="let col of config.columns" #templates let-row="row">
   <ng-container
     *ngComponentOutlet="col.template; injector: templateInjector(col, row)"
   ></ng-container>
 </ng-template>
+<!-- End column template setup -->
 
-<div class="entity-list-top flex flex-wrap" *ngIf="showSearch">
+<!-- Start header -->
+<div class="entity-list-top flex flex-wrap" *ngIf="!config.hideSearch">
+  <!-- Start search -->
   <div class="entity-list-searches">
     <div
       class="entity-list-search flex flex-wrap"
@@ -55,22 +84,26 @@
       </ion-label>
     </ion-text>
   </div>
+  <!-- End search -->
 
-  <div class="entity-list-create">
+  <div class="entity-list-create" *ngIf="!config.selection">
     <ion-button (click)="create()">
       <ion-icon name="create"></ion-icon>
       {{ 'str.common.actions.create' | translate }}
     </ion-button>
   </div>
 </div>
+<!-- End header -->
 
+<!-- Start datatable -->
 <ion-card class="datatable-card">
   <ngx-datatable
+    #datatable
     class="material"
     [rows]="page.items"
     [headerHeight]="50"
     [footerHeight]="50"
-    rowHeight="auto"
+    [rowHeight]="config.selection ? 50 : 'auto'"
     [externalPaging]="true"
     [externalSorting]="true"
     [columnMode]="ColumnMode.force"
@@ -84,7 +117,24 @@
     [messages]="{ emptyMessage: 'str.list.empty' | translate }"
     (sort)="changeSort($event)"
     [sortType]="SortType.single"
+    [selectionType]="selectionType()"
+    (select)="onSelect($event)"
   >
+    <ngx-datatable-column
+      *ngIf="config.selection"
+      [width]="40"
+      [sortable]="false"
+      [canAutoResize]="false"
+      cellClass="wo-datatable-actions wo-database-check"
+      headerClass="wo-datatable-actions-header"
+    >
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        <div class="flex center-everything">
+          <ion-checkbox [checked]="selected[row.id]"></ion-checkbox>
+        </div>
+      </ng-template>
+    </ngx-datatable-column>
+
     <ng-container *ngFor="let column of config.columns">
       <ngx-datatable-column
         *ngIf="column.width; else noWidth"
@@ -126,11 +176,12 @@
           <ion-button
             *ngIf="config.preview"
             class="wo-datatable-icon-button"
-            (click)="preview(row)"
+            (click)="preview(row, $event)"
           >
             <ion-icon slot="icon-only" icon="eye"></ion-icon>
           </ion-button>
           <ion-button
+            *ngIf="!config.selection"
             class="wo-datatable-icon-button"
             (click)="actionsDropdown($event, row)"
           >
@@ -145,3 +196,4 @@
     </ngx-datatable-column>
   </ngx-datatable>
 </ion-card>
+<!-- End datatable -->

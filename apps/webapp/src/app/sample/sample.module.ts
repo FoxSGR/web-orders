@@ -38,6 +38,11 @@ const components = [cc.SamplePreviewComponent, SampleComponent];
                 m => m.SampleWizardModule,
               ),
           },
+          {
+            path: '',
+            pathMatch: 'full',
+            redirectTo: 'list'
+          }
         ],
       },
     ]),

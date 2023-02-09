@@ -6,8 +6,12 @@ import { FindParams, Page, ResponseFormat } from '../types';
 import { IUser } from '../../user';
 import type { EntityService, IEntity } from '.';
 
-export abstract class EntityController<T extends IEntity, D> {
-  protected service: EntityService<T>;
+export abstract class EntityController<
+  T extends IEntity,
+  D,
+  S extends EntityService<T> = EntityService<T>,
+> {
+  protected service: S;
   protected mapper: Mapper<T, D>;
 
   public async findOne(user: IUser, id: Id): Promise<D | undefined> {

@@ -15,3 +15,9 @@ export interface EntityList<T> {
 export const initialListState: EntityList<any> = {
   state: 'loading',
 };
+
+export interface SelectItem<T> {
+  id: number | string;
+  name: string;
+  data: T;
+}

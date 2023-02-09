@@ -34,4 +34,7 @@ export const loginFailed = createAction(
 /**
  * Requests a logout.
  */
-export const logout = createAction('[account] logout');
+export const logout = createAction(
+  '[account] logout',
+  props<{ mode: 'manual' | 'unauthorized'; callback?: string }>(),
+);

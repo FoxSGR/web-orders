@@ -31,10 +31,10 @@ export class AgentMapper extends EntityMapper<IAgent, AgentDTO> {
     agent.clients?.forEach(client => delete client.agent);
 
     return {
-      ...super.entityToResponse(agent),
       name: agent.name,
       clients: this.fieldToResponse(this.clientMapper, agent.clients),
       address: this.fieldToResponse(this.addressMapper, agent.address),
+      ...super.entityToResponse(agent),
     };
   }
 }

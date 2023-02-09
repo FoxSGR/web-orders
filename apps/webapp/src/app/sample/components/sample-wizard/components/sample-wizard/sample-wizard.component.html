@@ -1,5 +1,23 @@
-<ion-text>
-  <h4>Criar amostra</h4>
+<ion-text class="ion-text-center">
+  <h4>
+    <ion-icon
+      style="vertical-align: middle; margin-bottom: 5px"
+      name="camera"
+    ></ion-icon>
+    <span>
+      Criar amostra
+      <!-- TODO: String -->
+    </span>
+  </h4>
 </ion-text>
 
-<ion-router-outlet id="sample-wizard"></ion-router-outlet>
+<div class="wo-sample-wizard">
+  <wo-stepper
+    class="wo-sample-wizard-stepper"
+    [options]="stepperOptions"
+  ></wo-stepper>
+
+  <form>
+    <router-outlet id="sample-wizard"></router-outlet>
+  </form>
+</div>

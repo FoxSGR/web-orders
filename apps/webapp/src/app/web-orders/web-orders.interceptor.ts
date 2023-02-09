@@ -11,7 +11,7 @@ import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { WebOrdersState } from './web-orders.types';
-import { Account, getAccount } from '../account';
+import { Account, getAccount, logout } from '../account';
 import { environment } from '../../environments/environment';
 
 @Injectable()
@@ -60,11 +60,15 @@ export class WebOrdersInterceptor implements HttpInterceptor {
           if (err instanceof HttpErrorResponse) {
             switch (err.status) {
               case 401: {
+                const urlTree = this.router.parseUrl(this.router.url);
+                delete urlTree.queryParams['callback'];
+                const encoded = encodeURIComponent(urlTree.toString());
+
                 if (!req.url.endsWith('/api/auth/login')) {
-                  const urlTree = this.router.parseUrl(this.router.url);
-                  delete urlTree.queryParams['callback'];
-                  const encoded = encodeURIComponent(urlTree.toString());
-                  this.router.navigate(['login', { callback: encoded }]);
+                  this.store.dispatch(logout({
+                    mode: 'unauthorized',
+                    callback: encoded
+                  }))
                 }
 
                 break;

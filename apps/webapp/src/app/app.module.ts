@@ -5,6 +5,7 @@ import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
 import { TranslateModule } from '@ngx-translate/core';
+import { IonicSelectableModule } from '@ionic-selectable/angular';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -26,6 +27,7 @@ import { WebOrdersModule } from './web-orders/web-orders.module';
       maxAge: 25, // Retains last 25 states
       logOnly: environment.production, // Restrict extension to log-only mode
     }),
+    IonicSelectableModule.forRoot(),
     EffectsModule.forRoot(),
     BrowserAnimationsModule,
     IonicModule.forRoot(),

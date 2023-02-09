@@ -1,0 +1,34 @@
+<div class="wo-stepper">
+  <div class="wo-stepper-steps">
+    <ng-container *ngFor="let step of options.steps; let i = index">
+      <div class="wo-stepper-step">
+        <ion-fab-button
+          class="wo-stepper-step-button"
+          [color]="buttonColor(i, step, route$ | async)"
+          (click)="navigate(step)"
+        >
+          <span *ngIf="i >= currentStepIndex(route$ | async); else doneStep">
+            {{ i + 1 }}
+          </span>
+          <ng-template #doneStep>
+            <ion-icon name="checkmark"></ion-icon>
+          </ng-template>
+        </ion-fab-button>
+        <ion-text
+          [color]="isCurrentRoute(step, route$ | async) ? 'dark' : 'medium'"
+          [ngStyle]="{
+            fontWeight: isCurrentRoute(step, route$ | async) ? 500 : 400
+          }"
+        >
+          <small>
+            {{ step.name | translate }}
+          </small>
+        </ion-text>
+      </div>
+      <div
+        class="wo-stepper-separator"
+        *ngIf="i !== options.steps.length - 1"
+      ></div>
+    </ng-container>
+  </div>
+</div>

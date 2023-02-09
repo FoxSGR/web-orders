@@ -9,7 +9,9 @@ import { entitySelectors } from './entity.selectors';
 import { EntityName } from './entity.types';
 import { Entity } from '../models/entity';
 import { alertActions } from '../../alerts';
+import { Injector } from '@angular/core';
 
+// noinspection JSUnusedGlobalSymbols
 export class EntityEffects<T extends Entity> {
   protected entityActions = entityActions<T>(this.entityName);
   private entitySelectors = entitySelectors(this.entityName);
@@ -33,14 +35,17 @@ export class EntityEffects<T extends Entity> {
   pageLoadError$ = createEffect(() =>
     this.actions.pipe(
       ofType(this.entityActions.pageLoadError),
-      switchMap(() => [
-        alertActions.showAlert({
-          alert: {
-            message: 'str.list.errors.loading.message',
-            type: 'error',
-          },
-        }),
-      ]),
+      switchMap(error => {
+        console.error(error)
+        return [
+          alertActions.showAlert({
+            alert: {
+              message: 'str.list.errors.loading.message',
+              type: 'error',
+            },
+          }),
+        ];
+      }),
     ),
   );
 

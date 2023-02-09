@@ -86,14 +86,23 @@ export class AccountEffects {
   logout$ = createEffect(() =>
     this.actions.pipe(
       ofType(fromAccountActions.logout),
-      map(() => {
-        this.router.navigate(['']);
-        return alertActions.showAlert({
-          alert: {
-            type: 'success',
-            message: this.translate.instant('str.account.loggedOut'),
-          },
-        });
+      switchMap(({ callback, mode }) => {
+        const result: any[] = [];
+        if (mode === 'manual') {
+          this.router.navigate(['']);
+          result.push(
+            alertActions.showAlert({
+              alert: {
+                type: 'success',
+                message: this.translate.instant('str.account.loggedOut'),
+              },
+            }),
+          );
+        } else if (mode === 'unauthorized') {
+          this.router.navigate(['login', { callback }]);
+        }
+
+        return result;
       }),
     ),
   );

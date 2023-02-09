@@ -7,6 +7,7 @@ import { WOAppService } from '../../service/wo-app.service';
 import { WebOrdersState } from '../../web-orders.types';
 import { MenuItem } from './menu-item';
 import { getAccount, logout } from '../../../account';
+import { padWithSlashes } from '../../../common';
 
 @Component({
   selector: 'wo-main',
@@ -29,7 +30,7 @@ export class WOMainComponent {
     {
       icon: 'camera',
       label: 'str.menu.sample',
-      route: 'sample/list',
+      route: 'sample',
     },
     {
       icon: 'cube',
@@ -44,7 +45,7 @@ export class WOMainComponent {
     {
       icon: 'log-out',
       label: 'str.account.logout',
-      onClick: () => this.store.dispatch(logout()),
+      onClick: () => this.store.dispatch(logout({ mode: 'manual' })),
     },
   ];
 
@@ -68,5 +69,20 @@ export class WOMainComponent {
 
   navigate(route: string) {
     this.router.navigate([route]);
+  }
+
+  routeMatches(item: MenuItem, currentRoute: string | null) {
+    if (!item.route) {
+      return;
+    }
+
+    if (!currentRoute) {
+      currentRoute = this.router.url;
+    }
+
+    currentRoute = padWithSlashes(currentRoute);
+    const itemRoute = padWithSlashes(item.route);
+
+    return currentRoute.includes(itemRoute);
   }
 }

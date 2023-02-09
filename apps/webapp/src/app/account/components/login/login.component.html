@@ -10,9 +10,9 @@
     <div class="login-fields ion-text-center">
       <form [formGroup]="loginForm" (ngSubmit)="login()">
         <ion-item class="login-field">
-          <ion-label position="floating">{{
-            'str.account.username' | translate
-          }}</ion-label>
+          <ion-label position="floating">
+            {{ 'str.account.username' | translate }}
+          </ion-label>
           <ion-input
             [placeholder]="'str.account.form.enterYourUsername' | translate"
             (keyup.enter)="login()"
