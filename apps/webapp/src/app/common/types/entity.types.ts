@@ -27,6 +27,6 @@ export interface EntityConfig<
   serviceClass: { new (...t: any): S };
   service?: S;
   listConfig: EntityListConfig<T>;
-  wizardConfig?: EntityFormWizard<T>;
+  wizardConfig?: EntityFormWizard;
   previewConfig?: (entity: T, print: boolean) => EntityPreviewConfig;
 }

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { NgStyle } from '@angular/common';
 
 @Component({
@@ -27,6 +27,7 @@ import { NgStyle } from '@angular/common';
   ],
   standalone: true,
   imports: [NgStyle],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ColorIndicatorComponent {
   @Input() value?: string;

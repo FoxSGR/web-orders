@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { SmartFormTextArea } from '../../../types';
 import { SmartFormAbstractItemComponent } from '../smart-form-abstract-item.component';
@@ -18,6 +18,7 @@ import { SmartFormAbstractItemComponent } from '../smart-form-abstract-item.comp
       ></ion-textarea>
     </ion-item>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SmartFormTextAreaComponent extends SmartFormAbstractItemComponent<
   string,

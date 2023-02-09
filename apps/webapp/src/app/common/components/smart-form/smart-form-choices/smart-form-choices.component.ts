@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { KeyValue } from '@angular/common';
 
 import { SmartFormAbstractItemComponent } from '../smart-form-abstract-item.component';
@@ -9,6 +9,7 @@ import { SelectSearchOption } from '../../select-search';
 @Component({
   selector: 'wo-smart-form-choices',
   templateUrl: './smart-form-choices.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SmartFormChoicesComponent<T extends string>
   extends SmartFormAbstractItemComponent<T, SmartFormChoices<T>>

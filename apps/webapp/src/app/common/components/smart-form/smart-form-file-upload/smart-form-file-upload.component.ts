@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   Injector,
@@ -9,12 +10,12 @@ import {
 import { DialogService, FileService } from '../../../services';
 import { SmartFormFiles, SmartFormFileUpload } from '../../../types';
 import { SmartFormAbstractItemComponent } from '../smart-form-abstract-item.component';
-import { IonCheckbox } from '@ionic/angular';
 
 @Component({
   selector: 'wo-smart-form-file-upload',
   templateUrl: './smart-form-file-upload.component.html',
   styleUrls: ['./smart-form-file-upload.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SmartFormFileUploadComponent
   extends SmartFormAbstractItemComponent<SmartFormFiles, SmartFormFileUpload>
@@ -51,7 +52,7 @@ export class SmartFormFileUploadComponent
         this.value!.files.find(f =>
           this.fileService.filesEqual(
             file,
-            this.fileService.getData(f.uid).file!,
+            this.fileService.getData(f.uid)?.file,
           ),
         )
       ) {
@@ -77,7 +78,15 @@ export class SmartFormFileUploadComponent
 
   removeFile(uid: string) {
     this.dialogService.confirm(() => {
+      const file = this.value!.files.find(f => f.uid === uid)!;
+
       this.value!.files = this.value!.files.filter(file => file.uid !== uid);
+      this.fileService.unloadFile(uid);
+
+      if (file.default && this.value!.files.length > 0) {
+        this.value!.files[0].default = true;
+      }
+
       this.onChange();
     });
   }

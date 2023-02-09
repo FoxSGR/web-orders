@@ -1,4 +1,9 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  ViewChild,
+} from '@angular/core';
 
 import { SmartFormDate } from '../../../types';
 import { SmartFormAbstractItemComponent } from '../smart-form-abstract-item.component';
@@ -7,6 +12,7 @@ import { SmartFormAbstractItemComponent } from '../smart-form-abstract-item.comp
   selector: 'wo-smart-form-date',
   templateUrl: './smart-form-date.component.html',
   styleUrls: ['./smart-form-date.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SmartFormDateComponent extends SmartFormAbstractItemComponent<
   string,

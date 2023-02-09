@@ -1,7 +1,6 @@
-import { SmartForm } from './smart-form.types';
+import { Injector } from '@angular/core';
+import { SmartForm, SmartFormState } from './smart-form.types';
 import { EntityType } from './entity.types';
-import { EntityService } from '../services';
-import { Entity } from '../models/entity';
 
 export interface EntityFormWizardStep {
   title?: string;
@@ -9,7 +8,7 @@ export interface EntityFormWizardStep {
   form: SmartForm;
 }
 
-export interface EntityFormWizard<T extends Entity = Entity> {
+export interface EntityFormWizard {
   messages: {
     save: string;
   };
@@ -19,6 +18,12 @@ export interface EntityFormWizard<T extends Entity = Entity> {
     icon: string;
   };
   steps: { [key: string]: EntityFormWizardStep };
+  postSave?: {
+    callback?: (
+      state: SmartFormState,
+      injector: Injector,
+    ) => Promise<void> | void;
+  };
 }
 
 export interface EntityFormWizardStepData {

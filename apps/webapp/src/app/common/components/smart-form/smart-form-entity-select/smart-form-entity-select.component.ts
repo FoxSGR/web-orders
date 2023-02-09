@@ -1,5 +1,6 @@
 import {
   AfterViewChecked,
+  ChangeDetectionStrategy,
   Component,
   HostListener,
   OnInit,
@@ -18,6 +19,7 @@ import { EntityConfigRegister } from '../../../entity-config.register';
   selector: 'wo-smart-form-entity-select',
   templateUrl: './smart-form-entity-select.component.html',
   styleUrls: ['./smart-form-entity-select.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SmartFormEntitySelectComponent
   extends SmartFormAbstractItemComponent<

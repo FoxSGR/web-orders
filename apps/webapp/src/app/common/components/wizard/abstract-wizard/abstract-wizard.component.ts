@@ -39,8 +39,8 @@ export abstract class AbstractWizardComponent<T extends Entity>
   /**
    * Structure definition of the wizard.
    */
-  get wizard(): EntityFormWizard<T> {
-    return this.entityConfig?.wizardConfig as EntityFormWizard<T>;
+  get wizard(): EntityFormWizard {
+    return this.entityConfig?.wizardConfig as EntityFormWizard;
   }
 
   /**
@@ -181,7 +181,10 @@ export abstract class AbstractWizardComponent<T extends Entity>
         filter(state => !!state),
         take(1),
       )
-      .subscribe(() => (this.loading = false));
+      .subscribe(() => {
+        this.loading = false;
+        this.cdr.detectChanges();
+      });
   }
 
   /**
@@ -194,8 +197,16 @@ export abstract class AbstractWizardComponent<T extends Entity>
     });
     loading.present();
 
+    const state = await firstValueFrom(
+      this.store
+        .select(
+          entitySelectors(this.entityConfig.entityType).getWizard(this.id),
+        )
+        .pipe(take(1)),
+    );
+
     try {
-      let entity = await this.generateEntity();
+      let entity = await this.generateEntity(state);
       if (!entity) {
         loading.dismiss();
         return;
@@ -209,6 +220,8 @@ export abstract class AbstractWizardComponent<T extends Entity>
         entity['id'] = this.id;
         entity = await firstValueFrom(service.update(entity));
       }
+
+      await this.postSave(state);
 
       this.onComplete(entity as T);
     } catch (e: any) {
@@ -337,6 +350,19 @@ export abstract class AbstractWizardComponent<T extends Entity>
     }
   }
 
+  private async postSave(state: SmartFormState) {
+    if (!this.wizard.postSave?.callback) {
+      return;
+    }
+
+    try {
+      await this.wizard.postSave.callback(state, this.injector);
+    } catch (e) {
+      // ignore because the show must go on
+      console.error(e);
+    }
+  }
+
   /**
    * Resolves a conflict between local changes and the fetched remote entity.
    * @param localState
@@ -401,17 +427,12 @@ export abstract class AbstractWizardComponent<T extends Entity>
 
   /**
    * Generates the entity from the wizard forms.
+   * @param state
    * @private
    */
-  private async generateEntity(): Promise<Partial<T> | undefined> {
-    const state = await firstValueFrom(
-      this.store
-        .select(
-          entitySelectors(this.entityConfig.entityType).getWizard(this.id),
-        )
-        .pipe(take(1)),
-    );
-
+  private async generateEntity(
+    state: SmartFormState,
+  ): Promise<Partial<T> | undefined> {
     const definitions = Object.values(this.wizard.steps).map(step => step.form);
 
     // validate the entity

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { get } from 'lodash';
 
 import { Entity } from '../../../models/entity';
@@ -13,6 +13,7 @@ import { CellComponent } from './cell.component';
       <span>{{ (value | translate) || '&nbsp;' }}</span>
     </ion-label>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChoiceCellComponent<T extends Entity> extends CellComponent<
   T,

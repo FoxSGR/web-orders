@@ -1,4 +1,9 @@
-import { Component, OnChanges, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnChanges,
+  OnInit,
+} from '@angular/core';
 import { cloneDeep, isEqualWith } from 'lodash';
 import * as uuid from 'uuid';
 
@@ -10,6 +15,7 @@ import { customEquals } from '../../../util';
   selector: 'wo-smart-form-multiple',
   templateUrl: './smart-form-multiple.component.html',
   styleUrls: ['./smart-form-multiple.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SmartFormMultipleComponent
   extends SmartFormAbstractItemComponent<any[], SmartFormMultiple>

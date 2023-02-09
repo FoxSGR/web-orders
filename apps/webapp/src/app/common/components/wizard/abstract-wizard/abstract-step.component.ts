@@ -21,7 +21,7 @@ export abstract class AbstractStepComponent<T extends Entity>
   /**
    * Structure definition of the entity wizard.
    */
-  get wizardDefinition(): EntityFormWizard<T> | undefined {
+  get wizardDefinition(): EntityFormWizard | undefined {
     return this.entityConfig?.wizardConfig;
   }
 
@@ -114,5 +114,6 @@ export abstract class AbstractStepComponent<T extends Entity>
     }
 
     this.state = state;
+    this.cdr.detectChanges();
   }
 }

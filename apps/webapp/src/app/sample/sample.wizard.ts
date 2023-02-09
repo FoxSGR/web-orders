@@ -1,3 +1,4 @@
+import { LoadingController } from '@ionic/angular';
 import { get, isEmpty } from 'lodash';
 
 import {
@@ -11,7 +12,7 @@ import {
   Brand,
   Client,
   EntityService,
-  ShoeSample,
+  FileService,
   shoeSizeChoices,
   WOIconItemMap,
 } from '../common';
@@ -19,6 +20,7 @@ import { BrandService } from '../brand';
 import {
   EntityFormWizard,
   SmartForm,
+  SmartFormFiles,
   SmartFormMultiple,
   SmartFormState,
 } from '../common/types';
@@ -26,7 +28,7 @@ import {
 /**
  * Structure definition of the sample wizard.
  */
-export const sampleWizard: EntityFormWizard<ShoeSample> = {
+export const sampleWizard: EntityFormWizard = {
   messages: {
     save: 'str.sample.wizard.messages.save.message',
   },
@@ -191,6 +193,34 @@ export const sampleWizard: EntityFormWizard<ShoeSample> = {
           },
         },
       },
+    },
+  },
+  postSave: {
+    callback: async (state, injector) => {
+      const photosToUpload = (
+        state.values['photos'] as SmartFormFiles
+      )?.files.filter(f => f.state === 'toUpload');
+      if (!photosToUpload || photosToUpload.length === 0) {
+        return;
+      }
+
+      const loadingController = injector.get(LoadingController);
+      const loading = await loadingController.create({
+        message: 'str.sample.wizard.postSave.uploadingPhotos',
+      });
+      loading.present();
+
+      const fileService = injector.get(FileService);
+      for (const photo of photosToUpload) {
+        try {
+          await fileService.uploadFile(photo);
+        } catch (e) {
+          // ignore, just log
+          console.error(e);
+        }
+      }
+
+      loading.dismiss();
     },
   },
 };

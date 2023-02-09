@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
 import { IonicModule } from '@ionic/angular';
 
@@ -24,7 +24,6 @@ const components = [cc.WOContainerComponent, cc.WOMainComponent];
     CommonModule,
     TranslateModule,
     IonicModule,
-    HttpClientModule,
 
     WebOrdersRoutingModule,
 

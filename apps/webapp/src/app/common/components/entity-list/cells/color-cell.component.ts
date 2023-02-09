@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { get } from 'lodash';
 
 import { CellComponent } from './cell.component';
@@ -11,6 +11,7 @@ import { CellComponent } from './cell.component';
       [name]="name()"
     ></wo-color-indicator>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ColorCellComponent extends CellComponent {
   color(): string | undefined {

@@ -1,4 +1,9 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Injector,
+  OnInit,
+} from '@angular/core';
 import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import { firstValueFrom, take } from 'rxjs';
 import { filter, map, takeUntil } from 'rxjs/operators';
@@ -20,6 +25,7 @@ import { HistoryService } from '../../../services';
 @Component({
   templateUrl: '../abstract-wizard/abstract-wizard.component.html',
   styleUrls: ['../abstract-wizard/abstract-wizard.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RoutedWizardComponent<T extends Entity>
   extends AbstractWizardComponent<T>
@@ -95,6 +101,7 @@ export class RoutedWizardComponent<T extends Entity>
     );
 
     this.findCurrentStepByRoute();
+    this.cdr.detectChanges();
 
     await super.loadWizard();
   }

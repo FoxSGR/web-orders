@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   Input,
@@ -17,7 +18,6 @@ import { deburr } from 'lodash';
 import * as uuid from 'uuid';
 
 import { SelectSearchOption } from './select-search.types';
-import { adjustPopover } from '../../util';
 
 @Component({
   selector: 'wo-select-search',
@@ -31,6 +31,7 @@ import { adjustPopover } from '../../util';
     ScrollingModule,
   ],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SelectSearchComponent<T = any>
   implements OnInit, AfterViewInit, OnChanges

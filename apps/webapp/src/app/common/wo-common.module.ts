@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 
 import * as directives from './directives';
@@ -15,7 +14,6 @@ import { EntityPreviewModule } from './components/entity-preview/entity-preview.
       serverLogLevel: NgxLoggerLevel.ERROR,
       colorScheme: ['purple', 'teal', 'gray', 'gray', 'red', 'red', 'red'],
     }),
-    HttpClientModule,
     EntityPreviewModule,
   ],
   exports: [directives.AutoFocusDirective],

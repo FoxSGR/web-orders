@@ -1,8 +1,7 @@
 import { EntityFormWizard } from '../common/types';
-import { ShoeComponent } from '../common';
 import { shoeComponentConstants } from './shoe-component.constants';
 
-export const shoeComponentWizardConfig: EntityFormWizard<ShoeComponent> = {
+export const shoeComponentWizardConfig: EntityFormWizard = {
   messages: {
     save: 'str.shoeComponent.wizard.messages.save.message',
   },

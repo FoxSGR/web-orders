@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 import { WizardType } from '../abstract-wizard/abstract-wizard.component';
 import { AbstractModalComponent } from '../../abstract-modal/abstract-modal.component';
@@ -35,6 +35,7 @@ import { EntityConfigRegister } from '../../../entity-config.register';
       </wo-standalone-wizard>
     </ion-content>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StandaloneWizardModalComponent extends AbstractModalComponent {
   /**

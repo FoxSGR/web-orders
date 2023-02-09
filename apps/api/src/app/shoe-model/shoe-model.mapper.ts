@@ -62,6 +62,7 @@ export class ShoeModelMapper extends EntityMapper<IShoeModel, ShoeModelDTO> {
       components: modelComponents,
       dateCreated: body.dateCreated,
       season: body.season,
+      photos: body.photos,
       notes: body.notes,
       base: {
         owner: user,
@@ -95,6 +96,7 @@ export class ShoeModelMapper extends EntityMapper<IShoeModel, ShoeModelDTO> {
       components,
       dateCreated: shoeModel.dateCreated,
       season: shoeModel.season,
+      photos: shoeModel.photos,
       notes: shoeModel.notes,
     };
   }

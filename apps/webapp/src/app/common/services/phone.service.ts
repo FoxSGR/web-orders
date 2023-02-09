@@ -21,7 +21,7 @@ export class PhoneService {
 
       this.http
         .get<ResponseDataItems<PhoneIntlConfig>>(
-          `${environment.apiUrl}/common/phone/intl-configs`,
+          `${environment.api}/common/phone/intl-configs`,
         )
         .pipe(map(response => response.data.items))
         .subscribe(configs => this.intlConfigs$!.next(configs));

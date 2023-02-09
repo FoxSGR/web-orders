@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { get } from 'lodash';
 
 import { countries } from '@web-orders/api-interfaces';
@@ -13,6 +13,7 @@ import { CellComponent } from './cell.component';
       style="font-size: 30px"
     ></span>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FlagCellComponent extends CellComponent {
   title(): string | undefined {

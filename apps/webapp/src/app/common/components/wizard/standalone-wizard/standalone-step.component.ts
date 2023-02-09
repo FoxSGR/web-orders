@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 import { Entity } from '../../../models/entity';
 import { AbstractStepComponent } from '../abstract-wizard/abstract-step.component';
@@ -8,6 +8,7 @@ import { EntityConfig, OptionalId } from '../../../types';
   selector: 'wo-standalone-step',
   templateUrl: '../abstract-wizard/abstract-step.component.html',
   styleUrls: ['../abstract-wizard/abstract-step.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StandaloneStepComponent<
   T extends Entity,

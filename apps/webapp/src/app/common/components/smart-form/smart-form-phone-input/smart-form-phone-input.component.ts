@@ -1,4 +1,9 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Injector,
+  OnInit,
+} from '@angular/core';
 import { set } from 'lodash';
 
 import { SmartFormPhone, SmartFormPhoneInput } from '../../../types';
@@ -9,6 +14,7 @@ import { SelectSearchOption } from '../../select-search';
 @Component({
   selector: 'wo-smart-form-phone-input',
   templateUrl: './smart-form-phone-input.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SmartFormPhoneInputComponent
   extends SmartFormAbstractItemComponent<SmartFormPhone, SmartFormPhoneInput>

@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   Injector,
@@ -42,6 +43,7 @@ import { EntityPreviewService, EntityWizardService } from '../../services';
   selector: 'wo-entity-list',
   templateUrl: './entity-list.component.html',
   styleUrls: ['./entity-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EntityListComponent<T extends Entity>
   extends BaseComponent

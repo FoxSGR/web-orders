@@ -21,7 +21,7 @@ export class SampleService extends EntityService<ShoeSample> {
     this.createParams(params);
 
     return this.http
-      .get(`${environment.apiUrl}/shoe-sample/top/clients`, {
+      .get(`${environment.api}/shoe-sample/top/clients`, {
         params: createParams(params),
       })
       .pipe(map((data: any) => data.items));

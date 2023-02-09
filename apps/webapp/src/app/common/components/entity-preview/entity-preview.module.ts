@@ -11,8 +11,6 @@ import { EntityPreviewListComponent } from './entity-preview-list/entity-preview
 import { EntityPreviewGroupComponent } from './entity-preview-group/entity-preview-group.component';
 import { EntityPreviewCompareComponent } from './entity-preview-compare/entity-preview-compare.component';
 import { ColorIndicatorComponent } from '../elements';
-import { RouterModule } from '@angular/router';
-import { EntityPreviewPageComponent } from './entity-preview-page/entity-preview-page.component';
 
 @NgModule({
   imports: [
@@ -21,12 +19,6 @@ import { EntityPreviewPageComponent } from './entity-preview-page/entity-preview
     TranslateModule,
     DatePipe,
     ColorIndicatorComponent,
-    RouterModule.forChild([
-      {
-        path: ':entityType/:id',
-        component: EntityPreviewPageComponent,
-      },
-    ]),
   ],
   declarations: [
     EntityPreviewActionComponent,
@@ -34,7 +26,6 @@ import { EntityPreviewPageComponent } from './entity-preview-page/entity-preview
     EntityPreviewGroupComponent,
     EntityPreviewComponent,
     EntityPreviewCompareComponent,
-    EntityPreviewPageComponent,
   ],
   exports: [
     EntityPreviewComponent,

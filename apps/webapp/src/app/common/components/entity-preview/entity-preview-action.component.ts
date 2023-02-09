@@ -1,4 +1,9 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Output,
+} from '@angular/core';
 
 @Component({
   selector: 'wo-entity-preview-action',
@@ -22,6 +27,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
       </ion-fab-list>
     </ion-fab>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EntityPreviewActionComponent {
   @Output() edit = new EventEmitter();

@@ -1,9 +1,8 @@
 export interface APIFile {
-  path: string;
   mimeType: string;
   uid: string;
   name: string;
-  default: boolean;
+  default?: boolean;
 }
 
 export interface ResponseData<T> {

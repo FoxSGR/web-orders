@@ -3,6 +3,8 @@ import { get, set } from 'lodash';
 import {
   SmartForm,
   SmartFormEntitySelect,
+  SmartFormFiles,
+  SmartFormFileUpload,
   SmartFormItem,
   SmartFormPhone,
   SmartFormState,
@@ -10,6 +12,7 @@ import {
 import { Entity } from '../../models/entity';
 import { customEmpty } from '../../util';
 import { SmartFormWalker } from './smart-form-walker';
+import { APIFile } from '@web-orders/api-interfaces';
 
 /**
  * Generates a model from a smart form.
@@ -63,6 +66,9 @@ export class SmartFormOutGenerator<T extends object> {
       case 'phone-input':
         value = this.generateFromPhoneNumber(value);
         break;
+      case 'file-upload':
+        value = this.generateFromFileUpload(item, value);
+        break;
     }
 
     this.setValue(targetProp, value);
@@ -88,7 +94,7 @@ export class SmartFormOutGenerator<T extends object> {
     return value;
   }
 
-  private generateFromPhoneNumber(value: SmartFormPhone | undefined) {
+  private generateFromPhoneNumber(value: SmartFormPhone | undefined): string | undefined {
     if (!value) {
       return undefined;
     }
@@ -96,6 +102,25 @@ export class SmartFormOutGenerator<T extends object> {
     const prefix = value.prefix || '';
     const phoneValue = value.value || '';
     return `${prefix}${phoneValue}`;
+  }
+
+  private generateFromFileUpload(item: SmartFormFileUpload, value: SmartFormFiles): APIFile | APIFile[] | undefined {
+    if (!value) {
+      return undefined;
+    }
+
+    const files: APIFile[] = value.files.map((file) => ({
+      uid: file.uid,
+      name: file.name,
+      default: file.default || false,
+      mimeType: file.mimeType,
+    }))
+
+    if (item.multiple) {
+      return files;
+    } else {
+      return files[0];
+    }
   }
 
   private flatten(item: SmartFormItem, prop: string, targetProp: string) {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 
 import { SmartFormAbstractItemComponent } from '../smart-form-abstract-item.component';
 import { SmartFormGroup } from '../../../types';
@@ -7,6 +7,7 @@ import { SmartFormGroup } from '../../../types';
   selector: 'wo-smart-form-group',
   templateUrl: './smart-form-group.component.html',
   styleUrls: ['smart-form-group.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SmartFormGroupComponent
   extends SmartFormAbstractItemComponent<object, SmartFormGroup>

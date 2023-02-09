@@ -12,7 +12,7 @@ export const createEntityWizardRoutes: (entityType: EntityType) => Routes = (
 
   const routes: Routes = Object.entries(entityConfig.wizardConfig!.steps).map(
     ([key, step]) => ({
-      path: step.route!,
+      path: step.route,
       component: RoutedStepComponent,
       data: {
         entityType,

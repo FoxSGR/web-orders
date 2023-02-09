@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ThemeService } from './common';
 
 @Component({
   selector: 'wo-root',
   templateUrl: './app.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit {
   constructor(private themeService: ThemeService) {}

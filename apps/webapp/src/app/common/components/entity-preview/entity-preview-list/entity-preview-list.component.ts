@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import {
@@ -12,6 +12,7 @@ import { EntityPreviewService } from '../../../services';
   selector: 'wo-entity-preview-list',
   templateUrl: './entity-preview-list.component.html',
   styleUrls: ['./entity-preview-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EntityPreviewListComponent<T extends Entity> {
   @Input()

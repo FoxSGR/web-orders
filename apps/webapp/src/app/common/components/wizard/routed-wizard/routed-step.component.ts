@@ -1,4 +1,4 @@
-import { Component, Injector } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Injector } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom, take } from 'rxjs';
 
@@ -11,6 +11,7 @@ import { AbstractStepComponent } from '../abstract-wizard/abstract-step.componen
   selector: 'wo-step',
   templateUrl: '../abstract-wizard/abstract-step.component.html',
   styleUrls: ['../abstract-wizard/abstract-step.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RoutedStepComponent<
   T extends Entity,

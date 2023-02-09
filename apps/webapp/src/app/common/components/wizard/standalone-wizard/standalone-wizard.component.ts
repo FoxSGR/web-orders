@@ -1,4 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
 
 import {
   AbstractWizardComponent,
@@ -12,6 +17,7 @@ import { EntityConfigRegister } from '../../../entity-config.register';
   selector: 'wo-standalone-wizard',
   templateUrl: '../abstract-wizard/abstract-wizard.component.html',
   styleUrls: ['../abstract-wizard/abstract-wizard.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StandaloneWizardComponent<T extends Entity>
   extends AbstractWizardComponent<T>

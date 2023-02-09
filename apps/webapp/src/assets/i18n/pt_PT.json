@@ -66,6 +66,11 @@
           "pick": "Escolher",
           "main": "Principal"
         }
+      },
+      "fileUpload": {
+        "errors": {
+          "generic": "Não foi possível enviar o ficheiro '{{name}}': {{error}}"
+        }
       }
     },
     "menu": {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 
 import { CellComponent } from './cell.component';
 
@@ -10,6 +10,7 @@ import { CellComponent } from './cell.component';
       <span>{{ value || '&nbsp;' }}</span>
     </ion-label>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BasicCellComponent extends CellComponent implements OnInit {
   value: any;

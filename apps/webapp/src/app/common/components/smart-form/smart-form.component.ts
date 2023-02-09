@@ -1,4 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
 
 import { BaseComponent } from '../base.component';
 import { SmartForm, SmartFormState } from '../../types';
@@ -7,6 +13,7 @@ import { SmartForm, SmartFormState } from '../../types';
   selector: 'wo-smart-form',
   templateUrl: './smart-form.component.html',
   styleUrls: ['./smart-form.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SmartFormComponent extends BaseComponent {
   /**

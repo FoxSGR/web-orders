@@ -1,14 +1,16 @@
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   Input,
   OnChanges,
+  Renderer2,
   ViewChild,
-  ViewContainerRef,
 } from '@angular/core';
 import { NgStyle } from '@angular/common';
-import { AlertController, IonicModule } from '@ionic/angular';
+import { IonicModule } from '@ionic/angular';
 import * as uuid from 'uuid';
 
 @Component({
@@ -17,6 +19,7 @@ import * as uuid from 'uuid';
   styleUrls: ['./thumbnail.component.scss'],
   imports: [NgStyle, IonicModule],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ThumbnailComponent implements AfterViewInit, OnChanges {
   @ViewChild('img') img: ElementRef<HTMLImageElement>;
@@ -37,10 +40,7 @@ export class ThumbnailComponent implements AfterViewInit, OnChanges {
 
   private uid = uuid.v4();
 
-  constructor(
-    private alertController: AlertController,
-    private vcr: ViewContainerRef,
-  ) {}
+  constructor(private cdr: ChangeDetectorRef, private renderer: Renderer2) {}
 
   ngAfterViewInit() {
     this.load();
@@ -61,18 +61,21 @@ export class ThumbnailComponent implements AfterViewInit, OnChanges {
       const reader = new FileReader();
       await new Promise<void>(resolve => {
         reader.onloadend = () => {
-          image.src = reader.result as string;
+          this.renderer.setAttribute(image, 'src', reader.result as string);
           resolve();
         };
         reader.readAsDataURL(this.file!);
       });
     } else if (this.url) {
       await new Promise<void>(resolve => {
-        image.onload = () => resolve();
-        image.src = this.url!;
+        this.renderer.setProperty(image, 'onload', () => resolve());
+        this.renderer.setAttribute(image, 'src', this.url!);
       });
     }
 
     this.loaded = true;
+
+    // markForCheck allows parents to quickly know if it was loaded
+    this.cdr.markForCheck();
   }
 }

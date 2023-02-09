@@ -17,16 +17,13 @@ export class ShoeSampleDTO extends EntityDTO implements IShoeSampleDTO {
   sampleModel?: ShoeModelDTO;
 
   @IsOptional()
-  @ValidateNested()
   @Type(() => ClientDTO)
   client?: ClientDTO;
 
-  @ValidateNested()
   @IsOptional()
   @Type(() => AgentDTO)
   agent?: AgentDTO;
 
-  @ValidateNested()
   @IsOptional()
   @Type(() => BrandDTO)
   brand?: BrandDTO;

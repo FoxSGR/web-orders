@@ -1,4 +1,10 @@
-import { IsArray, IsDate, IsOptional, IsString, ValidateNested } from 'class-validator';
+import {
+  IsArray,
+  IsDate,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 
 import { APIFile, IShoeModelDTO, SeasonType } from '@web-orders/api-interfaces';
 import { Type } from 'class-transformer';
@@ -28,6 +34,7 @@ export class ShoeModelDTO extends EntityDTO implements IShoeModelDTO {
 
   @Type(() => String)
   @IsString()
+  @IsOptional()
   season: SeasonType;
 
   @Type(() => Array)

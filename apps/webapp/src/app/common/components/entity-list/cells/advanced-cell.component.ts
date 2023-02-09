@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { CellComponent } from './cell.component';
 
@@ -19,5 +19,6 @@ import { CellComponent } from './cell.component';
       </ng-container>
     </ion-label>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdvancedCellComponent extends CellComponent {}

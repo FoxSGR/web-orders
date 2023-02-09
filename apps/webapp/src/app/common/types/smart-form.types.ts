@@ -13,6 +13,9 @@ interface ISmartFormItem<T> {
   hidden?: (state: SmartFormState, prop: string) => boolean;
 
   generation?: {
+    /**
+     * Prop path of the generated model.
+     */
     prop?: string;
 
     /**

@@ -31,7 +31,7 @@ export class EntityService<T extends Entity> {
     route = this.config.route,
   ): Observable<EntityPage<T>> {
     return this.http
-      .get<EntityPage<T>>(`${environment.apiUrl}/${route}`, {
+      .get<EntityPage<T>>(`${environment.api}/${route}`, {
         params: this.createParams(params),
       })
       .pipe(map(page => this.mapPage(page)));
@@ -39,7 +39,7 @@ export class EntityService<T extends Entity> {
 
   findById(id: any, params?: any): Observable<T> {
     return this.http
-      .get<T>(`${environment.apiUrl}/${this.config.route}/${id}`, {
+      .get<T>(`${environment.api}/${this.config.route}/${id}`, {
         params: createParams(params),
       })
       .pipe(map(e => this.mapOne(e)));
@@ -47,19 +47,19 @@ export class EntityService<T extends Entity> {
 
   create(entity: T): Observable<T> {
     return this.http
-      .post<T>(`${environment.apiUrl}/${this.config.route}`, entity)
+      .post<T>(`${environment.api}/${this.config.route}`, entity)
       .pipe(map(e => this.mapOne(e)!));
   }
 
   update(entity: T): Observable<T> {
     return this.http
-      .put<T>(`${environment.apiUrl}/${this.config.route}/${entity.id}`, entity)
+      .put<T>(`${environment.api}/${this.config.route}/${entity.id}`, entity)
       .pipe(map(e => this.mapOne(e)!));
   }
 
   delete(id: string | number): Observable<T> {
     return this.http
-      .delete<T>(`${environment.apiUrl}/${this.config.route}/${id}`)
+      .delete<T>(`${environment.api}/${this.config.route}/${id}`)
       .pipe(map(e => this.mapOne(e)!));
   }
 

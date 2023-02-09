@@ -35,7 +35,7 @@ export class WebOrdersInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler,
   ): Observable<HttpEvent<any>> {
-    if (!req.url.startsWith(environment.apiUrl) || req.url.endsWith('/auth')) {
+    if (!req.url.startsWith(environment.api) || req.url.endsWith('/auth')) {
       return next.handle(req);
     }
 
