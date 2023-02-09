@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { SmartFormNumberInput } from '../../../types';
 import { SmartFormAbstractItemComponent } from '../smart-form-abstract-item.component';
@@ -6,7 +6,7 @@ import { SmartFormAbstractItemComponent } from '../smart-form-abstract-item.comp
 @Component({
   selector: 'wo-smart-form-number-input',
   template: `
-    <ion-item [disabled]="isDisabled()">
+    <ion-item [disabled]="disabled">
       <ion-label *ngIf="definition.label" position="stacked">
         {{ definition.label | translate }}
       </ion-label>
@@ -32,6 +32,7 @@ import { SmartFormAbstractItemComponent } from '../smart-form-abstract-item.comp
       </ion-input>
     </ion-item>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SmartFormNumberInputComponent extends SmartFormAbstractItemComponent<
   string,

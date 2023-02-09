@@ -4,7 +4,7 @@
 export type AlertPosition = 'toast';
 
 /**
- * The type of an alert.
+ * The type of alert.
  */
 export type AlertType = 'success' | 'info' | 'warning' | 'error';
 
@@ -58,10 +58,3 @@ export interface Alert {
    */
   timeout?: number;
 }
-
-/**
- * Represents the alerts in the state.
- */
-export type AlertsState = {
-  collection: Alert[];
-};

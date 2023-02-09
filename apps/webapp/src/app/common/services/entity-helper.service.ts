@@ -1,21 +1,20 @@
 import { Injectable, Injector } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
-import { Store } from '@ngrx/store';
 import { firstValueFrom } from 'rxjs';
 
 import { Id } from '@web-orders/api-interfaces';
-import { alertActions } from '../../alerts';
 import { EntityType } from '../types';
 import { EntityConfigRegister } from '../entity-config.register';
 import { Entity } from '../models/entity';
 import { EntityService } from './entity.service';
+import { AlertService } from './alert.service';
 
 @Injectable({ providedIn: 'root' })
 export class EntityHelperService {
   constructor(
     private loadingController: LoadingController,
     private injector: Injector,
-    private store: Store,
+    private alertService: AlertService,
   ) {}
 
   async findEntity<T extends Entity>(
@@ -29,16 +28,12 @@ export class EntityHelperService {
 
     try {
       config.service = this.injector.get<EntityService<T>>(config.serviceClass);
-      return (await firstValueFrom(config.service!.findById(id))) as T;
+      return (await firstValueFrom(config.service.findById(id))) as T;
     } catch (e) {
-      this.store.dispatch(
-        alertActions.showAlert({
-          alert: {
-            type: 'error',
-            message: 'str.entity.preview.alerts.error.message',
-          },
-        }),
-      );
+      this.alertService.showAlert({
+        type: 'error',
+        message: 'str.entity.preview.alerts.error.message',
+      });
       throw e;
     } finally {
       await loading.dismiss();

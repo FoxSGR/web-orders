@@ -10,10 +10,7 @@ import { BrandRepository } from './brand.repository';
 import { ClientModule } from '../client/client.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Brand]),
-    forwardRef(() => ClientModule),
-  ],
+  imports: [TypeOrmModule.forFeature([Brand]), forwardRef(() => ClientModule)],
   exports: [BrandMapper, BrandService],
   providers: [BrandRepository, BrandMapper, BrandSeeder, BrandService],
   controllers: [BrandController],

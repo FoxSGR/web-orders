@@ -9,4 +9,5 @@ export interface IShoeModelComponent {
   amount?: number;
   price?: number;
   color?: IColor;
+  notes?: string;
 }

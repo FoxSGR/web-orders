@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { filter, map } from 'rxjs/operators';
@@ -16,6 +16,7 @@ import '../../../common/services/history.service';
   selector: 'wo-main',
   templateUrl: './wo-main.component.html',
   styleUrls: ['./wo-main.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WOMainComponent {
   /**

@@ -6,7 +6,7 @@ import { SmartFormAbstractItemComponent } from '../smart-form-abstract-item.comp
 @Component({
   selector: 'wo-smart-form-text-input',
   template: `
-    <ion-item [disabled]="isDisabled()">
+    <ion-item [disabled]="disabled">
       <ion-label *ngIf="definition.label" position="stacked">
         {{ definition.label | translate }}
       </ion-label>

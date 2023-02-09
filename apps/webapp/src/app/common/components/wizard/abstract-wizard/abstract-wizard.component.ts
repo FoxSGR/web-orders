@@ -15,9 +15,9 @@ import {
 } from '../../../types';
 import { entityActions, entitySelectors } from '../../../store';
 import { SmartFormInGenerator, SmartFormOutGenerator } from '../../smart-form';
-import { alertActions } from '../../../../alerts';
 import { Entity } from '../../../models/entity';
 import {
+  AlertService,
   DialogService,
   EntityPreviewService,
   EntityService,
@@ -79,6 +79,7 @@ export abstract class AbstractWizardComponent<T extends Entity>
   private alertCtrl = this.injector.get(AlertController);
   private previewService = this.injector.get(EntityPreviewService);
   private dialogService = this.injector.get(DialogService);
+  private alertService = this.injector.get(AlertService);
 
   override ngOnInit() {
     super.ngOnInit();
@@ -233,14 +234,10 @@ export abstract class AbstractWizardComponent<T extends Entity>
       if (e.status === 400) {
         message = 'str.wizard.alerts.saveInvalid.message';
       }
-      this.store.dispatch(
-        alertActions.showAlert({
-          alert: {
-            type: 'error',
-            message,
-          },
-        }),
-      );
+      this.alertService.showAlert({
+        type: 'error',
+        message,
+      });
     } finally {
       loading.dismiss();
     }
@@ -270,25 +267,21 @@ export abstract class AbstractWizardComponent<T extends Entity>
    */
   protected onComplete(entity: T) {
     // show a success alert
-    this.store.dispatch(
-      alertActions.showAlert({
-        alert: {
-          type: 'success',
-          message: this.wizard.messages.save,
-          buttons: [
-            {
-              text: this.translate.instant('str.common.see'),
-              callback: () => {
-                this.previewService.previewEntity(
-                  entity.id!,
-                  this.entityConfig.entityType,
-                );
-              },
-            },
-          ],
+    this.alertService.showAlert({
+      type: 'success',
+      message: this.wizard.messages.save,
+      buttons: [
+        {
+          text: this.translate.instant('str.common.see'),
+          callback: () => {
+            this.previewService.previewEntity(
+              entity.id!,
+              this.entityConfig.entityType,
+            );
+          },
         },
-      }),
-    );
+      ],
+    });
 
     // clear the wizard
     this.store.dispatch(
@@ -346,11 +339,9 @@ export abstract class AbstractWizardComponent<T extends Entity>
       );
     } catch (e) {
       console.error(e);
-      alertActions.showAlert({
-        alert: {
-          type: 'error',
-          message: 'str.wizard.alerts.load.message',
-        },
+      this.alertService.showAlert({
+        type: 'error',
+        message: 'str.wizard.alerts.load.message',
       });
     }
   }
@@ -472,14 +463,10 @@ export abstract class AbstractWizardComponent<T extends Entity>
     );
     const results = validator.validate();
     if (results.length > 0) {
-      this.store.dispatch(
-        alertActions.showAlert({
-          alert: {
-            type: 'error',
-            message: results[0].message,
-          },
-        }),
-      );
+      this.alertService.showAlert({
+        type: 'error',
+        message: results[0].message,
+      });
       return;
     }
 
@@ -488,14 +475,10 @@ export abstract class AbstractWizardComponent<T extends Entity>
     const entity = generator.generate()!;
 
     if (customEmpty(entity)) {
-      this.store.dispatch(
-        alertActions.showAlert({
-          alert: {
-            type: 'warning',
-            message: 'str.wizard.alerts.empty.message',
-          },
-        }),
-      );
+      this.alertService.showAlert({
+        type: 'warning',
+        message: 'str.wizard.alerts.empty.message',
+      });
       return;
     }
 

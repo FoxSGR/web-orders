@@ -45,6 +45,11 @@ export class SmartFormAbstractItemComponent<T, S extends SmartFormItem<T>>
   @Output() stateChange = new EventEmitter<SmartFormState>();
 
   /**
+   * Whether the form field is disabled.
+   */
+  disabled = false;
+
+  /**
    * Accessors for the value of the current item.
    */
   get value(): T | undefined {
@@ -82,18 +87,6 @@ export class SmartFormAbstractItemComponent<T, S extends SmartFormItem<T>>
   }
 
   /**
-   * Whether the form field is disabled.
-   * @returns
-   */
-  isDisabled(): boolean {
-    if (!this.definition.disabled) {
-      return false;
-    }
-
-    return this.definition.disabled(this.state, this.prop);
-  }
-
-  /**
    * Finds the value of the current item in the state.
    * @protected
    */
@@ -106,11 +99,15 @@ export class SmartFormAbstractItemComponent<T, S extends SmartFormItem<T>>
    * @protected
    */
   protected checkValue() {
-    if (this.value || !(this.definition.default || this.defaultValue)) {
-      return;
+    if (!this.value && (this.definition.default || this.defaultValue)) {
+      this.restoreDefaultValue();
     }
 
-    this.value = cloneDeep(this.definition.default || this.defaultValue);
+    const disabled = this.isDisabled();
+    if (disabled !== this.disabled) {
+      this.disabled = disabled;
+      this.cdr.detectChanges();
+    }
   }
 
   /**
@@ -119,5 +116,17 @@ export class SmartFormAbstractItemComponent<T, S extends SmartFormItem<T>>
    */
   protected restoreDefaultValue() {
     this.value = cloneDeep(this.definition.default || this.defaultValue);
+  }
+
+  /**
+   * Whether the form field is disabled.
+   * @returns
+   */
+  private isDisabled(): boolean {
+    if (!this.definition.disabled) {
+      return false;
+    }
+
+    return this.definition.disabled(this.state, this.prop);
   }
 }

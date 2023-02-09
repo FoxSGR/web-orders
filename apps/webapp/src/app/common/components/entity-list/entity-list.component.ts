@@ -37,7 +37,11 @@ import {
   EntityListSearchable,
   EntityListSearchBar,
 } from './entity-list.types';
-import { EntityPreviewService, EntityWizardService } from '../../services';
+import {
+  AlertService,
+  EntityPreviewService,
+  EntityWizardService,
+} from '../../services';
 
 @Component({
   selector: 'wo-entity-list',
@@ -170,6 +174,7 @@ export class EntityListComponent<T extends Entity>
     private readonly popoverController: PopoverController,
     private readonly previewService: EntityPreviewService,
     private readonly wizardService: EntityWizardService,
+    private readonly alertService: AlertService,
   ) {
     super(injector);
   }
@@ -288,7 +293,11 @@ export class EntityListComponent<T extends Entity>
         this.cdr.detectChanges();
       },
       error: error => {
-        this.store.dispatch(this.entityActions.pageLoadError({ error }));
+        console.error(error);
+        this.alertService.showAlert({
+          message: 'str.list.errors.loading.message',
+          type: 'error',
+        });
         this.status = 'unloaded';
       },
     });

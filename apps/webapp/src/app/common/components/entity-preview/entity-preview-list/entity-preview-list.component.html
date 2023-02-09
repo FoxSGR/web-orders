@@ -11,12 +11,13 @@
           class="ion-no-padding transparent wo-entity-preview-item"
           *ngIf="item.type !== 'photo'; else photo"
           [attr.button]="item.preview ? 'true' : null"
+          [detail]="!!item.preview"
           (click)="onClickItem(item)"
         >
           <ion-icon
             [name]="icon(item)"
             class="ion-padding-end"
-            style="margin-bottom: 5px"
+            style="margin-bottom: 3px"
           ></ion-icon>
           <ion-label [ngClass]="{ flex: item.type === 'color' }">
             <p style="display: inline; font-weight: 500" class="m0">

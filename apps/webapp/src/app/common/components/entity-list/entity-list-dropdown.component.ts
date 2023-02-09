@@ -1,12 +1,12 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 
 import { Entity } from '../../models/entity';
 import { entityActions } from '../../store';
 import { EntityConfig } from '../../types';
-import { alertActions } from '../../../alerts';
 import {
+  AlertService,
   DialogService,
   EntityHelperService,
   EntityPrintService,
@@ -31,6 +31,7 @@ import { WOActionItem } from '../../wo-common.types';
       </ion-item>
     </ion-list>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EntityListDropdownComponent<T extends Entity> {
   @Input() entity: T;
@@ -56,6 +57,7 @@ export class EntityListDropdownComponent<T extends Entity> {
     private dialogService: DialogService,
     private entityPrintService: EntityPrintService,
     private entityHelperService: EntityHelperService,
+    private alertService: AlertService,
   ) {}
 
   delete() {
@@ -65,22 +67,17 @@ export class EntityListDropdownComponent<T extends Entity> {
 
       this.entityConfig.service!.delete(this.entity.id!).subscribe({
         next: () => {
-          this.store.dispatch(
-            entityActions(this.entityConfig.entityType).deleted({
-              entity: this.entity,
-            }),
-          );
+          this.alertService.showAlert({
+            type: 'success',
+            message: 'str.entity.delete.alerts.success.message',
+          });
           this.refresh();
         },
         error: () =>
-          this.store.dispatch(
-            alertActions.showAlert({
-              alert: {
-                type: 'error',
-                message: 'str.entity.delete.alerts.error.message',
-              },
-            }),
-          ),
+          this.alertService.showAlert({
+            type: 'error',
+            message: 'str.entity.delete.alerts.error.message',
+          }),
         complete: () => loading.dismiss(),
       });
     }, 'str.dialogs.delete.text');

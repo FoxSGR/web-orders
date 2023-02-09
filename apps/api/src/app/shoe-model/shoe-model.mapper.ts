@@ -51,6 +51,7 @@ export class ShoeModelMapper extends EntityMapper<IShoeModel, ShoeModelDTO> {
           color: input.color
             ? colors.find(c => c.id === input.color.id)
             : undefined,
+          notes: input.notes,
           base: { owner: user },
         };
       });
@@ -86,6 +87,7 @@ export class ShoeModelMapper extends EntityMapper<IShoeModel, ShoeModelDTO> {
           amount: component.amount,
           price: component.price,
           color: this.fieldToResponse(this.colorMapper, component.color),
+          notes: component.notes,
         })) || [];
     }
 

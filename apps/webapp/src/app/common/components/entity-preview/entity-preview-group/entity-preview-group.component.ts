@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 import {
   EntityPreviewGroupGroup,
@@ -11,6 +11,7 @@ import { Entity } from '../../../models/entity';
   selector: 'wo-entity-preview-group',
   templateUrl: './entity-preview-group.component.html',
   styleUrls: ['./entity-preview-group.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EntityPreviewGroupComponent<
   T extends Entity,

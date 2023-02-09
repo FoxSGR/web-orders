@@ -12,9 +12,9 @@ TO-DO
 
 ## Installation
 
-Install dependencies with pnpm:
+Install dependencies with yarn:
 ```bash
-pnpm i
+yarn
 ```
     
 ## Development
@@ -22,7 +22,7 @@ pnpm i
 Start the whole application (front- and back-end):
 
 ```bash
-  pnpm run start
+  yarn start
 ```
 
 
@@ -39,6 +39,7 @@ And some points where it could be better:
 
 * GRASP is not well applied in a few areas, such as the back-end services, which have logic that makes them act more like a repository. This is common in simple back-end projects, but is not what I aim to implement in my projects. It was done to save time and may be reworked in the future.
 * Messy code in one or two places. *When abstraction goes too far?!* Nope. It's my fault. Examples: `entity-preview-list.component.html` (webapp) and `entity.service.ts` (api).
+* Does not support different users for the same company. This is a feature that I would like to implement in the future. 
 
 ## License
 

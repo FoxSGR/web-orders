@@ -91,7 +91,6 @@ export class SmartFormEntitySelectComponent
           .pipe(timeout(3000))
           .subscribe(entity => {
             this.value![0] = entity;
-            console.log(entity);
             this.onChange();
           });
       }

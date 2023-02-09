@@ -5,6 +5,7 @@ import { SmartFormAbstractItemComponent } from '../smart-form-abstract-item.comp
 @Component({
   selector: 'wo-smart-form-item',
   templateUrl: './smart-form-item.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SmartFormItemComponent extends SmartFormAbstractItemComponent<
   any,

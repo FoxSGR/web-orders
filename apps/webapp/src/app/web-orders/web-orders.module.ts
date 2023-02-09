@@ -5,7 +5,6 @@ import { TranslateModule } from '@ngx-translate/core';
 import { IonicModule } from '@ionic/angular';
 
 import { AccountModule } from '../account';
-import { AlertsModule } from '../alerts';
 
 import { WebOrdersRoutingModule } from './web-orders-routing.module';
 
@@ -28,7 +27,6 @@ const components = [cc.WOContainerComponent, cc.WOMainComponent];
     WebOrdersRoutingModule,
 
     AccountModule,
-    AlertsModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: WebOrdersInterceptor, multi: true },

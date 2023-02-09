@@ -3,11 +3,7 @@
     definition.label | translate
   }}</ion-label>
 
-  <ion-datetime-button
-    #datetimeButton
-    [datetime]="prop"
-    [disabled]="isDisabled()"
-  >
+  <ion-datetime-button #datetimeButton [datetime]="prop" [disabled]="disabled">
     <ion-chip slot="date-target">
       <span *ngIf="!value">
         {{ 'str.wizard.fields.date.placeholder' | translate }}
@@ -23,7 +19,7 @@
       <ion-datetime
         [presentation]="definition.dateType"
         [id]="prop"
-        [disabled]="isDisabled()"
+        [disabled]="disabled"
         [(ngModel)]="value"
         (ionChange)="onChange()"
         [showClearButton]="true"

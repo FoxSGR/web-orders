@@ -1,4 +1,4 @@
-<ion-item lines="none" [disabled]="isDisabled()">
+<ion-item lines="none" [disabled]="disabled">
   <ion-label position="stacked">{{
     'str.common.phoneNumber' | translate
   }}</ion-label>
@@ -22,7 +22,7 @@
             placeholder="911231231"
             [(ngModel)]="value!.value"
             (ngModelChange)="onChange()"
-            [disabled]="isDisabled()"
+            [disabled]="disabled"
           ></ion-input>
         </ion-item>
       </ion-col>

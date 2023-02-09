@@ -213,7 +213,7 @@ const buildComponentItem = (
           ? undefined
           : shoeModelComponent.price + ' €',
       ...amountField,
-      'str.common.notes': shoeModelComponent.component.notes,
+      'str.common.notes': shoeModelComponent.notes,
     },
     label: componentConfig.label + indexSuffix,
     valueType: 'value',

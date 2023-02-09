@@ -24,6 +24,7 @@ export class ShoeModelComponent
   amount?: number;
   price?: number;
   color?: Color;
+  notes?: string;
 }
 
 export class ShoeModel extends Entity implements IShoeModelDTO {

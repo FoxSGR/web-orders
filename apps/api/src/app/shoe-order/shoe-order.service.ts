@@ -13,6 +13,7 @@ export class ShoeOrderService extends EntityService<ShoeOrder> {
       relations: [
         'sample',
         'sample.sampleModel',
+        'sample.sampleModel.components',
         'sample.client',
         'sample.client.address',
         'sample.agent',

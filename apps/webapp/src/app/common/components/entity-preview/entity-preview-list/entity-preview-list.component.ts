@@ -34,18 +34,34 @@ export class EntityPreviewListComponent<T extends Entity> {
     private fileService: FileService,
   ) {}
 
+  /**
+   * Returns the icon for the given item.
+   * @param item
+   */
   icon(item: EntityPreviewItem): string {
     return typeof item.icon === 'function' ? item.icon() : item.icon;
   }
 
+  /**
+   * Returns the value for the given item.
+   * @param item
+   */
   value(item: EntityPreviewItem): Observable<any> {
     return this.previewService.itemValue(item, this.model);
   }
 
+  /**
+   * Checks if the given value is an object.
+   * @param value
+   */
   isObject(value: any): boolean {
     return value && typeof value === 'object';
   }
 
+  /**
+   * Returns the entries of the given object.
+   * @param val
+   */
   objectEntries(val: any): [string, string][] {
     return Object.entries(val).filter(([, value]) => !!value) as [
       string,
@@ -53,10 +69,18 @@ export class EntityPreviewListComponent<T extends Entity> {
     ][];
   }
 
+  /**
+   * Returns the file url for the given file data.
+   * @param fileData
+   */
   fileUrl(fileData: FileData): string {
     return this.fileService.buildUrl(fileData);
   }
 
+  /**
+   * Previews the given item.
+   * @param item
+   */
   async onClickItem(item: EntityPreviewItem) {
     if (!item.preview) {
       return;

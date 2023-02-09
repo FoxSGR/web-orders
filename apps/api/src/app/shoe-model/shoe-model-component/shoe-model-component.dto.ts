@@ -30,4 +30,7 @@ export class ShoeModelComponentDTO
 
   @Type(() => ColorDTO)
   color?: ColorDTO;
+
+  @Type(() => String)
+  notes?: string;
 }

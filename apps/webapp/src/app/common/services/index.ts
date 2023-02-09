@@ -1,3 +1,4 @@
+export * from './alert.service';
 export * from './device.service';
 export * from './dialog.service';
 export * from './entity.service';

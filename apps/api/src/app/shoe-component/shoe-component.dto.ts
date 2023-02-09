@@ -1,11 +1,4 @@
-import {
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
-  Min,
-  Validate,
-} from 'class-validator';
+import { IsNumber, IsOptional, IsString, Min, Validate } from 'class-validator';
 import { Type } from 'class-transformer';
 
 import {
@@ -19,7 +12,7 @@ import { EntityDTO } from '../shared/entity/entity.dto';
 
 export class ShoeComponentDTO extends EntityDTO implements IShoeComponentDTO {
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   @Type(() => String)
   reference: string;
 
@@ -29,7 +22,7 @@ export class ShoeComponentDTO extends EntityDTO implements IShoeComponentDTO {
   name: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   @Validate(type => componentTypes.includes(type))
   @Type(() => String)
   type: ComponentType;

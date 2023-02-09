@@ -8,4 +8,5 @@ export interface IShoeModelComponentDTO extends IEntityDTO {
   amount?: number;
   price?: number;
   color?: IColorDTO;
+  notes?: string;
 }

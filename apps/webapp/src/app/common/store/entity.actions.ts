@@ -11,14 +11,6 @@ const _entityActions = <T>(entityName: EntityType) => ({
     `[${entityName}] page loaded`,
     props<{ page: EntityPage<T> }>(),
   ),
-  pageLoadError: createAction(
-    `[${entityName}] page load error`,
-    props<{ error: any }>(),
-  ),
-  deleted: createAction(
-    `[${entityName}] deleted`,
-    props<{ entity: Partial<T> }>(),
-  ),
   wizard: createAction(`[${entityName}] wizard`, props<{ id?: OptionalId }>()),
   loadWizard: createAction(
     `[${entityName}] load wizard`,

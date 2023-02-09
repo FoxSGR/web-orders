@@ -1,4 +1,4 @@
-import { Component, Injector } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Injector } from '@angular/core';
 
 import { BaseViewComponent } from '../../../common';
 import { WOAppService } from '../../service/wo-app.service';
@@ -7,6 +7,7 @@ import { WOAppService } from '../../service/wo-app.service';
   selector: 'wo-container',
   templateUrl: './wo-container.component.html',
   styleUrls: ['./wo-container.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WOContainerComponent extends BaseViewComponent {
   override requiresAuth = true;

@@ -6,7 +6,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { DatePipe } from '../../pipes';
 
 import { EntityPreviewComponent } from './entity-preview.component';
-import { EntityPreviewActionComponent } from './entity-preview-action.component';
+import { EntityPreviewActionComponent } from './entity-preview-action/entity-preview-action.component';
 import { EntityPreviewListComponent } from './entity-preview-list/entity-preview-list.component';
 import { EntityPreviewGroupComponent } from './entity-preview-group/entity-preview-group.component';
 import { EntityPreviewCompareComponent } from './entity-preview-compare/entity-preview-compare.component';
