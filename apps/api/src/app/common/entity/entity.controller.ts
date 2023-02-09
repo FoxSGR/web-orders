@@ -1,9 +1,10 @@
 import { ForbiddenException } from '@nestjs/common';
 
-import { IUser } from '../../user/user.types';
-import { FindParams, Id, IEntity, Page, ResponseFormat } from '../types';
 import { EntityService } from './entity.service';
 import { Mapper } from '../mapper';
+import { FindParams, Id, IEntity, Page, ResponseFormat } from '../types';
+import { IUser } from '../../user';
+import { DeepPartial } from 'typeorm';
 
 export abstract class EntityController<T extends IEntity, D> {
   protected service: EntityService<T>;
@@ -16,7 +17,7 @@ export abstract class EntityController<T extends IEntity, D> {
 
     const entity = await this.service.findOne(id, user);
     if (entity) {
-      return this.toResponse(entity, 'full');
+      return this.toResponse(entity, 'full') as D;
     } else {
       return undefined;
     }
@@ -35,7 +36,7 @@ export abstract class EntityController<T extends IEntity, D> {
     const page = await this.service.findPage(params);
     return {
       ...page,
-      items: page.items.map((entity) => this.toResponse(entity)),
+      items: page.items.map((entity) => this.toResponse(entity)) as D[],
     };
   }
 
@@ -49,7 +50,7 @@ export abstract class EntityController<T extends IEntity, D> {
       user
     );
 
-    return this.toResponse(entity);
+    return this.toResponse(entity, 'full') as D;
   }
 
   public async update(user: IUser, id: number, body: Partial<D>): Promise<D> {
@@ -63,7 +64,7 @@ export abstract class EntityController<T extends IEntity, D> {
       user
     );
 
-    return this.toResponse(entity);
+    return this.toResponse(entity, 'full') as D;
   }
 
   public async delete(user: IUser, id: Id): Promise<D> {
@@ -72,7 +73,7 @@ export abstract class EntityController<T extends IEntity, D> {
     }
 
     const entity = await this.service.delete(id, user);
-    return this.toResponse(entity);
+    return this.toResponse(entity) as D;
   }
 
   protected readonly toResponse = (entity: T, type?: ResponseFormat) => {

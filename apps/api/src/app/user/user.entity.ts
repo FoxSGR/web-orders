@@ -1,17 +1,13 @@
 import { Exclude } from 'class-transformer';
 import { IsArray, IsNotEmpty, Validate, ValidateNested } from 'class-validator';
-import {
-  BeforeInsert,
-  Column,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Factory } from 'nestjs-seeder';
 
-import { IUser } from './user.types';
+import type { IUser } from './user.types';
 import { Role, roles } from './roles';
-import { EntityBase } from '../common/entity';
+import { EntityBase } from '../common/entity/entity';
 import { Client } from '../client/client.entity';
+import { hashPassword } from '../auth/auth';
 
 @Entity()
 export class User implements IUser {
@@ -19,27 +15,28 @@ export class User implements IUser {
   id: number;
 
   @IsNotEmpty()
-  @Column({ name: 'first_name' })
+  @Factory((faker) => faker.name.firstName())
+  @Column()
   firstName: string;
 
   @IsNotEmpty()
-  @Column({ name: 'last_name' })
+  @Factory((faker) => faker.name.lastName())
+  @Column()
   lastName: string;
 
   @IsNotEmpty()
-  @Column()
+  @Factory((faker) => faker.internet.email())
+  @Column({ unique: true })
   email: string;
 
   @IsNotEmpty()
   @Column()
-  username: string;
-
-  @IsNotEmpty()
-  @Column()
+  @Factory(() => hashPassword('password'))
   @Exclude()
   password: string;
 
   @Column({ type: 'simple-json' })
+  @Factory(() => ['normal'])
   @IsNotEmpty()
   @IsArray()
   @ValidateNested({ each: true })
@@ -52,24 +49,7 @@ export class User implements IUser {
   @OneToMany(() => Client, (client) => client.id)
   clients: Promise<Client[]>;
 
-  @BeforeInsert()
-  async hashPassword(): Promise<void> {
-    this.password = await User.hashPassword(this.password);
-  }
-
   toString(): string {
     return `${this.firstName} ${this.lastName} (${this.email})`;
-  }
-
-  static hashPassword(password: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-      resolve('test');
-      // void bcrypt.hash(password, 10, (err, hash) => {
-      //   if (err) {
-      //     return reject(err);
-      //   }
-      //   resolve(hash);
-      // });
-    });
   }
 }

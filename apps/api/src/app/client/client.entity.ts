@@ -9,8 +9,8 @@ import {
 import { IsNotEmpty } from 'class-validator';
 
 import { IClient } from './client.types';
-import { Agent } from '../agent';
-import { Address } from '../common/address';
+import { Agent } from '../agent/agent.entity';
+import { Address } from '../address/address.entity';
 import { OwnedEntity } from '../common/entity';
 
 @Entity()
@@ -32,7 +32,8 @@ export class Client implements IClient {
   @JoinColumn()
   address: Address;
 
-  @ManyToOne(() => Agent, { cascade: false })
+  @ManyToOne(() => Agent, (agent) => agent.clients, { cascade: false })
+  @JoinColumn({ name: 'agentId' })
   agent: Agent;
 
   @Column({ default: '' })

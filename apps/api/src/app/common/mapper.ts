@@ -1,8 +1,8 @@
 import { DeepPartial } from 'typeorm';
 
+import { EntityService } from './entity';
 import { Promial, ResponseFormat } from './types';
-import { IUser } from '../user/user.types';
-import { EntityService } from './entity/entity.service';
+import { IUser } from '../user';
 
 export abstract class Mapper<T, D> {
   abstract bodyToEntity(
@@ -10,7 +10,10 @@ export abstract class Mapper<T, D> {
     user: IUser
   ): Promial<T> | DeepPartial<T>;
 
-  abstract entityToResponse(input: T, type?: ResponseFormat): D;
+  abstract entityToResponse(
+    input: T,
+    type?: ResponseFormat
+  ): DeepPartial<D> | Partial<D>;
 
   protected async find(
     service: EntityService<any>,

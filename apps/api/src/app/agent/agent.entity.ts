@@ -4,13 +4,14 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { IsNotEmpty } from 'class-validator';
 
 import { IAgent } from './agent.types';
-import { Client } from '../client';
-import { Address } from '../common/address';
-import { OwnedEntity } from '../common/entity';
+import { Client } from '../client/client.entity';
+import { Address } from '../address/address.entity';
+import { OwnedEntity } from '../common/entity/entity';
 
 @Entity()
 export class Agent implements IAgent {
@@ -32,6 +33,7 @@ export class Agent implements IAgent {
   address?: Address;
 
   // not persisted
+  @OneToMany(() => Client, (client) => client.agent)
   clients?: Client[];
 
   @Column(() => OwnedEntity, { prefix: '' })

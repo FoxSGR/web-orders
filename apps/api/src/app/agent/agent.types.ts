@@ -1,5 +1,5 @@
 import { IEntity } from '../common';
-import { IAddress } from '../common/address';
+import { IAddress } from '../address';
 import { IClient } from '../client';
 
 export interface IAgent extends IEntity {

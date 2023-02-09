@@ -18,7 +18,9 @@
               }
             ]
           }
-        ]
+        ],
+        "no-case-declarations": "off",
+        "@typescript-eslint/no-explicit-any": "off"
       }
     },
     {

@@ -8,4 +8,11 @@ export const environment = {
     password: 'root',
     database: 'weborders',
   },
+  auth: {
+    secret: 'dev123',
+  },
+  admin: {
+    email: 'admin@test.com',
+    password: 'admin'
+  }
 };

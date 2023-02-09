@@ -14,8 +14,8 @@ import { ColorService } from './color.service';
 import { ColorMapper } from './color.mapper';
 import { IColor } from './color.types';
 import { ColorDTO } from './color.dto';
-import { FindParams, Id, Page } from '../common';
-import { IUser } from '../user/user.types';
+import { CurrentUser, FindParams, Id, Page } from '../common';
+import { IUser } from '../user';
 
 @Controller('/color')
 export class ColorController extends EntityController<IColor, ColorDTO> {
@@ -44,7 +44,7 @@ export class ColorController extends EntityController<IColor, ColorDTO> {
   @Post()
   public async create(
     @CurrentUser() user: IUser,
-    @Body(createBodyOptions) body: ColorDTO
+    @Body() body: ColorDTO
   ): Promise<ColorDTO> {
     return super.create(user, body);
   }
@@ -53,7 +53,7 @@ export class ColorController extends EntityController<IColor, ColorDTO> {
   public async update(
     @CurrentUser() user: IUser,
     @Param('id') id: Id,
-    @Body(updateBodyOptions) body: Partial<ColorDTO>
+    @Body() body: Partial<ColorDTO>
   ): Promise<ColorDTO> {
     return super.update(user, id, body);
   }

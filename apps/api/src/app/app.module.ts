@@ -1,20 +1,51 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-
 import { environment } from '../environments/environment';
+
+import { Address, AddressModule } from './address';
+import { Agent, AgentModule } from './agent';
+import { AuthModule } from './auth/auth.module';
+import { Brand, BrandModule } from './brand';
+import { Client, ClientModule } from './client';
+import { Color, ColorModule } from './color';
+import { ShoeComponent, ShoeComponentModule } from './shoe-component';
+import { ShoeModel, ShoeModelModule } from './shoe-model';
+import { ShoeModelComponent } from './shoe-model/shoe-model-component';
+import { User, UserModule } from './user';
+
+import { AppController } from './app.controller';
+import { SeedService } from './cli/seed.service';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       // eslint-disable-next-line
       ...(environment.database as any),
-      synchronize: !!environment.production,
+      synchronize: !environment.production,
+      entities: [
+        Address,
+        Agent,
+        Brand,
+        Client,
+        Color,
+        ShoeComponent,
+        ShoeModel,
+        ShoeModelComponent,
+        User,
+      ],
     }),
+    AddressModule,
+    AgentModule,
+    AuthModule,
+    BrandModule,
+    ClientModule,
+    ColorModule,
+    ShoeComponentModule,
+    ShoeModelModule,
+    UserModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [SeedService],
 })
 export class AppModule {}

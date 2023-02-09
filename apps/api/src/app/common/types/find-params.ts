@@ -1,7 +1,7 @@
 import { IsBoolean, IsOptional, Matches, Min } from 'class-validator';
 
 import { IEntity } from './entity';
-import { IUser } from '../../user/user.types';
+import { IUser } from '../../user';
 
 export abstract class FindParams<T extends IEntity> {
   @IsOptional()

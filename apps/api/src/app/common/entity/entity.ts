@@ -4,7 +4,8 @@ import {
   ManyToOne,
   UpdateDateColumn,
 } from 'typeorm';
-import { User } from '../../user/user.entity';
+
+import { User } from '../../user';
 
 export class EntityBase {
   @DeleteDateColumn({ type: 'timestamp', default: null })
@@ -25,6 +26,6 @@ export class EntityBase {
 }
 
 export class OwnedEntity extends EntityBase {
-  @ManyToOne(() => User, { cascade: false })
+  @ManyToOne(() => User, { cascade: false, nullable: false })
   owner: User;
 }

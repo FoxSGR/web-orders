@@ -1,9 +1,9 @@
 import { ValidateIf } from 'class-validator';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-import { countries } from './countries';
 import { IAddress } from './address.types';
-import { EntityBase } from '../entity/base.entity';
+import { countries } from './countries';
+import { EntityBase } from '../common/entity/entity';
 
 @Entity()
 export class Address implements IAddress {

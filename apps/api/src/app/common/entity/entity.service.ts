@@ -4,11 +4,10 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { FindConditions, In, Repository } from 'typeorm';
+import _ from 'lodash';
 
 import { FindParams, Id, IEntity, Page } from '../types';
-import { IUser } from '../../user/user.types';
-
-import _ from 'lodash';
+import type { IUser } from '../../user/user.types';
 
 interface EntityServiceConfig {
   name: string;
@@ -70,6 +69,10 @@ export class EntityService<T extends IEntity> {
       ids,
       this.buildFindOptions(params)
     );
+
+    if (entities.length !== ids.length) {
+      throw new NotFoundException(`not_found_${this.config.name}`);
+    }
 
     await this.setupFoundEntities(entities, params);
     return entities;
@@ -134,10 +137,10 @@ export class EntityService<T extends IEntity> {
       .filter((key) => entity[key] === undefined)
       .forEach((key) => delete entity[key]);
 
-    return await this.repository.save({
+    return (await this.repository.save({
       ...found,
       ...entity,
-    } as any) as any;
+    } as any)) as any;
   }
 
   async delete(id: Id, user: IUser): Promise<T> {
@@ -156,7 +159,7 @@ export class EntityService<T extends IEntity> {
   ): Promise<void> {
     for (const entity of entities) {
       if (this.config.owned) {
-        entity['base'].owner = params.owner;
+        entity.base.owner = params.owner;
       }
 
       if (params.loadRelations && this.config.relations) {
