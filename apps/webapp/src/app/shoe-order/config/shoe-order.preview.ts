@@ -1,4 +1,8 @@
-import { EntityPreviewGenerator, ShoeOrder } from '../../common';
+import {
+  EntityPreviewGenerator,
+  EntityPreviewItem,
+  ShoeOrder,
+} from '../../common';
 
 export const shoeOrderPreview: EntityPreviewGenerator<ShoeOrder> = (
   order,
@@ -75,6 +79,12 @@ export const shoeOrderPreview: EntityPreviewGenerator<ShoeOrder> = (
           label: 'str.common.deadline',
           value: 'deadline',
         },
+      ],
+    },
+    {
+      type: 'items',
+      columns: 1,
+      items: [
         {
           icon: 'reader',
           label: 'str.common.notes',
@@ -83,5 +93,52 @@ export const shoeOrderPreview: EntityPreviewGenerator<ShoeOrder> = (
         },
       ],
     },
+    {
+      type: 'items',
+      header: print
+        ? undefined
+        : {
+            title: 'str.common.photos',
+            icon: 'camera',
+          },
+      items:
+        order.sample.sampleModel?.photos
+          ?.map(
+            photo =>
+              ({
+                type: 'photo',
+                value: photo,
+                label: photo.name,
+              } as EntityPreviewItem),
+          )
+          ?.slice(0, print ? 1 : order.sample.sampleModel?.photos.length) || [],
+      emptyText: 'str.sample.preview.photos.empty',
+    },
+    {
+      header: {
+        title: 'str.common.pairs',
+      },
+      columns: 1,
+      items: [
+        {
+          icon: 'footsteps',
+          label: 'str.common.sizes',
+          value: buildSizesValue(order),
+          valueType: 'value',
+        },
+      ],
+    },
   ],
 });
+
+const buildSizesValue = (order: ShoeOrder) => {
+  const sizes: any = {};
+
+  for (let i = 34; i < 45; i += 0.5) {
+    if (order.sizes[i] || Number.isInteger(i)) {
+      sizes[i] = order.sizes[i] || 0;
+    }
+  }
+
+  return sizes;
+}

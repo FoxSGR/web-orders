@@ -1,0 +1,17 @@
+<ion-label class="flex">
+  <ion-text [color]="previewColor" *ngIf="value(item) | async as val">
+    <wo-entity-preview-title
+      [label]="item.label"
+      [showIndex]="showIndex"
+      [index]="index"
+    ></wo-entity-preview-title>
+
+    <p style="display: flex; align-items: center; gap: 5px; margin-top: 5px">
+      <wo-color-indicator
+        [value]="val['color']"
+        [name]="val['name']"
+      ></wo-color-indicator>
+      {{ val['name'] }}
+    </p>
+  </ion-text>
+</ion-label>

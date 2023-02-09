@@ -9,6 +9,7 @@ import { ColorService } from './color.service';
   route: 'color',
   serviceClass: ColorService,
   listConfig: {
+    title: 'str.color.common.colors',
     searchables: [
       {
         label: 'str.common.name',

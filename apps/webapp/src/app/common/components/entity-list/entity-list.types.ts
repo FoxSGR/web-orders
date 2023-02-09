@@ -26,6 +26,7 @@ export interface EntityListConfig<
   T extends Entity,
   S extends EntityService<T> = EntityService<T>,
 > {
+  title: string;
   hideSearch?: boolean;
   searchables: EntityListSearchable[];
   columns: EntityListColumn<T>[];

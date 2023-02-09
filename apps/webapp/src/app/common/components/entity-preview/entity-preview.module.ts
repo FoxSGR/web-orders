@@ -5,13 +5,10 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { DatePipe } from '../../pipes';
 
-import { EntityPreviewComponent } from './entity-preview.component';
-import { EntityPreviewActionComponent } from './entity-preview-action/entity-preview-action.component';
-import { EntityPreviewListComponent } from './entity-preview-list/entity-preview-list.component';
-import { EntityPreviewGroupComponent } from './entity-preview-group/entity-preview-group.component';
-import { EntityPreviewCompareComponent } from './entity-preview-compare/entity-preview-compare.component';
 import { ColorIndicatorComponent } from '../elements';
 import { ThumbnailComponent } from '../thumbnail/thumbnail.component';
+
+import * as components from './components';
 
 @NgModule({
   imports: [
@@ -23,16 +20,21 @@ import { ThumbnailComponent } from '../thumbnail/thumbnail.component';
     ThumbnailComponent,
   ],
   declarations: [
-    EntityPreviewActionComponent,
-    EntityPreviewListComponent,
-    EntityPreviewGroupComponent,
-    EntityPreviewComponent,
-    EntityPreviewCompareComponent,
+    components.EntityPreviewActionComponent,
+    components.EntityPreviewListComponent,
+    components.EntityPreviewGroupComponent,
+    components.EntityPreviewTitleComponent,
+    components.EntityPreviewItemComponent,
+    components.EntityPreviewItemColorComponent,
+    components.EntityPreviewItemMapComponent,
+    components.EntityPreviewItemPhotoComponent,
+    components.EntityPreviewItemSimpleComponent,
+    components.EntityPreviewComponent,
+    components.EntityPreviewCompareComponent,
   ],
   exports: [
-    EntityPreviewComponent,
-    EntityPreviewListComponent,
-    EntityPreviewCompareComponent,
+    components.EntityPreviewComponent,
+    components.EntityPreviewCompareComponent,
   ],
 })
 export class EntityPreviewModule {}

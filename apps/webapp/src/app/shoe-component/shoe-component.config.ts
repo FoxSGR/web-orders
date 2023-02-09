@@ -12,6 +12,7 @@ import { shoeComponentWizardConfig } from './shoe-component.wizard.config';
   route: 'shoe-component',
   serviceClass: ShoeComponentService,
   listConfig: {
+    title: 'str.shoeComponent.common.components',
     searchables: [
       {
         label: 'str.common.reference',

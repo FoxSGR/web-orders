@@ -8,9 +8,9 @@ import { EntityType } from '../../types';
 export interface EntityPreviewItem<T extends Entity = Entity> {
   value: string | object | Date | (() => Observable<any> | any);
   label: string;
-  icon: string | (() => string);
+  icon?: string | (() => string);
   valueType?: 'prop' | 'value';
-  type?: 'simple' | 'text' | 'color' | 'photo';
+  type?: 'simple' | 'text' | 'map' | 'color' | 'photo';
   hidden?: (entity: Entity) => boolean;
   choices?: WOItemMap;
   preview?: {

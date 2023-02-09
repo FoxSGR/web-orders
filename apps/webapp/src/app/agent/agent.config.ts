@@ -19,6 +19,7 @@ import { contactsPreview } from '../address';
   icon: 'hand-left',
   route: 'agent',
   listConfig: {
+    title: 'str.agent.common.agents',
     searchables: [
       {
         label: 'str.common.name',

@@ -97,6 +97,12 @@ export const samplePreview: EntityPreviewGenerator<ShoeSample> = (
           label: 'str.common.deadline',
           value: 'deadline',
         },
+      ],
+    },
+    {
+      type: 'items',
+      columns: 1,
+      items: [
         {
           icon: 'reader',
           label: 'str.common.notes',
@@ -120,7 +126,6 @@ export const samplePreview: EntityPreviewGenerator<ShoeSample> = (
               ({
                 type: 'photo',
                 value: photo,
-                icon: 'camera',
                 label: photo.name,
               } as EntityPreviewItem),
           )
@@ -200,6 +205,7 @@ const buildComponentItem = (
 
   return {
     icon: componentConfig.icon,
+    type: 'map',
     value: {
       'str.shoeComponent.types.ornament.type':
         shoeModelComponent.component.type === 'ornament'

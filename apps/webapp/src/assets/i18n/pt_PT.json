@@ -56,6 +56,7 @@
       "reference": "Referência",
       "see": "Ver",
       "size": "Tamanho",
+      "sizes": "Tamanhos",
       "totalCost": "Custo total",
       "type": "Tipo",
       "unset": "Não definido",
@@ -149,6 +150,7 @@
     "shoeOrder": {
       "common": {
         "order": "Encomenda",
+        "orders": "Encomendas",
         "requestedAt": "Pedida em",
         "dateAsked": "Pedida em",
         "dateDelivery": "Entregue em",
@@ -191,6 +193,7 @@
     "sample": {
       "common": {
         "sample": "Amostra",
+        "samples": "Amostras",
         "requestedAt": "Pedida em",
         "season": "Época",
         "dateAsked": "Pedida em",
@@ -260,7 +263,8 @@
     },
     "agent": {
       "common": {
-        "agent": "Agente"
+        "agent": "Agente",
+        "agents": "Agentes"
       },
       "preview": {
         "clients": {
@@ -284,7 +288,8 @@
     },
     "client": {
       "common": {
-        "client": "Cliente"
+        "client": "Cliente",
+        "clients": "Clientes"
       },
       "wizard": {
         "messages": {
@@ -308,11 +313,14 @@
     },
     "brand": {
       "common": {
-        "brand": "Marca"
+        "brand": "Marca",
+        "brands": "Marcas"
       }
     },
     "shoeComponent": {
       "common": {
+        "component": "Componente",
+        "components": "Componentes",
         "reference": "Referência",
         "name": "Descrição",
         "componentReference": "Referência do Componente",
@@ -389,7 +397,8 @@
     },
     "color": {
       "common": {
-        "color": "Cor"
+        "color": "Cor",
+        "colors": "Cores"
       },
       "wizard": {
         "messages": {

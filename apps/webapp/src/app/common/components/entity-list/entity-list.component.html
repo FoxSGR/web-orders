@@ -1,3 +1,9 @@
+<ion-text *ngIf="standalone">
+  <h2 class="m0" style="margin-bottom: 12px !important;">
+    {{ config.title | translate }}
+  </h2>
+</ion-text>
+
 <div
   *ngIf="config.selection === 'multiple'"
   class="round shaded flex align-center w100"

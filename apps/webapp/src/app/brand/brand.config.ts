@@ -9,6 +9,7 @@ import { BrandService } from './brand.service';
   route: 'brand',
   serviceClass: BrandService,
   listConfig: {
+    title: 'str.brand.common.brands',
     searchables: [
       {
         label: 'str.common.name',

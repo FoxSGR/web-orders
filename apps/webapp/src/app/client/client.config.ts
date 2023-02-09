@@ -17,6 +17,7 @@ import { addressForm, personalForm } from '../address/address.wizard';
   route: 'client',
   serviceClass: ClientService,
   listConfig: {
+    title: 'str.client.common.clients',
     searchables: [
       {
         label: 'str.common.name',

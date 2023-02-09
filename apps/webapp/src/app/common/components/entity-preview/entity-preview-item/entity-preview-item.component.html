@@ -1,0 +1,49 @@
+<ion-item
+  class="ion-no-padding transparent"
+  [attr.button]="item.preview ? 'true' : null"
+  [detail]="!!item.preview"
+  (click)="onClickItem(item)"
+>
+  <ion-icon
+    *ngIf="icon(item)"
+    [name]="icon(item)"
+    [color]="previewColor"
+    class="ion-padding-end"
+    style="margin-bottom: 3px"
+  ></ion-icon>
+
+  <ng-container [ngSwitch]="item.type">
+    <wo-entity-preview-item-map
+      *ngSwitchCase="'map'"
+      [item]="item"
+      [model]="model"
+      [index]="index"
+      [showIndex]="showIndex"
+    ></wo-entity-preview-item-map>
+
+    <wo-entity-preview-item-photo
+      *ngSwitchCase="'photo'"
+      [item]="item"
+      [model]="model"
+      [index]="index"
+      [showIndex]="showIndex"
+    >
+    </wo-entity-preview-item-photo>
+
+    <wo-entity-preview-item-color
+      *ngSwitchCase="'color'"
+      [item]="item"
+      [model]="model"
+      [index]="index"
+      [showIndex]="showIndex"
+    ></wo-entity-preview-item-color>
+
+    <wo-entity-preview-item-simple
+      *ngSwitchDefault
+      [item]="item"
+      [model]="model"
+      [index]="index"
+      [showIndex]="showIndex"
+    ></wo-entity-preview-item-simple>
+  </ng-container>
+</ion-item>

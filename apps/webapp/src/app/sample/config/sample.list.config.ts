@@ -8,6 +8,7 @@ import {
 import { EntityListConfig } from '../../common/components/entity-list/entity-list.types';
 
 export const sampleListConfig: EntityListConfig<ShoeSample> = {
+  title: 'str.sample.common.samples',
   searchables: [
     {
       label: 'str.model.common.reference',

@@ -6,103 +6,13 @@
       size-sm="12"
       size-xs="12"
     >
-      <ng-container *ngIf="!item.hidden || !item.hidden(model)">
-        <ion-item
-          class="ion-no-padding transparent wo-entity-preview-item"
-          *ngIf="item.type !== 'photo'; else photo"
-          [attr.button]="item.preview ? 'true' : null"
-          [detail]="!!item.preview"
-          (click)="onClickItem(item)"
-        >
-          <ion-icon
-            [name]="icon(item)"
-            class="ion-padding-end"
-            style="margin-bottom: 3px"
-          ></ion-icon>
-          <ion-label [ngClass]="{ flex: item.type === 'color' }">
-            <p style="display: inline; font-weight: 500" class="m0">
-              {{ item.label | translate }}
-              <span *ngIf="indexed && items.length > 1">
-                {{ i + 1 }}
-              </span>
-              <span
-                *ngIf="!isObject(value(item) | async) || item.type === 'color'"
-                style="margin-left: -0.2em"
-                >:</span
-              >
-            </p>
-            <ng-container *ngIf="value(item) | async as val">
-              <p
-                *ngIf="item.type === 'color'; else normalValue"
-                style="
-                  display: flex;
-                  align-items: center;
-                  gap: 5px;
-                  margin-top: 5px;
-                "
-              >
-                <wo-color-indicator
-                  [value]="val['color']"
-                  [name]="val['name']"
-                ></wo-color-indicator>
-                {{ val['name'] }}
-              </p>
-              <ng-template #normalValue>
-                <p
-                  *ngIf="!isObject(val); else valueList"
-                  style="white-space: normal"
-                  [ngStyle]="{
-                    display: item.type === 'text' ? 'block' : 'inline'
-                  }"
-                >
-                  {{ value(item) | async }}
-                </p>
-              </ng-template>
-              <ng-template #valueList>
-                <div style="margin-top: 5px">
-                  <p
-                    *ngFor="let v of objectEntries(val)"
-                    style="white-space: normal"
-                  >
-                    <span style="font-weight: 400">
-                      {{ v[0] | translate }}:
-                    </span>
-                    <span style="font-weight: 300">
-                      {{ v[1] | translate }}
-                    </span>
-                  </p>
-                </div>
-              </ng-template>
-            </ng-container>
-          </ion-label>
-        </ion-item>
-
-        <ng-template #photo>
-          <ion-item lines="full">
-            <div class="flex flex-column center-everything w100 h100">
-              <ion-label
-                [title]="$any(item.value).name"
-                class="text-ellipsis w100"
-              >
-                <ion-icon
-                  *ngIf="$any(item.value).default"
-                  name="star"
-                  color="primary"
-                  style="margin-bottom: -1px"
-                >
-                </ion-icon>
-                {{ item.label }}
-              </ion-label>
-              <wo-thumbnail
-                style="flex: 1; margin: 10px 5px"
-                [url]="fileUrl($any(item.value))"
-                [name]="$any(item.value).name"
-                [size]="'100%'"
-              ></wo-thumbnail>
-            </div>
-          </ion-item>
-        </ng-template>
-      </ng-container>
+      <wo-entity-preview-item
+        *ngIf="!item.hidden || !item.hidden(model)"
+        [item]="item"
+        [model]="model"
+        [showIndex]="indexed && items.length > 1"
+        [index]="i"
+      ></wo-entity-preview-item>
     </ion-col>
   </ion-row>
 </ion-grid>

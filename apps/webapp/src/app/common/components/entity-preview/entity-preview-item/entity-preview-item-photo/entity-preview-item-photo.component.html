@@ -1,0 +1,26 @@
+<div class="flex flex-column center-everything w100 h100">
+  <wo-thumbnail
+    style="flex: 1"
+    [url]="fileUrl($any(item.value))"
+    [name]="$any(item.value).name"
+    [size]="'100%'"
+  ></wo-thumbnail>
+  <ion-label
+    [title]="$any(item.value).name"
+    class="text-ellipsis w100"
+    style="margin: 0 0 7px"
+  >
+    <ion-icon
+      *ngIf="$any(item.value).default"
+      name="star"
+      color="primary"
+      style="margin-bottom: -2px"
+    >
+    </ion-icon>
+    <ion-text>
+      <p style="display: inline">
+        {{ item.label }}
+      </p>
+    </ion-text>
+  </ion-label>
+</div>

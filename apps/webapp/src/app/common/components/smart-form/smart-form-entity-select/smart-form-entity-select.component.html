@@ -82,7 +82,9 @@
   <ng-template>
     <ion-header>
       <ion-toolbar>
-        <ion-title>Welcome</ion-title>
+        <ion-title>
+          {{ definition.label! | translate }}
+        </ion-title>
         <ion-buttons slot="end">
           <ion-button (click)="modal.dismiss()" [strong]="true">
             {{ 'str.common.done' | translate }}

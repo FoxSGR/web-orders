@@ -8,6 +8,7 @@ import {
 import { EntityListConfig } from '../../common/components/entity-list/entity-list.types';
 
 export const shoeOrderListConfig: EntityListConfig<ShoeOrder> = {
+  title: 'str.shoeOrder.common.orders',
   searchables: [
     {
       label: 'str.model.common.reference',
