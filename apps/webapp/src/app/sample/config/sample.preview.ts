@@ -1,5 +1,6 @@
 import {
   EntityPreviewConfig,
+  EntityPreviewGenerator,
   EntityPreviewItem,
   EntityPreviewItemGroup,
   ShoeModelComponent,
@@ -7,10 +8,10 @@ import {
 } from '../../common';
 import { componentTypeConfigs } from '@web-orders/api-interfaces';
 
-export const samplePreview: (
-  entity: ShoeSample,
-  print: boolean,
-) => EntityPreviewConfig = (entity, print) => ({
+export const samplePreview: EntityPreviewGenerator<ShoeSample> = (
+  entity,
+  print,
+) => ({
   header: {
     title: 'str.sample.common.sample',
     subTitle: entity.id,

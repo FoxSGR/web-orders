@@ -18,6 +18,7 @@ export class ShoeOrderService extends EntityService<ShoeOrder> {
         'sample.client.address',
         'sample.agent',
         'sample.agent.address',
+        'sample.brand',
       ],
     });
   }

@@ -54,3 +54,8 @@ export interface EntityPreviewConfig {
   };
   groups: (EntityPreviewItemGroup | EntityPreviewGroupGroup)[];
 }
+
+export type EntityPreviewGenerator<T extends Entity> = (
+  entity: T,
+  print: boolean,
+) => EntityPreviewConfig;
