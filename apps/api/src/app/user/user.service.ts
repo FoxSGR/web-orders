@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import * as uuid from 'uuid';
 
+import { environment } from '../../environments/environment';
+
 import { EntityService } from '../shared/entity/entity.service';
 import { User } from './user.entity';
 import { UserRepository } from './user.repository';
 import { Connection } from 'typeorm';
 import { IUser } from './user.types';
-import { environment } from '../../environments/environment';
+import { hashPassword } from '../auth/auth';
+
 
 @Injectable()
 export class UserService extends EntityService<User> {
@@ -49,7 +52,7 @@ export class UserService extends EntityService<User> {
         firstName: 'Admin',
         lastName: 'Silva',
         email: environment.admin.email,
-        password: environment.admin.password,
+        password: await hashPassword(environment.admin.password),
         roles: ['admin'],
       });
     }
