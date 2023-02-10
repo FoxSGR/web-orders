@@ -35,7 +35,8 @@ import { AppController } from './app.controller';
     TypeOrmModule.forRoot({
       // eslint-disable-next-line
       ...(environment.database as any),
-      synchronize: !environment.production,
+      synchronize:
+        process.env.TYPEORM_SYNCHRONIZE === 'true' || !environment.production,
       entities: [
         Address,
         Agent,
