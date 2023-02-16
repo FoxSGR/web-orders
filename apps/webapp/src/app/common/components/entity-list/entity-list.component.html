@@ -1,36 +1,3 @@
-<ion-text *ngIf="standalone">
-  <h2 class="m0" style="margin-bottom: 12px !important;">
-    {{ config.title | translate }}
-  </h2>
-</ion-text>
-
-<div
-  *ngIf="config.selection === 'multiple'"
-  class="round shaded flex align-center w100"
-  style="
-    margin-bottom: 20px;
-    padding: 5px;
-    min-height: 50px;
-    border-radius: 25px;
-  "
->
-  <div *ngIf="pick.length > 0; else emptySelection">
-    <ion-chip
-      *ngFor="let selectedEntity of pick; trackBy: trackById"
-      (click)="unselect(selectedEntity.id!)"
-      [outline]="true"
-    >
-      {{ entityConfig.label(selectedEntity) }}
-      <ion-icon name="close"></ion-icon>
-    </ion-chip>
-  </div>
-  <ng-template #emptySelection>
-    <div style="margin: auto">
-      {{ 'str.common.placeholders.selectedItems' | translate }}
-    </div>
-  </ng-template>
-</div>
-
 <!-- Start column template setup -->
 <ng-template
   *ngFor="let col of config.columns; trackBy: trackByProp"
@@ -43,205 +10,247 @@
 </ng-template>
 <!-- End column template setup -->
 
-<!-- Start header -->
-<div class="entity-list-top flex flex-wrap" *ngIf="!config.hideSearch">
-  <!-- Start search -->
-  <div class="entity-list-searches">
-    <div
-      class="entity-list-search flex flex-wrap"
-      *ngFor="let searchBar of searchBars; trackBy: trackByProp"
-    >
-      <ion-card class="m0 p0 entity-list-search-field">
-        <ion-item lines="none" *ngIf="config.searchables.length > 1">
-          <ion-select
-            interface="popover"
-            [selectedText]="searchBar.label | translate"
-            (ionChange)="changeSearchbar(searchBar, $any($event))"
-          >
-            <ion-select-option
-              *ngFor="
-                let searchable of availableSearchFields(searchBar);
-                trackBy: trackByProp
-              "
-              [value]="searchable"
-            >
-              {{ searchable.label | translate }}
-            </ion-select-option>
-            <ion-select-option
-              *ngIf="searchBars.length > 1"
-              [value]="{ prop: '#remove' }"
-            >
-              — {{ 'str.list.actions.remove' | translate }}
-            </ion-select-option>
-          </ion-select>
-        </ion-item>
-      </ion-card>
-
-      <ion-searchbar
-        *ngIf="!searchBar.choices"
-        debounce="1000"
-        animated="true"
-        (ionChange)="search()"
-        [(ngModel)]="searchBar.value"
-        [placeholder]="'str.common.placeholders.search' | translate"
-      ></ion-searchbar>
-
-      <ion-card *ngIf="searchBar.choices" class="entity-list-search-choices">
-        <ion-item lines="none">
-          <ion-select
-            interface="popover"
-            [selectedText]="
-              searchBar.choices[searchBar.value!]
-                ? (searchBar.choices[searchBar.value!].label | translate)
-                : ''
-            "
-            [(ngModel)]="searchBar.value"
-            (ionChange)="load()"
-          >
-            <ion-select-option
-              *ngFor="let choice of searchBar.choices | keyvalue: originalOrder"
-              [value]="choice.key"
-            >
-              {{ choice.value.label | translate }}
-            </ion-select-option>
-            <ion-button>x</ion-button>
-          </ion-select>
-        </ion-item>
-      </ion-card>
-    </div>
-
-    <ion-text
-      color="medium"
-      class="cursor-pointer"
-      style="margin-top: -5px"
-      *ngIf="remainingSearchFields().length !== 0"
-    >
-      <ion-label (click)="newSearchBar()">
-        <small>
-          {{ 'str.list.actions.newFilter' | translate }}
-        </small>
-      </ion-label>
+<ng-container *ngIf="standalone; else entityList">
+  <ion-content class="ion-padding">
+    <ion-text *ngIf="standalone">
+      <h2 class="m0" style="margin-bottom: 12px !important;">
+        {{ config.title | translate }}
+      </h2>
     </ion-text>
-  </div>
-  <!-- End search -->
+    <ng-container *ngTemplateOutlet="entityList"></ng-container>
+  </ion-content>
+</ng-container>
 
-  <div class="entity-list-create">
-    <ion-button (click)="create()">
-      <ion-icon name="create"></ion-icon>
-      {{ 'str.common.actions.create' | translate }}
-    </ion-button>
-  </div>
-</div>
-<!-- End header -->
-
-<!-- Start datatable -->
-<ion-card class="datatable-card" [ngClass]="{ standalone: standalone }">
-  <ngx-datatable
-    #datatable
-    class="wo-datatable"
-    [ngClass]="{ dark: theme() === 'dark', material: theme() === 'light' }"
-    [rows]="page.items"
-    [headerHeight]="50"
-    [footerHeight]="50"
-    [rowHeight]="config.selection ? 50 : 'auto'"
-    [externalPaging]="true"
-    [externalSorting]="true"
-    [columnMode]="ColumnMode.force"
-    [count]="page.total"
-    [rowIdentity]="rowIdentity"
-    [offset]="page.offset"
-    [limit]="pageSize"
-    (page)="load({ page: $event.offset })"
-    [loadingIndicator]="status === 'loading'"
-    [scrollbarH]="true"
-    [virtualization]="false"
-    [messages]="{ emptyMessage: 'str.list.empty' | translate }"
-    (sort)="changeSort($event)"
-    [sortType]="SortType.single"
-    [selectionType]="$any(selectionType())"
-    (select)="onSelect($event)"
-    (activate)="onActivate($event)"
+<ng-template #entityList>
+  <div
+    *ngIf="config.selection === 'multiple'"
+    class="round shaded flex align-center w100"
+    style="
+      margin-bottom: 20px;
+      padding: 5px;
+      min-height: 50px;
+      border-radius: 25px;
+    "
   >
-    <ngx-datatable-column
-      *ngIf="config.selection"
-      [width]="40"
-      [sortable]="false"
-      [canAutoResize]="false"
-      cellClass="wo-datatable-actions wo-database-check"
-      headerClass="wo-datatable-actions-header"
-    >
-      <ng-template let-row="row" ngx-datatable-cell-template>
-        <div class="flex center-everything">
-          <ion-checkbox [checked]="isPicked(row.id)"></ion-checkbox>
-        </div>
-      </ng-template>
-    </ngx-datatable-column>
+    <div *ngIf="pick.length > 0; else emptySelection">
+      <ion-chip
+        *ngFor="let selectedEntity of pick; trackBy: trackById"
+        (click)="unselect(selectedEntity.id!)"
+        [outline]="true"
+      >
+        {{ entityConfig.label(selectedEntity) }}
+        <ion-icon name="close"></ion-icon>
+      </ion-chip>
+    </div>
+    <ng-template #emptySelection>
+      <div style="margin: auto">
+        {{ 'str.common.placeholders.selectedItems' | translate }}
+      </div>
+    </ng-template>
+  </div>
 
-    <ng-container *ngFor="let column of config.columns; trackBy: trackByProp">
+  <!-- Start header -->
+  <div class="entity-list-top flex flex-wrap" *ngIf="!config.hideSearch">
+    <!-- Start search -->
+    <div class="entity-list-searches">
+      <div
+        class="entity-list-search flex flex-wrap"
+        *ngFor="let searchBar of searchBars; trackBy: trackByProp"
+      >
+        <ion-card class="m0 p0 entity-list-search-field">
+          <ion-item lines="none" *ngIf="config.searchables.length > 1">
+            <ion-select
+              interface="popover"
+              [selectedText]="searchBar.label | translate"
+              (ionChange)="changeSearchbar(searchBar, $any($event))"
+            >
+              <ion-select-option
+                *ngFor="
+                  let searchable of availableSearchFields(searchBar);
+                  trackBy: trackByProp
+                "
+                [value]="searchable"
+              >
+                {{ searchable.label | translate }}
+              </ion-select-option>
+              <ion-select-option
+                *ngIf="searchBars.length > 1"
+                [value]="{ prop: '#remove' }"
+              >
+                — {{ 'str.list.actions.remove' | translate }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-card>
+
+        <ion-searchbar
+          *ngIf="!searchBar.choices"
+          debounce="1000"
+          animated="true"
+          (ionChange)="search()"
+          [(ngModel)]="searchBar.value"
+          [placeholder]="'str.common.placeholders.search' | translate"
+        ></ion-searchbar>
+
+        <ion-card *ngIf="searchBar.choices" class="entity-list-search-choices">
+          <ion-item lines="none">
+            <ion-select
+              interface="popover"
+              [selectedText]="
+                searchBar.choices[searchBar.value!]
+                  ? (searchBar.choices[searchBar.value!].label | translate)
+                  : ''
+              "
+              [(ngModel)]="searchBar.value"
+              (ionChange)="load()"
+            >
+              <ion-select-option
+                *ngFor="
+                  let choice of searchBar.choices | keyvalue: originalOrder
+                "
+                [value]="choice.key"
+              >
+                {{ choice.value.label | translate }}
+              </ion-select-option>
+              <ion-button>x</ion-button>
+            </ion-select>
+          </ion-item>
+        </ion-card>
+      </div>
+
+      <ion-text
+        color="medium"
+        class="cursor-pointer"
+        style="margin-top: -5px"
+        *ngIf="remainingSearchFields().length !== 0"
+      >
+        <ion-label (click)="newSearchBar()">
+          <small>
+            {{ 'str.list.actions.newFilter' | translate }}
+          </small>
+        </ion-label>
+      </ion-text>
+    </div>
+    <!-- End search -->
+
+    <div class="entity-list-create">
+      <ion-button (click)="create()">
+        <ion-icon name="create"></ion-icon>
+        {{ 'str.common.actions.create' | translate }}
+      </ion-button>
+    </div>
+  </div>
+  <!-- End header -->
+
+  <!-- Start datatable -->
+  <ion-card class="datatable-card" [ngClass]="{ standalone: standalone }">
+    <ngx-datatable
+      #datatable
+      class="wo-datatable"
+      [ngClass]="{ dark: theme() === 'dark', material: theme() === 'light' }"
+      [rows]="page.items"
+      [headerHeight]="50"
+      [footerHeight]="50"
+      [rowHeight]="config.selection ? 50 : 'auto'"
+      [externalPaging]="true"
+      [externalSorting]="true"
+      [columnMode]="ColumnMode.force"
+      [count]="page.total"
+      [rowIdentity]="rowIdentity"
+      [offset]="page.offset"
+      [limit]="pageSize"
+      (page)="load({ page: $event.offset })"
+      [loadingIndicator]="status === 'loading'"
+      [scrollbarH]="true"
+      [virtualization]="false"
+      [messages]="{ emptyMessage: 'str.list.empty' | translate }"
+      (sort)="changeSort($event)"
+      [sortType]="SortType.single"
+      [selectionType]="$any(selectionType())"
+      (select)="onSelect($event)"
+      (activate)="onActivate($event)"
+    >
       <ngx-datatable-column
-        *ngIf="column.width; else noWidth"
-        [name]="column.name!"
-        [prop]="column.prop!"
-        [sortable]="column.sortable || false"
-        [canAutoResize]="column.canAutoResize!"
-        [flexGrow]="column.flexGrow!"
-        [pipe]="column.pipe!"
-        [width]="column.width"
-        [maxWidth]="column.maxWidth!"
-        [frozenRight]="column.frozenRight"
-        [cellTemplate]="column.cellTemplate"
-      ></ngx-datatable-column>
-      <ng-template #noWidth>
+        *ngIf="config.selection"
+        [width]="40"
+        [sortable]="false"
+        [canAutoResize]="false"
+        cellClass="wo-datatable-actions wo-database-check"
+        headerClass="wo-datatable-actions-header"
+      >
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          <div class="flex center-everything">
+            <ion-checkbox [checked]="isPicked(row.id)"></ion-checkbox>
+          </div>
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ng-container *ngFor="let column of config.columns; trackBy: trackByProp">
         <ngx-datatable-column
+          *ngIf="column.width; else noWidth"
           [name]="column.name!"
           [prop]="column.prop!"
           [sortable]="column.sortable || false"
           [canAutoResize]="column.canAutoResize!"
           [flexGrow]="column.flexGrow!"
           [pipe]="column.pipe!"
+          [width]="column.width"
           [maxWidth]="column.maxWidth!"
           [frozenRight]="column.frozenRight"
           [cellTemplate]="column.cellTemplate"
         ></ngx-datatable-column>
-      </ng-template>
-    </ng-container>
+        <ng-template #noWidth>
+          <ngx-datatable-column
+            [name]="column.name!"
+            [prop]="column.prop!"
+            [sortable]="column.sortable || false"
+            [canAutoResize]="column.canAutoResize!"
+            [flexGrow]="column.flexGrow!"
+            [pipe]="column.pipe!"
+            [maxWidth]="column.maxWidth!"
+            [frozenRight]="column.frozenRight"
+            [cellTemplate]="column.cellTemplate"
+          ></ngx-datatable-column>
+        </ng-template>
+      </ng-container>
 
-    <ngx-datatable-column
-      name=""
-      [canAutoResize]="false"
-      [sortable]="false"
-      [cellClass]="'wo-datatable-actions'"
-      [headerClass]="'wo-datatable-actions-header'"
-    >
-      <ng-template let-row="row" ngx-datatable-cell-template>
-        <ion-buttons slot="end">
-          <ion-button
-            *ngIf="entityConfig.previewConfig"
-            class="wo-datatable-icon-button"
-            (click)="preview(row, $event)"
-          >
-            <ion-icon slot="icon-only" icon="eye"></ion-icon>
-          </ion-button>
-          <ion-button
-            class="wo-datatable-icon-button"
-            (click)="edit(row, $event)"
-          >
-            <ion-icon slot="icon-only" icon="pencil"></ion-icon>
-          </ion-button>
-          <ion-button
-            *ngIf="!config.selection"
-            class="wo-datatable-icon-button"
-            (click)="actionsDropdown($event, row)"
-          >
-            <ion-icon
-              slot="icon-only"
-              ios="ellipsis-horizontal"
-              md="ellipsis-vertical"
-            ></ion-icon>
-          </ion-button>
-        </ion-buttons>
-      </ng-template>
-    </ngx-datatable-column>
-  </ngx-datatable>
-</ion-card>
-<!-- End datatable -->
+      <ngx-datatable-column
+        name=""
+        [canAutoResize]="false"
+        [sortable]="false"
+        [cellClass]="'wo-datatable-actions'"
+        [headerClass]="'wo-datatable-actions-header'"
+      >
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          <ion-buttons slot="end">
+            <ion-button
+              *ngIf="entityConfig.previewConfig"
+              class="wo-datatable-icon-button"
+              (click)="preview(row, $event)"
+            >
+              <ion-icon slot="icon-only" icon="eye"></ion-icon>
+            </ion-button>
+            <ion-button
+              class="wo-datatable-icon-button"
+              (click)="edit(row, $event)"
+            >
+              <ion-icon slot="icon-only" icon="pencil"></ion-icon>
+            </ion-button>
+            <ion-button
+              *ngIf="!config.selection"
+              class="wo-datatable-icon-button"
+              (click)="actionsDropdown($event, row)"
+            >
+              <ion-icon
+                slot="icon-only"
+                ios="ellipsis-horizontal"
+                md="ellipsis-vertical"
+              ></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ng-template>
+      </ngx-datatable-column>
+    </ngx-datatable>
+  </ion-card>
+  <!-- End datatable -->
+</ng-template>

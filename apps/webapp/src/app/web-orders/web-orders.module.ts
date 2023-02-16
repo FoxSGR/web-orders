@@ -7,18 +7,14 @@ import { IonicModule } from '@ionic/angular';
 import { AccountModule } from '../account';
 
 import { WebOrdersRoutingModule } from './web-orders-routing.module';
-
 import { WebOrdersInterceptor } from './web-orders.interceptor';
-
-import * as cc from './components';
+import { WOMainComponent } from './components';
 
 import './autoload';
 
-const components = [cc.WOContainerComponent, cc.WOMainComponent];
-
 @NgModule({
-  declarations: components,
-  exports: components,
+  declarations: [WOMainComponent],
+  exports: [WOMainComponent],
   imports: [
     CommonModule,
     TranslateModule,

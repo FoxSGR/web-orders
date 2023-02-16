@@ -416,7 +416,7 @@
       }
     },
     "list": {
-      "empty": "Sem resultados.",
+      "empty": "Sem resultados. Clique em \"Criar\" para começar.",
       "actions": {
         "delete": "Apagar",
         "print": "Imprimir",

@@ -1,6 +1,5 @@
 ion-menu {
-  max-width: 280px !important;
-  --border: 1px solid #dedede;
+  --side-max-width: 280px;
 
   ion-icon {
     margin-right: 15px;
@@ -9,4 +8,8 @@ ion-menu {
   &.dark {
     --border: 1px solid #222222;
   }
+}
+
+::ng-deep #main > * {
+    display: contents;
 }

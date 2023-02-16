@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { WOContainerComponent } from './components';
 import { woRoutes } from './web-orders.routes';
 
 const routes: Routes = [
@@ -10,11 +9,7 @@ const routes: Routes = [
     pathMatch: 'full',
     redirectTo: 'home',
   },
-  {
-    path: '',
-    component: WOContainerComponent,
-    children: woRoutes,
-  },
+  ...woRoutes,
 ];
 
 @NgModule({

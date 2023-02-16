@@ -141,4 +141,4 @@ const buildSizesValue = (order: ShoeOrder) => {
   }
 
   return sizes;
-}
+};

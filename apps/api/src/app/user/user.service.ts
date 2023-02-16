@@ -10,7 +10,6 @@ import { Connection } from 'typeorm';
 import { IUser } from './user.types';
 import { hashPassword } from '../auth/auth';
 
-
 @Injectable()
 export class UserService extends EntityService<User> {
   constructor(connection: Connection) {
