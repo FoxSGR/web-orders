@@ -10,7 +10,6 @@ import {
   SmartFormState,
 } from '../../types';
 import { Entity } from '../../models/entity';
-import { customEmpty } from '../../util';
 import { SmartFormWalker } from './smart-form-walker';
 import { APIFile } from '@web-orders/api-interfaces';
 
@@ -52,10 +51,6 @@ export class SmartFormOutGenerator<T extends object> {
     prop: string,
     targetProp = prop,
   ) {
-    if (customEmpty(value)) {
-      return;
-    }
-
     switch (item.type) {
       case 'multiple':
       case 'group':

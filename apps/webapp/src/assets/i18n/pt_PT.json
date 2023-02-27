@@ -188,6 +188,11 @@
             "message": "A encomenda foi gravada."
           }
         }
+      },
+      "preview": {
+        "sizes": {
+          "empty": "Não foram definidos os tamanhos."
+        }
       }
     },
     "sample": {

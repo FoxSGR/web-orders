@@ -6,7 +6,7 @@
       [index]="index"
     ></wo-entity-preview-title>
 
-    <div style="margin-top: 5px" *ngIf="value(item) | async as val">
+    <div style="margin-top: 5px" *ngIf="value(item) | async as val; else empty">
       <p
         *ngFor="let keyvalue of objectEntries(val)"
         style="white-space: normal"
@@ -17,5 +17,11 @@
         </span>
       </p>
     </div>
+
+    <ng-template #empty>
+      <wo-entity-preview-empty-text
+        [value]="item.emptyText"
+      ></wo-entity-preview-empty-text>
+    </ng-template>
   </ion-text>
 </ion-label>

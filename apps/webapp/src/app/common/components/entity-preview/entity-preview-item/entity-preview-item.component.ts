@@ -7,7 +7,9 @@ import { EntityPreviewItem } from '../entity-preview.types';
   selector: 'wo-entity-preview-item',
   templateUrl: './entity-preview-item.component.html',
 })
-export class EntityPreviewItemComponent extends EntityPreviewAbstractItemComponent {
+export class EntityPreviewItemComponent<
+  T extends EntityPreviewItem,
+> extends EntityPreviewAbstractItemComponent<T> {
   /**
    * Returns the icon for the given item.
    * @param item

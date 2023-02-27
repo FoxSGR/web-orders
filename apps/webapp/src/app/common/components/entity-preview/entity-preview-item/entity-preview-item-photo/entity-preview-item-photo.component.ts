@@ -1,12 +1,12 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { EntityPreviewAbstractItemComponent } from '../entity-preview-abstract-item.component';
 import { FileData } from '../../../../types';
-import { FileService } from '../../../../services';
 
 @Component({
   selector: 'wo-entity-preview-item-photo',
   templateUrl: './entity-preview-item-photo.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EntityPreviewItemPhotoComponent extends EntityPreviewAbstractItemComponent {
   /**

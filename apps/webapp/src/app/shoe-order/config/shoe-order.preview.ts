@@ -122,9 +122,20 @@ export const shoeOrderPreview: EntityPreviewGenerator<ShoeOrder> = (
       items: [
         {
           icon: 'footsteps',
-          label: 'str.common.sizes',
           value: buildSizesValue(order),
           valueType: 'value',
+          type: 'table',
+          emptyText: 'str.shoeOrder.preview.sizes.empty',
+          columns: [
+            {
+              label: 'str.common.size',
+              prop: 'size',
+            },
+            {
+              label: 'str.common.amount',
+              prop: 'amount',
+            },
+          ],
         },
       ],
     },
@@ -132,12 +143,24 @@ export const shoeOrderPreview: EntityPreviewGenerator<ShoeOrder> = (
 });
 
 const buildSizesValue = (order: ShoeOrder) => {
-  const sizes: any = {};
+  let total = 0;
+  const sizes: any[] = [];
 
   for (let i = 34; i < 45; i += 0.5) {
     if (order.sizes[i] || Number.isInteger(i)) {
-      sizes[i] = order.sizes[i] || 0;
+      const amount = order.sizes[i] || 0;
+
+      sizes.push({
+        size: i,
+        amount,
+      });
+
+      total += amount;
     }
+  }
+
+  if (total === 0) {
+    return undefined;
   }
 
   return sizes;

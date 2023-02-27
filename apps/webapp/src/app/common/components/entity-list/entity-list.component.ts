@@ -41,7 +41,9 @@ import {
   AlertService,
   EntityPreviewService,
   EntityWizardService,
+  ThemeService,
 } from '../../services';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'wo-entity-list',
@@ -174,6 +176,7 @@ export class EntityListComponent<T extends Entity>
     private readonly popoverController: PopoverController,
     private readonly previewService: EntityPreviewService,
     private readonly wizardService: EntityWizardService,
+    private readonly themeService: ThemeService,
     private readonly alertService: AlertService,
   ) {
     super(injector);
@@ -550,11 +553,11 @@ export class EntityListComponent<T extends Entity>
   }
 
   /**
-   * Returns the current app theme.
+   * Whether dark theme is enabled.
    * @returns
    */
-  theme(): 'dark' | 'light' {
-    return document.body.classList.contains('dark') ? 'dark' : 'light';
+  isDarkTheme(): Observable<boolean> {
+    return this.themeService.darkTheme$;
   }
 
   /**

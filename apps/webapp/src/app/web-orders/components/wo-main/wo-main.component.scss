@@ -10,6 +10,12 @@ ion-menu {
   }
 }
 
-::ng-deep #main > * {
+::ng-deep #mainRouter > * {
     display: contents;
+}
+
+@media (max-width: 991.98px) {
+  #mainRouter {
+    margin-top: 56px;
+  }
 }

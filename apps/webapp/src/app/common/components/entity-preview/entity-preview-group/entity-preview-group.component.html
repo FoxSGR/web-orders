@@ -37,9 +37,11 @@
     </h6>
   </ion-text>
 
-  <ion-label *ngIf="group.items.length === 0 && group.emptyText">
-    <p>{{ group.emptyText | translate }}</p>
-  </ion-label>
+  <wo-entity-preview-empty-text
+    *ngIf="group.items.length === 0 && group.emptyText"
+    [value]="group.emptyText"
+    [inline]="false"
+  ></wo-entity-preview-empty-text>
 
   <wo-entity-preview-list
     *ngIf="(!group.type || group.type === 'items') && group.items.length > 0"

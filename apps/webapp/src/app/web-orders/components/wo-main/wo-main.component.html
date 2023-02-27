@@ -77,5 +77,22 @@
     </ion-content>
   </ion-menu>
 
-  <ion-router-outlet id="main"></ion-router-outlet>
+  <div class="ion-page" id="main">
+    <ion-header [translucent]="true" class="ion-hide-lg-up">
+      <ion-toolbar>
+        <!-- Menu Button -->
+        <ion-buttons slot="start">
+          <ion-menu-button
+            [autoHide]="false"
+            (click)="toggleMenu()"
+          ></ion-menu-button>
+        </ion-buttons>
+
+        <!-- Title -->
+        <ion-title>Web Orders</ion-title>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-router-outlet id="mainRouter"></ion-router-outlet>
+  </div>
 </ion-split-pane>

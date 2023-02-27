@@ -45,7 +45,7 @@ export class ShoeOrder implements IShoeOrder {
   notes?: string;
 
   @Factory(faker => {
-    const result = {};
+    const result: ShoeSizes = {};
 
     const min = faker.datatype.number({ min: 34, max: 38 });
     const max = faker.datatype.number({ min: 38, max: 42 });

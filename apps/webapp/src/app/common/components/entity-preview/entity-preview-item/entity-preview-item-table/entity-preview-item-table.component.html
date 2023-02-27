@@ -1,0 +1,33 @@
+<ion-label>
+  <ion-text [color]="previewColor">
+    <wo-entity-preview-title
+      [label]="item.label"
+      [showIndex]="showIndex"
+      [index]="index"
+    ></wo-entity-preview-title>
+
+    <wo-entity-preview-empty-text
+      *ngIf="!(value(item) | async)"
+      [value]="item.emptyText"
+    ></wo-entity-preview-empty-text>
+  </ion-text>
+</ion-label>
+
+<div *ngIf="value(item) | async as val">
+  <ngx-datatable
+    [ngClass]="{
+      dark: isDarkTheme() | async,
+      material: (isDarkTheme() | async) === false
+    }"
+    [rows]="val"
+    [columnMode]="'force'"
+    [headerHeight]="50"
+    [footerHeight]="0"
+    [rowHeight]="40"
+    [scrollbarV]="true"
+    [scrollbarH]="true"
+    [reorderable]="true"
+    [columns]="columns"
+  >
+  </ngx-datatable>
+</div>

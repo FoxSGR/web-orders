@@ -13,7 +13,7 @@
 <ng-container *ngIf="standalone; else entityList">
   <ion-content class="ion-padding">
     <ion-text *ngIf="standalone">
-      <h2 class="m0" style="margin-bottom: 12px !important;">
+      <h2 class="m0" style="margin-bottom: 12px !important">
         {{ config.title | translate }}
       </h2>
     </ion-text>
@@ -147,7 +147,10 @@
     <ngx-datatable
       #datatable
       class="wo-datatable"
-      [ngClass]="{ dark: theme() === 'dark', material: theme() === 'light' }"
+      [ngClass]="{
+        dark: isDarkTheme() | async,
+        material: (isDarkTheme() | async) === false
+      }"
       [rows]="page.items"
       [headerHeight]="50"
       [footerHeight]="50"

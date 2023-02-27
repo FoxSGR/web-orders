@@ -257,20 +257,27 @@ export class EntityPrintService {
       this.previewService.itemValue(item, this.entity),
     );
 
-    let label = await firstValueFrom(this.translate.get(item.label));
-    if (group.showIndex && group.items.length > 1) {
-      label += ` ${index + 1}`;
-    }
+    let label = '';
+    if (item.label) {
+      label = await firstValueFrom(this.translate.get(item.label));
+      if (group.showIndex && group.items.length > 1) {
+        label += ` ${index + 1}`;
+      }
 
-    if (!value || typeof value !== 'object' || item.type === 'color') {
-      label += ':';
+      if (!value || typeof value !== 'object' || item.type === 'color') {
+        label += ':';
+      }
+
+      label = `
+        <p style="display: inline; font-weight: 500; margin: 0">
+          ${label}
+        </p>
+      `;
     }
 
     return `
       <div class="entity-print-item col-sm-${12 / (group.columns || 2)}">
-        <p style="display: inline; font-weight: 500; margin: 0">
-          ${label}
-        </p>
+        ${label}
         ${await this.generateItemValueContent(item, value)}
       </div>
     `;

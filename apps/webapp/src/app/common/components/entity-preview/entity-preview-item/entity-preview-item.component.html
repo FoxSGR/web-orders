@@ -15,15 +15,23 @@
   <ng-container [ngSwitch]="item.type">
     <wo-entity-preview-item-map
       *ngSwitchCase="'map'"
-      [item]="item"
+      [item]="$any(item)"
       [model]="model"
       [index]="index"
       [showIndex]="showIndex"
     ></wo-entity-preview-item-map>
 
+    <wo-entity-preview-item-table
+      *ngSwitchCase="'table'"
+      [item]="$any(item)"
+      [model]="model"
+      [index]="index"
+      [showIndex]="showIndex"
+    ></wo-entity-preview-item-table>
+
     <wo-entity-preview-item-photo
       *ngSwitchCase="'photo'"
-      [item]="item"
+      [item]="$any(item)"
       [model]="model"
       [index]="index"
       [showIndex]="showIndex"
@@ -32,7 +40,7 @@
 
     <wo-entity-preview-item-color
       *ngSwitchCase="'color'"
-      [item]="item"
+      [item]="$any(item)"
       [model]="model"
       [index]="index"
       [showIndex]="showIndex"
@@ -40,7 +48,7 @@
 
     <wo-entity-preview-item-simple
       *ngSwitchDefault
-      [item]="item"
+      [item]="$any(item)"
       [model]="model"
       [index]="index"
       [showIndex]="showIndex"

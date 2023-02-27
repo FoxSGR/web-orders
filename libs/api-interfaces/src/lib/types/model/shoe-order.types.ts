@@ -1,12 +1,8 @@
 import { IEntityDTO } from './entity.types';
 import { IShoeSampleDTO } from './shoe-sample.types';
 
-export interface ShoeSizeData {
-  amount: number;
-}
-
 export interface ShoeSizes {
-  [size: number]: ShoeSizeData;
+  [size: number]: number;
 }
 
 export interface IShoeOrderDTO extends IEntityDTO {

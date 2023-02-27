@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 import { DatePipe } from '../../pipes';
 
@@ -15,6 +16,7 @@ import * as components from './components';
     CommonModule,
     IonicModule,
     TranslateModule,
+    NgxDatatableModule,
     DatePipe,
     ColorIndicatorComponent,
     ThumbnailComponent,
@@ -29,8 +31,10 @@ import * as components from './components';
     components.EntityPreviewItemMapComponent,
     components.EntityPreviewItemPhotoComponent,
     components.EntityPreviewItemSimpleComponent,
+    components.EntityPreviewItemTableComponent,
     components.EntityPreviewComponent,
     components.EntityPreviewCompareComponent,
+    components.EntityPreviewEmptyTextComponent,
   ],
   exports: [
     components.EntityPreviewComponent,
