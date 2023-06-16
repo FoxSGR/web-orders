@@ -8,17 +8,20 @@ import {
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+
 import { WebOrdersState } from './web-orders.types';
-import { AccountState, getAccountState, logout } from '../account';
+import { AccountService, AccountState, getAccountState } from '../account';
 import { environment } from '../../environments/environment';
 
 @Injectable()
 export class WebOrdersInterceptor implements HttpInterceptor {
   private account: AccountState = {};
 
-  constructor(private router: Router, private store: Store<WebOrdersState>) {
+  constructor(
+    private store: Store<WebOrdersState>,
+    private accountService: AccountService,
+  ) {
     this.store
       .select(getAccountState)
       .subscribe(account => (this.account = account));
@@ -50,33 +53,18 @@ export class WebOrdersInterceptor implements HttpInterceptor {
     });
 
     return next.handle(newRequest).pipe(
-      tap(
-        (event: HttpEvent<any>) => {
-          return event;
-        },
-        err => {
-          if (err instanceof HttpErrorResponse) {
-            switch (err.status) {
-              case 401: {
-                const urlTree = this.router.parseUrl(this.router.url);
-                delete urlTree.queryParams['callback'];
-                const encoded = encodeURIComponent(urlTree.toString());
+      tap({
+        next: (event: HttpEvent<any>) => event,
+        error: err => {
+          if (!(err instanceof HttpErrorResponse)) {
+            return;
+          }
 
-                if (!req.url.endsWith('/api/auth/login')) {
-                  this.store.dispatch(
-                    logout({
-                      mode: 'unauthorized',
-                      callback: encoded,
-                    }),
-                  );
-                }
-
-                break;
-              }
-            }
+          if (err.status === 401 && !req.url.endsWith('/api/auth/login')) {
+            this.accountService.logout();
           }
         },
-      ),
+      }),
     );
   }
 }

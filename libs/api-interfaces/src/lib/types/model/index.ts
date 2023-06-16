@@ -10,6 +10,7 @@ export * from './season.types';
 export * from './shoe-component.types';
 export * from './shoe-model.types';
 export * from './shoe-model-component.types';
+export * from './shoe-order-sample.types';
 export * from './shoe-order.types';
 export * from './shoe-sample.types';
 export * from './user.types';

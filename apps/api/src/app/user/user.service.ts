@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ModuleRef } from '@nestjs/core';
 import * as uuid from 'uuid';
 
 import { environment } from '../../environments/environment';
@@ -6,14 +7,13 @@ import { environment } from '../../environments/environment';
 import { EntityService } from '../shared/entity/entity.service';
 import { User } from './user.entity';
 import { UserRepository } from './user.repository';
-import { Connection } from 'typeorm';
 import { IUser } from './user.types';
 import { hashPassword } from '../auth/auth';
 
 @Injectable()
 export class UserService extends EntityService<User> {
-  constructor(connection: Connection) {
-    super(connection, UserRepository, { name: 'user', owned: false });
+  constructor(moduleRef: ModuleRef) {
+    super(moduleRef, UserRepository, { name: 'user', owned: false });
   }
 
   /**

@@ -1,16 +1,11 @@
 import { IEntityDTO } from './entity.types';
-import { IShoeSampleDTO } from './shoe-sample.types';
-
-export interface ShoeSizes {
-  [size: number]: number;
-}
+import { IShoeOrderSampleDTO } from './shoe-order-sample.types';
 
 export interface IShoeOrderDTO extends IEntityDTO {
-  sample: IShoeSampleDTO;
+  samples: IShoeOrderSampleDTO[];
   dateAsked?: Date;
   deadline?: Date;
   dateDelivery?: Date;
   notes?: string;
-  sizes?: ShoeSizes;
   totalPairs: number;
 }

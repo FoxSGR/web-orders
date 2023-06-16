@@ -3,8 +3,9 @@ import {
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
+import { ModuleRef } from '@nestjs/core';
 import { Connection, FindManyOptions, SelectQueryBuilder } from 'typeorm';
-import { uniq } from 'lodash';
+import { set, uniq } from 'lodash';
 
 import { Id, IFindFilter } from '@web-orders/api-interfaces';
 import { FindParams, Page } from '../types';
@@ -12,10 +13,15 @@ import type { IUser } from '../../user/user.types';
 import { EntityFieldMapping, IEntity } from './entity.types';
 import { WOEntityRepository } from './entity.repository';
 
+interface EntityServiceConfigRelation {
+  name: string;
+  service?: any;
+}
+
 interface EntityServiceConfig {
   name: string;
   owned?: boolean;
-  relations?: string[];
+  relations?: EntityServiceConfigRelation[];
   cache: boolean;
   mapping?: {
     [key: string]: EntityFieldMapping;
@@ -30,10 +36,20 @@ const defaultConfig: Partial<EntityServiceConfig> = {
 };
 
 export class EntityService<
-  T extends IEntity,
+  T extends IEntity = IEntity,
   R extends WOEntityRepository<T> = WOEntityRepository<T>,
 > {
-  protected repository: R;
+  get repository(): R {
+    // Dynamic initialization, since the Connection object is not available
+    // in the constructor phase
+    if (!this._repository) {
+      const connection = this.moduleRef.get(Connection, { strict: false });
+      this._repository = connection.getCustomRepository(this.repositoryClass);
+    }
+
+    return this._repository;
+  }
+  private _repository: R;
 
   private get config(): EntityServiceConfig {
     return this._config;
@@ -44,12 +60,11 @@ export class EntityService<
   private _config: EntityServiceConfig;
 
   constructor(
-    connection: Connection,
-    repositoryClass: { new (): R },
+    private moduleRef: ModuleRef,
+    private repositoryClass: { new (): R },
     config: Partial<EntityServiceConfig>,
   ) {
     this.config = config;
-    this.repository = connection.getCustomRepository(repositoryClass);
   }
 
   /**
@@ -275,29 +290,41 @@ export class EntityService<
         condition = `NOT ${condition}`;
       }
 
-      let prop = mapping.prop;
-
-      const propParts = prop.split('.');
-      const relationAlias = propParts.slice(0, propParts.length - 1).join('.');
-      const propField = propParts[propParts.length - 1];
-
-      prop = `\`${queryBuilder.expressionMap.mainAlias.name}\`.${mapping.prop}`;
-
-      // find the table alias that matches the current filter
-      for (const alias of queryBuilder.expressionMap.aliases) {
-        if (alias.type === 'from') continue;
-
-        const name = alias.name
-          .replace(`${queryBuilder.expressionMap.mainAlias.name}__`, '')
-          .replace(/_+/g, '.');
-        if (name === relationAlias) {
-          prop = `\`${alias.name}\`.\`${propField}\``;
-          break;
-        }
-      }
-
+      const prop = this.mapPropForQueryBuilder(queryBuilder, mapping.prop);
       queryBuilder = queryBuilder.andWhere(`${prop} ${condition}`);
     });
+  }
+
+  /**
+   * Maps a property path to a query property path.
+   * @param queryBuilder
+   * @param prop
+   * @private
+   */
+  private mapPropForQueryBuilder(
+    queryBuilder: SelectQueryBuilder<any>,
+    prop: string,
+  ): string {
+    const propParts = prop.split('.');
+    const relationAlias = propParts.slice(0, propParts.length - 1).join('.');
+    const propField = propParts[propParts.length - 1];
+
+    prop = `\`${queryBuilder.expressionMap.mainAlias.name}\`.${prop}`;
+
+    // find the table alias that matches the current filter
+    for (const alias of queryBuilder.expressionMap.aliases) {
+      if (alias.type === 'from') continue;
+
+      const name = alias.name
+        .replace(`${queryBuilder.expressionMap.mainAlias.name}__`, '')
+        .replace(/_+/g, '.');
+      if (name === relationAlias) {
+        prop = `\`${alias.name}\`.\`${propField}\``;
+        break;
+      }
+    }
+
+    return prop;
   }
 
   /**
@@ -314,7 +341,39 @@ export class EntityService<
       if (params.loadRelations && this.config.relations) {
         await this.loadRelations(entity);
       }
+
+      for (const relation of this.config.relations || []) {
+        if (relation.service && entity[relation.name]) {
+          const service: EntityService = this.moduleRef.get(relation.service, {
+            strict: false,
+          });
+          await service.mapFoundEntities([entity[relation.name]], params);
+        }
+      }
     }
+  }
+
+  /**
+   * Builds the relations array.
+   */
+  private buildRelations(): string[] {
+    const relations = [];
+
+    for (const relation of this.config.relations || []) {
+      relations.push(relation.name);
+
+      if (relation.service) {
+        const service: EntityService = this.moduleRef.get(relation.service, {
+          strict: false,
+        });
+        const subRelations = service.buildRelations();
+        for (const subRelation of subRelations) {
+          relations.push(`${relation.name}.${subRelation}`);
+        }
+      }
+    }
+
+    return relations;
   }
 
   /**
@@ -342,7 +401,7 @@ export class EntityService<
     realFilters: IFindFilter[] = null,
   ): FindManyOptions<T> {
     return {
-      relations: params.loadRelations ? this.config.relations : undefined,
+      relations: params.loadRelations ? this.buildRelations() : undefined,
       withDeleted: false,
       skip: params.offset,
       take: params.limit || 50,
@@ -360,14 +419,14 @@ export class EntityService<
   private buildOrder(params: FindParams<T>) {
     const order: any = {};
     if (!params.sortField) {
-      order['id'] = params.sortDirection || 'DESC';
+      order['id'] = params.sortDirection?.toLocaleUpperCase() || 'DESC';
     } else {
       const mapping = this.fieldMapping(params.sortField);
-      order[mapping.prop] = params.sortDirection || 'ASC';
-    }
-
-    for (const key of Object.keys(order)) {
-      order[key] = order[key].toLocaleUpperCase();
+      set(
+        order,
+        mapping.prop,
+        params.sortDirection?.toLocaleUpperCase() || 'ASC',
+      );
     }
 
     return order;
@@ -418,18 +477,42 @@ export class EntityService<
    */
   private fieldMapping(key: string): EntityFieldMapping {
     if (key === 'id') {
-      return {
-        prop: 'id',
-      };
+      return { prop: 'id' };
     }
 
-    const mapping = this.config.mapping[key];
+    // If mapping is configured for key, return it
+    if (this.config.mapping[key]) {
+      return this.config.mapping[key];
+    }
+
+    // Build mapping for nested fields
+    const path = key.split('.');
+    const mapping = this.config.mapping[path[0]];
     if (!mapping) {
       throw new UnprocessableEntityException(
         `No mapping configured for key '${key}'`,
       );
     }
 
-    return mapping;
+    if (!mapping.relation) {
+      throw new UnprocessableEntityException(
+        `No nested mappings configured for key '${key}'`,
+      );
+    }
+
+    const relation = this.config.relations.find(
+      r => r.name === mapping.relation,
+    );
+    if (!relation) {
+      throw new UnprocessableEntityException(
+        `No mapping configured for key '${key}'`,
+      );
+    }
+
+    const service: EntityService = this.moduleRef.get(relation.service, {
+      strict: false,
+    });
+    const childMapping = service.fieldMapping(path.slice(1).join('.'));
+    return { prop: `${mapping.prop}.${childMapping.prop}` };
   }
 }

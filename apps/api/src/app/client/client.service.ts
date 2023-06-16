@@ -1,5 +1,5 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
-import { Connection } from 'typeorm';
+import { ModuleRef } from '@nestjs/core';
 
 import { Id } from '@web-orders/api-interfaces';
 import { EntityService } from '../shared/entity';
@@ -13,12 +13,16 @@ import { IUser } from '../user';
 @Injectable()
 export class ClientService extends EntityService<Client> {
   constructor(
-    connection: Connection,
+    moduleRef: ModuleRef,
     @Inject(forwardRef(() => BrandService)) private brandService: BrandService,
   ) {
-    super(connection, ClientRepository, {
+    super(moduleRef, ClientRepository, {
       name: 'client',
-      relations: ['address', 'agent', 'brands'],
+      relations: [
+        { name: 'address' },
+        { name: 'agent' },
+        { name: 'brands', service: BrandService },
+      ],
       mapping: {
         name: {
           prop: 'name',

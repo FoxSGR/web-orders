@@ -81,9 +81,18 @@ export class SelectSearchComponent<T = any>
   @ViewChild('popover', { read: IonPopover })
   popover: IonPopover;
 
+  @Input()
+  set searchEnabled(value: boolean | undefined) {
+    this._searchEnabled = value;
+  }
   get searchEnabled(): boolean {
+    if (this._searchEnabled !== undefined) {
+      return this._searchEnabled;
+    }
+
     return !!this.options && this.options.length >= 10;
   }
+  private _searchEnabled: boolean | undefined;
 
   ngOnInit() {
     this.updateSelectedOption();

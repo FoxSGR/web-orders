@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+
 import { EntityPreviewAbstractItemComponent } from '../entity-preview-abstract-item.component';
 
 @Component({

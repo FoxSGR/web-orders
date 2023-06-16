@@ -39,3 +39,7 @@
 .login-button {
   min-width: 130px;
 }
+
+::ng-deep .gavatar::part(image) {
+  border-radius: 100%;
+}

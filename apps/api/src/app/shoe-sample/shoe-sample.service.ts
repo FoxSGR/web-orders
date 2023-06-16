@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Connection } from 'typeorm';
+import { ModuleRef } from '@nestjs/core';
 
 import { Id } from '@web-orders/api-interfaces';
 import { EntityService } from '../shared/entity';
@@ -9,39 +9,42 @@ import { FindParams } from '../shared';
 import { Client, ClientService, IClient } from '../client';
 import { ShoeSampleRepository } from './shoe-sample.repository';
 import { ShoeModelService } from '../shoe-model';
+import { BrandService } from '../brand';
+import { AgentService } from '../agent';
 
 @Injectable()
 export class ShoeSampleService extends EntityService<ShoeSample> {
   constructor(
-    connection: Connection,
+    moduleRef: ModuleRef,
     private clientService: ClientService,
     private shoeModelService: ShoeModelService,
   ) {
-    super(connection, ShoeSampleRepository, {
+    super(moduleRef, ShoeSampleRepository, {
       name: 'shoe_sample',
       relations: [
-        'baseModel',
-        'sampleModel',
-        'baseModel.components',
-        'sampleModel.components',
-        'sampleModel.components.component',
-        'client',
-        'agent',
-        'brand',
+        { name: 'sampleModel', service: ShoeModelService },
+        { name: 'client', service: ClientService },
+        { name: 'agent', service: AgentService },
+        { name: 'brand', service: BrandService },
       ],
       mapping: {
-        'sampleModel.reference': {
-          prop: 'sampleModel.reference',
+        sampleModel: {
+          prop: 'sampleModel',
+          relation: 'sampleModel',
         },
-        'client.name': {
-          prop: 'client.name',
+        client: {
+          prop: 'client',
+          relation: 'client',
         },
-        'agent.name': {
-          prop: 'agent.name',
+        agent: {
+          prop: 'agent',
+          relation: 'agent',
         },
-        'brand.name': {
-          prop: 'brand.name',
+        brand: {
+          prop: 'brand',
+          relation: 'brand',
         },
+        dateAsked: { prop: 'dateAsked' },
         notes: {
           prop: 'notes',
         },
@@ -115,21 +118,6 @@ export class ShoeSampleService extends EntityService<ShoeSample> {
         sortDirection: params.sortDirection || 'ASC',
       },
       clientIds,
-    );
-  }
-
-  async mapFoundEntities(
-    entities: ShoeSample[],
-    params: FindParams<ShoeSample>,
-  ): Promise<void> {
-    await super.mapFoundEntities(entities, params);
-    await this.shoeModelService.mapFoundEntities(
-      entities.filter(e => e.sampleModel).map(e => e.sampleModel),
-      params,
-    );
-    await this.shoeModelService.mapFoundEntities(
-      entities.filter(e => e.baseModel).map(e => e.baseModel),
-      params,
     );
   }
 }

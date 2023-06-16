@@ -1,10 +1,10 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'webapp',
+  appId: 'com.foxsgr.github.weborders',
+  appName: 'Web Orders',
   webDir: 'dist/apps/webapp',
-  bundledWebRuntime: false
+  bundledWebRuntime: false,
 };
 
 export default config;

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Connection } from 'typeorm';
+import { ModuleRef } from '@nestjs/core';
 
 import { Id } from '@web-orders/api-interfaces';
 import { EntityService } from '../shared/entity';
@@ -12,12 +12,21 @@ import { ShoeComponentService } from '../shoe-component';
 @Injectable()
 export class ShoeModelService extends EntityService<ShoeModel> {
   constructor(
-    connection: Connection,
+    moduleRef: ModuleRef,
     private shoeComponentService: ShoeComponentService,
   ) {
-    super(connection, ShoeModelRepository, {
+    super(moduleRef, ShoeModelRepository, {
       name: 'shoe_model',
-      relations: ['components'],
+      relations: [{ name: 'components' }],
+      mapping: {
+        reference: { prop: 'reference' },
+        'components.component.reference': {
+          prop: 'components.component.reference',
+        },
+        'components.component.name': {
+          prop: 'components.component.name',
+        },
+      },
     });
   }
 

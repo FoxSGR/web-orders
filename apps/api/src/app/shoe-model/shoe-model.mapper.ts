@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
+import { IShoeModelComponentDTO } from '@web-orders/api-interfaces';
 import { EntityMapper } from '../shared/entity/entity.mapper';
 import { IShoeModel } from './shoe-model.types';
 import { ShoeModelDTO } from './shoe-model.dto';
@@ -25,42 +26,10 @@ export class ShoeModelMapper extends EntityMapper<IShoeModel, ShoeModelDTO> {
     body: Partial<ShoeModelDTO>,
     user: IUser,
   ): Promial<IShoeModel> {
-    let modelComponents: IShoeModelComponent[];
-    if (body.components) {
-      const components = await this.componentService.findByIds(
-        { owner: user },
-        body.components.map(component => component.component.id),
-      );
-
-      const colors = await this.colorService.findByIds(
-        { owner: user },
-        body.components.filter(c => c.color).map(c => c.color.id),
-      );
-
-      // create the model to component link
-      modelComponents = components.map(component => {
-        const input = body.components.find(
-          c => c.component.id === component.id,
-        );
-
-        return {
-          component,
-          sort: input.sort,
-          amount: input.amount,
-          price: input.price,
-          color: input.color
-            ? colors.find(c => c.id === input.color.id)
-            : undefined,
-          notes: input.notes,
-          base: { owner: user },
-        };
-      });
-    }
-
     return {
       type: 'base',
       reference: body.reference,
-      components: modelComponents,
+      components: await this.mapComponentsToEntities(body.components, user),
       dateCreated: body.dateCreated,
       season: body.season,
       photos: body.photos,
@@ -101,5 +70,41 @@ export class ShoeModelMapper extends EntityMapper<IShoeModel, ShoeModelDTO> {
       photos: shoeModel.photos,
       notes: shoeModel.notes,
     };
+  }
+
+  private async mapComponentsToEntities(
+    bodyComponents: IShoeModelComponentDTO[] | undefined,
+    user: IUser,
+  ): Promise<IShoeModelComponent[]> {
+    if (!bodyComponents) {
+      return undefined;
+    }
+
+    const components = await this.componentService.findByIds(
+      { owner: user },
+      bodyComponents.map(component => component.component.id),
+    );
+
+    const colors = await this.colorService.findByIds(
+      { owner: user },
+      bodyComponents.filter(c => c.color).map(c => c.color.id),
+    );
+
+    // create the model to component link
+    return components.map(component => {
+      const input = bodyComponents.find(c => c.component.id === component.id);
+
+      return {
+        component,
+        sort: input.sort,
+        amount: input.amount,
+        price: input.price,
+        color: input.color
+          ? colors.find(c => c.id === input.color.id)
+          : undefined,
+        notes: input.notes,
+        base: { owner: user },
+      };
+    });
   }
 }

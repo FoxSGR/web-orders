@@ -20,18 +20,18 @@ export const shoeOrderPreview: EntityPreviewGenerator<ShoeOrder> = (
             title: 'str.dialogs.preview.overview',
           },
       items: [
-        {
-          icon: 'camera',
-          label: 'str.sample.common.sample',
-          value: () =>
-            order.sample?.sampleModel?.reference
-              ? `${order.sample.id} - ${order.sample.sampleModel.reference}`
-              : '',
-          preview: {
-            type: 'sample',
-            idProp: 'sample.id',
-          },
-        },
+        //        {
+        //          icon: 'camera',
+        //          label: 'str.sample.common.sample',
+        //          value: () =>
+        //            order.sample?.sampleModel?.reference
+        //              ? `${order.sample.id} - ${order.sample.sampleModel.reference}`
+        //              : '',
+        //          preview: {
+        //            type: 'sample',
+        //            idProp: 'sample.id',
+        //          },
+        //        },
         {
           icon: 'bag',
           label: 'str.brand.common.brand',
@@ -93,52 +93,52 @@ export const shoeOrderPreview: EntityPreviewGenerator<ShoeOrder> = (
         },
       ],
     },
-    {
-      type: 'items',
-      header: print
-        ? undefined
-        : {
-            title: 'str.common.photos',
-            icon: 'camera',
-          },
-      items:
-        order.sample.sampleModel?.photos
-          ?.map(
-            photo =>
-              ({
-                type: 'photo',
-                value: photo,
-                label: photo.name,
-              } as EntityPreviewItem),
-          )
-          ?.slice(0, print ? 1 : order.sample.sampleModel?.photos.length) || [],
-      emptyText: 'str.sample.preview.photos.empty',
-    },
-    {
-      header: {
-        title: 'str.common.pairs',
-      },
-      columns: 1,
-      items: [
-        {
-          icon: 'footsteps',
-          value: buildSizesValue(order),
-          valueType: 'value',
-          type: 'table',
-          emptyText: 'str.shoeOrder.preview.sizes.empty',
-          columns: [
-            {
-              label: 'str.common.size',
-              prop: 'size',
-            },
-            {
-              label: 'str.common.amount',
-              prop: 'amount',
-            },
-          ],
-        },
-      ],
-    },
+    //    {
+    //      type: 'items',
+    //      header: print
+    //        ? undefined
+    //        : {
+    //            title: 'str.common.photos',
+    //            icon: 'camera',
+    //          },
+    //      items:
+    //        order.sample.sampleModel?.photos
+    //          ?.map(
+    //            photo =>
+    //              ({
+    //                type: 'photo',
+    //                value: photo,
+    //                label: photo.name,
+    //              } as EntityPreviewItem),
+    //          )
+    //          ?.slice(0, print ? 1 : order.sample.sampleModel?.photos.length) || [],
+    //      emptyText: 'str.sample.preview.photos.empty',
+    //    },
+    //    {
+    //      header: {
+    //        title: 'str.common.pairs',
+    //      },
+    //      columns: 1,
+    //      items: [
+    //        {
+    //          icon: 'footsteps',
+    //          value: buildSizesValue(order),
+    //          valueType: 'value',
+    //          type: 'table',
+    //          emptyText: 'str.shoeOrder.preview.sizes.empty',
+    //          columns: [
+    //            {
+    //              label: 'str.common.size',
+    //              prop: 'size',
+    //            },
+    //            {
+    //              label: 'str.common.amount',
+    //              prop: 'amount',
+    //            },
+    //          ],
+    //        },
+    //      ],
+    //    },
   ],
 });
 

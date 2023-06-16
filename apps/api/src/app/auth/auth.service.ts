@@ -4,6 +4,9 @@ import { JwtService } from '@nestjs/jwt';
 import { comparePasswords } from './auth';
 import { IUser, UserService } from '../user';
 
+/**
+ * Authentication service.
+ */
 @Injectable()
 export class AuthService {
   constructor(
@@ -11,6 +14,11 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
+  /**
+   * Checks if the user exists and the password is correct.
+   * @param email
+   * @param pass
+   */
   async validateUser(email: string, pass: string): Promise<IUser | null> {
     const user = await this.userService.findByEmail(email);
     if (!user) {
@@ -21,6 +29,11 @@ export class AuthService {
     return result ? user : null;
   }
 
+  /**
+   * Authenticates a user and returns a token.
+   * @param email
+   * @param password
+   */
   async login(email: string, password: string) {
     const user = await this.validateUser(email, password);
     if (!user) {

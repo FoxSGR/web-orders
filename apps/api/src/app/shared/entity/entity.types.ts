@@ -13,4 +13,5 @@ export interface IEntity {
 
 export interface EntityFieldMapping {
   prop: string;
+  relation?: string;
 }

@@ -12,7 +12,7 @@ export const shoeOrderListConfig: EntityListConfig<ShoeOrder> = {
   searchables: [
     {
       label: 'str.model.common.reference',
-      prop: 'sampleModel.reference',
+      prop: 'sample.sampleModel.reference',
     },
     {
       label: 'str.client.common.client',
@@ -28,11 +28,11 @@ export const shoeOrderListConfig: EntityListConfig<ShoeOrder> = {
     },
     {
       label: 'str.shoeComponent.common.componentReference',
-      prop: 'sampleModel.components.component.reference',
+      prop: 'sample.sampleModel.components.component.reference',
     },
     {
       label: 'str.shoeComponent.common.componentDescription',
-      prop: 'sampleModel.components.component.name',
+      prop: 'sample.sampleModel.components.component.name',
     },
     {
       label: 'str.common.notes',

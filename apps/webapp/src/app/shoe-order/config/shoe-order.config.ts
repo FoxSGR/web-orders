@@ -6,7 +6,7 @@ import { shoeOrderWizard } from './shoe-order.wizard';
 
 @WOEntityConfig<ShoeOrder>({
   entityType: 'shoe-order',
-  label: shoeOrder => shoeOrder.sample?.sampleModel?.reference,
+  label: shoeOrder => `${shoeOrder.id}`,
   icon: 'cube',
   route: 'shoe-order',
   serviceClass: ShoeOrderService,
@@ -14,4 +14,4 @@ import { shoeOrderWizard } from './shoe-order.wizard';
   wizardConfig: shoeOrderWizard,
   previewConfig: shoeOrderPreview,
 })
-export class ShoeOrderListConfig {}
+export class ShoeOrderConfig {}

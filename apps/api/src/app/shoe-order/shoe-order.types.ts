@@ -1,15 +1,11 @@
-import { ShoeSizes } from '@web-orders/api-interfaces';
 import type { IEntity } from '../shared/entity';
-import { IShoeSample } from '../shoe-sample';
-import { IShoeModel } from '../shoe-model';
+import { IShoeOrderSample } from './shoe-order-sample/shoe-order-sample.types';
 
 export interface IShoeOrder extends IEntity {
-  sample: IShoeSample;
-  model: IShoeModel;
+  samples: IShoeOrderSample[];
   dateAsked?: Date;
   deadline?: Date;
   dateDelivery?: Date;
   notes?: string;
-  sizes?: ShoeSizes;
   totalPairs: number;
 }

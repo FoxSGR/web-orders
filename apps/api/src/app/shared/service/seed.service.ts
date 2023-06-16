@@ -16,9 +16,10 @@ export class SeedService extends CliService {
   async run() {
     this.logger.log('Starting to seed');
 
-    const seeders: Seeder[] = entitySeeders
-      .sort((a, b) => a.config.order - b.config.order)
-      .map(s => this._application.get(s.clazz));
+    entitySeeders.sort((a, b) => a.config.order - b.config.order);
+    const seeders: Seeder[] = entitySeeders.map(s =>
+      this._application.get(s.clazz),
+    );
 
     this.logger.log(
       `Dropping and synchronizing database '${environment.database.database}'`,

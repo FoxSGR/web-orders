@@ -1,32 +1,34 @@
 import {
   Column,
   Entity,
-  JoinColumn,
-  ManyToOne,
+  JoinTable,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { DataFactory, Factory } from 'nestjs-seeder';
 
 import { ShoeSizes } from '@web-orders/api-interfaces';
 import { IShoeOrder } from './shoe-order.types';
-import { ShoeSample } from '../shoe-sample';
-import { ShoeModel } from '../shoe-model';
 import { OwnedEntity } from '../shared/entity';
-import { Factory } from 'nestjs-seeder';
 import { commonColumns } from '../shared/entity/common-columns';
+import { ShoeOrderSample } from './shoe-order-sample/shoe-order-sample.entity';
 
 @Entity()
 export class ShoeOrder implements IShoeOrder {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Factory(faker => ({ id: faker.datatype.number(99) + 1 }))
-  @ManyToOne(() => ShoeSample, { cascade: false })
-  @JoinColumn()
-  sample: ShoeSample;
-
-  @ManyToOne(() => ShoeModel, { cascade: true, nullable: true })
-  @JoinColumn()
-  model: ShoeModel;
+  @Factory(faker =>
+    DataFactory.createForClass(ShoeOrderSample).generate(
+      faker.datatype.number(12),
+    ),
+  )
+  @OneToMany(() => ShoeOrderSample, orderSample => orderSample.order, {
+    cascade: true,
+    orphanedRowAction: 'delete',
+  })
+  @JoinTable()
+  samples: ShoeOrderSample[];
 
   @Factory(faker => faker.date.recent())
   @Column({ default: null })
@@ -44,28 +46,15 @@ export class ShoeOrder implements IShoeOrder {
   @Column(commonColumns.notes.column)
   notes?: string;
 
-  @Factory(faker => {
-    const result: ShoeSizes = {};
+  @Factory((_, ctx) => {
+    let total = 0;
 
-    const min = faker.datatype.number({ min: 34, max: 38 });
-    const max = faker.datatype.number({ min: 38, max: 42 });
-    for (let i = min; i < max; i++) {
-      // Skip some sizes
-      if (faker.datatype.number({ min: 0, max: 2 }) > 1) {
-        continue;
-      }
-
-      result[i] = faker.datatype.number({ min: 1000, max: 5000 });
+    for (const sample of ctx['samples'] as ShoeOrderSample[]) {
+      total += sample.totalPairs;
     }
 
-    return result;
+    return total;
   })
-  @Column({ default: '{}', type: 'simple-json' })
-  sizes: ShoeSizes;
-
-  @Factory((_, ctx) =>
-    Object.values(ctx['sizes'] as ShoeSizes).reduce((a, b) => a + b, 0),
-  )
   @Column({ default: 0 })
   totalPairs: number;
 

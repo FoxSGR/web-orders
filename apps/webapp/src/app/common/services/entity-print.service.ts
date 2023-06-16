@@ -11,9 +11,12 @@ import {
   EntityPreviewGroup,
   EntityPreviewItem,
   EntityPreviewItemGroup,
+  EntityPreviewItemTable,
 } from '../components';
 import { EntityPreviewService } from './entity-preview.service';
 import { FileService } from './file.service';
+import { AlertService } from './alert.service';
+import { get } from 'lodash';
 
 @Injectable({ providedIn: 'root' })
 export class EntityPrintService {
@@ -22,10 +25,11 @@ export class EntityPrintService {
   private previewData: EntityPreviewConfig;
 
   constructor(
-    private translate: TranslateService,
+    private translateService: TranslateService,
     private loadingController: LoadingController,
     private previewService: EntityPreviewService,
     private fileService: FileService,
+    private alertService: AlertService,
   ) {}
 
   async printEntity(entity: Entity, entityType: EntityType) {
@@ -36,23 +40,34 @@ export class EntityPrintService {
     const loading = await this.loadingController.create();
     loading.present();
 
-    const html = await this.generateHtml();
+    try {
+      const html = await this.generateHtml();
+      console.log(html);
 
-    const previewFrame = document.createElement('IFRAME') as HTMLIFrameElement;
-    document.body.appendChild(previewFrame);
-    previewFrame.contentDocument!.documentElement.innerHTML = html;
+      const previewFrame = document.createElement(
+        'IFRAME',
+      ) as HTMLIFrameElement;
+      document.body.appendChild(previewFrame);
+      previewFrame.contentDocument!.documentElement.innerHTML = html;
 
-    // wait for the document to load
-    await new Promise<void>(r => setTimeout(() => r(), 3000));
-    if (previewFrame.contentDocument!.readyState !== 'complete') {
-      await new Promise<void>(r =>
-        previewFrame.contentWindow!.addEventListener('load', () => r()),
-      );
+      // wait for the document to load
+      await new Promise<void>(r => setTimeout(() => r(), 3000));
+      if (previewFrame.contentDocument!.readyState !== 'complete') {
+        await new Promise<void>(r =>
+          previewFrame.contentWindow!.addEventListener('load', () => r()),
+        );
+      }
+
+      previewFrame.contentWindow!.print();
+    } catch (e) {
+      this.alertService.showAlert({
+        type: 'error',
+        message: 'str.entity.preview.print.error.message',
+      });
+      console.error(e);
+    } finally {
+      loading.dismiss();
     }
-
-    previewFrame.contentWindow!.print();
-
-    loading.dismiss();
   }
 
   private async generateHtml(): Promise<string> {
@@ -75,16 +90,16 @@ export class EntityPrintService {
             small {
               font-weight: 400;
             }
-            
-            p {
+
+            p, td, th {
               margin-bottom: 0 !important;
               font-size: 12px;
             }
-            
+
             .entity-print-group {
               margin-bottom: 10px;
             }
-            
+
             .entity-print-item {
               margin-top: 5px;
               margin-bottom: 5px;
@@ -163,9 +178,7 @@ export class EntityPrintService {
   }
 
   private async generateHeader(): Promise<string> {
-    const title = await firstValueFrom(
-      this.translate.get(this.previewData.header.title),
-    );
+    const title = await this.translate(this.previewData.header.title);
 
     const subTitle = this.previewData.header.subTitle
       ? `<small>${this.previewData.header.subTitle}</small>`
@@ -199,9 +212,7 @@ export class EntityPrintService {
 
     let header = '';
     if (group.header) {
-      const title = await firstValueFrom(
-        this.translate.get(group.header.title),
-      );
+      const title = await this.translate(group.header.title);
       header = `<h5 style="font-size: 14px">${title}</h5>`;
     }
 
@@ -259,7 +270,7 @@ export class EntityPrintService {
 
     let label = '';
     if (item.label) {
-      label = await firstValueFrom(this.translate.get(item.label));
+      label = await this.translate(item.label);
       if (group.showIndex && group.items.length > 1) {
         label += ` ${index + 1}`;
       }
@@ -283,37 +294,22 @@ export class EntityPrintService {
     `;
   }
 
-  private async generateItemValueContent(item: EntityPreviewItem, value: any) {
-    if (!value) {
+  private async generateItemValueContent(
+    item: EntityPreviewItem,
+    value: any,
+  ): Promise<string> {
+    if (!value || (Array.isArray(value) && value.length === 0)) {
+      if (item['emptyText']) {
+        return `<p>${await this.translate(item['emptyText'])}</p>`;
+      }
+
       return '';
     }
 
-    if (typeof value === 'object') {
-      let items = '';
-
-      for (const [key, itemValue] of Object.entries(value)) {
-        if (!itemValue) {
-          continue;
-        }
-
-        const title = await firstValueFrom(this.translate.get(key));
-        const itemValueStr = await firstValueFrom(
-          this.translate.get(itemValue as string),
-        );
-
-        items += `
-          <p style="white-space: normal">
-            <span style="font-weight: 400">${title}:</span>
-            <span style="font-weight: 300">${itemValueStr}</span>
-          </p>
-        `;
-      }
-
-      return `
-        <div style="margin-top: 5px">
-          ${items}
-        </div>
-      `;
+    if (item.type === 'map') {
+      return this.generateMapValue(value);
+    } else if (item.type === 'table') {
+      return this.generateTableValue(item, value);
     } else {
       const display = item.type === 'text' ? 'block' : 'inline';
       return `
@@ -322,6 +318,89 @@ export class EntityPrintService {
         </p>
       `;
     }
+  }
+
+  private async generateMapValue(value: any): Promise<string> {
+    let items = '';
+
+    for (const [key, itemValue] of Object.entries(value)) {
+      if (!itemValue) {
+        continue;
+      }
+
+      const title = await this.translate(key);
+      const itemValueStr = await this.translate(itemValue as string);
+
+      items += `
+          <p style="white-space: normal">
+            <span style="font-weight: 400">${title}:</span>
+            <span style="font-weight: 300">${itemValueStr}</span>
+          </p>
+        `;
+    }
+
+    return `
+        <div style="margin-top: 5px">
+          ${items}
+        </div>
+      `;
+  }
+
+  private async generateTableValue(
+    item: EntityPreviewItemTable,
+    values: any[],
+  ): Promise<string> {
+    let items = '';
+
+    for (const value of values) {
+      items += await this.generateTableRow(item.columns, value);
+    }
+
+    return `
+      <table class="table table-bordered table-sm">
+        <thead>
+          ${await this.generateTableRow(item.columns)}
+        </thead>
+        <tbody>
+          ${items}
+        </tbody>
+      </table>
+    `;
+  }
+
+  private async generateTableRow(
+    columns: EntityPreviewItemTable['columns'],
+    model?: any,
+  ): Promise<string> {
+    let result = '<tr>';
+
+    for (let i = 0; i < columns.length; i++) {
+      const column = columns[i];
+
+      let value: string;
+      if (model) {
+        value = get(model, column.prop);
+      } else {
+        value = await this.translate(column.label);
+      }
+
+      let scope = '';
+      if (!model) {
+        scope = 'scope="col"';
+      } else if (i === 0) {
+        scope = 'scope="row"';
+      }
+
+      const element = model && i !== 0 ? 'td' : 'th';
+
+      result += `
+        <${element} ${scope}>
+          ${value}
+        </${element}>
+      `;
+    }
+
+    return result + '</tr>';
   }
 
   private generatePhotoItem(value: FileData) {
@@ -340,5 +419,10 @@ export class EntityPrintService {
         >
       </div>
     `;
+  }
+
+  private async translate(key: string): Promise<string> {
+    if (!key) return '';
+    return firstValueFrom(this.translateService.get(key));
   }
 }

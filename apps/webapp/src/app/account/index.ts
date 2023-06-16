@@ -1,4 +1,5 @@
 export * from './account.module';
+export * from './account.service';
 
 export * from './components';
 export * from './store/account.actions';

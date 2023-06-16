@@ -84,6 +84,7 @@ export interface SmartFormEntitySelect<T extends Entity[]>
 export interface SmartFormChoices<T extends string>
   extends ISmartFormItem<any> {
   type: 'choices';
+  searchable?: boolean;
   choices: WOItemMap<T> | WOIconItemMap<T>;
 }
 

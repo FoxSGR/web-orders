@@ -172,6 +172,7 @@ export const sampleWizard: EntityFormWizard = {
             type: 'choices',
             label: 'str.common.size',
             choices: shoeSizeChoices,
+            searchable: false,
           },
           amount: {
             type: 'number-input',

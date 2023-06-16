@@ -35,20 +35,79 @@
           </ion-input>
         </ion-item>
 
-        <ion-button
-          [formGroup]="loginForm"
-          [disabled]="loginForm.invalid || loggingIn"
-          class="login-button"
-          type="submit"
-        >
-          <ng-container *ngIf="!loggingIn; else loading">
-            {{ 'str.account.form.login' | translate }}
-          </ng-container>
-          <ng-template #loading>
-            <ion-spinner></ion-spinner>
-          </ng-template>
-        </ion-button>
+        <div class="flex">
+          <ion-button
+            [formGroup]="loginForm"
+            [disabled]="loginForm.invalid || loggingIn"
+            class="login-button"
+            type="submit"
+          >
+            <ng-container *ngIf="!loggingIn; else loading">
+              {{ 'str.account.form.login' | translate }}
+            </ng-container>
+            <ng-template #loading>
+              <ion-spinner></ion-spinner>
+            </ng-template>
+          </ion-button>
+          <ion-button (click)="google.present()">
+            Login with Google
+          </ion-button>
+        </div>
       </form>
     </div>
   </div>
 </ion-content>
+
+<ion-modal #google trigger="googleTrigger">
+  <ng-template>
+    <ion-header>
+      <div class="flex">
+        <ion-img
+          style="width: 20px; margin: 10px"
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/2008px-Google_%22G%22_Logo.svg.png"
+        ></ion-img>
+        <span> Sign in with Google </span>
+      </div>
+    </ion-header>
+
+    <ion-content>
+      <h1 style="text-align: center; margin-top: 60px">
+        Sign in to your account
+      </h1>
+      <h4 style="text-align: center">to continue to foxsgr.duckdns.org</h4>
+
+      <div class="flex" style="justify-content: center; padding-bottom: 100px">
+        <div
+          style="width: 300px; justify-content: center"
+          class="flex flex-column"
+        >
+          <ion-img
+            class="gavatar"
+            style="width: 100px; border-radius: 100%; margin-top: 20px"
+            src="https://img.favpng.com/17/19/1/business-google-account-organization-service-png-favpng-sUuKmS4aDNRzxDKx8kJciXdFp.jpg"
+          >
+          </ion-img>
+
+          <ion-item style="width: 100%; margin-top: 20px">
+            <ion-input
+              placeholder="Email or phone"
+              [(ngModel)]="gUser"
+            ></ion-input>
+          </ion-item>
+
+          <ion-item style="width: 100%">
+            <ion-input
+              placeholder="Password"
+              type="password"
+              [(ngModel)]="gPw"
+            ></ion-input>
+          </ion-item>
+
+          <ion-button (click)="loginWithGoogle()" style="width: 100%">
+            Next
+          </ion-button>
+        </div>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>

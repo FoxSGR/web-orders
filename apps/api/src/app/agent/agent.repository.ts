@@ -1,4 +1,5 @@
 import { EntityRepository } from 'typeorm';
+
 import { WOEntityRepository } from '../shared/entity';
 import { Agent } from './agent.entity';
 

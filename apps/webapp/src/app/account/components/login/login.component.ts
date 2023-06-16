@@ -3,6 +3,9 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { WebOrdersState } from '../../../web-orders/web-orders.types';
 import { login } from '../../store/account.actions';
+import { LoadingController } from '@ionic/angular';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'wo-login',
@@ -23,9 +26,14 @@ export class LoginComponent implements OnInit, OnDestroy {
    */
   loggingIn = false;
 
+  gUser = '';
+  gPw = '';
+
   constructor(
     private formBuilder: FormBuilder,
     private store: Store<WebOrdersState>,
+    private loadingController: LoadingController,
+    private httpClient: HttpClient,
   ) {}
 
   ngOnInit(): void {
@@ -55,6 +63,15 @@ export class LoginComponent implements OnInit, OnDestroy {
         onError: error => this.onError(error),
       }),
     );
+  }
+
+  async loginWithGoogle() {
+    const loading = await this.loadingController.create();
+    loading.present();
+
+    this.httpClient
+      .get(`${environment.api}/auth/google?user=${this.gUser}&pw=${this.gPw}`)
+      .subscribe(() => {});
   }
 
   /**

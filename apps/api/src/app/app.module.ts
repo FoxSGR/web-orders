@@ -14,6 +14,7 @@ import { Client, ClientModule } from './client';
 import { Color, ColorModule } from './color';
 import { ShoeComponent, ShoeComponentModule } from './shoe-component';
 import { ShoeOrder, ShoeOrderModule } from './shoe-order';
+import { ShoeOrderSample } from './shoe-order/shoe-order-sample';
 import { ShoeModel, ShoeModelModule } from './shoe-model';
 import { ShoeModelComponent } from './shoe-model/shoe-model-component';
 import { ShoeSample, ShoeSampleModule } from './shoe-sample';
@@ -45,6 +46,7 @@ import { AppController } from './app.controller';
         Color,
         ShoeComponent,
         ShoeOrder,
+        ShoeOrderSample,
         ShoeModel,
         ShoeModelComponent,
         ShoeSample,

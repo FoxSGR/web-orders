@@ -403,7 +403,6 @@ export abstract class AbstractWizardComponent<T extends Entity>
         false,
         ...Object.values(this.wizard.steps).map(step => step.form),
       );
-      console.log(localState);
       localEntity = generator.generate() as T;
       localEntity = this.entityConfig.service!.parseEntity(localEntity);
 
