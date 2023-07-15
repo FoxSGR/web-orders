@@ -1,25 +1,41 @@
-<ion-text *ngIf="definition.label">
-  <h4>
-    {{ definition.label | translate }}
-  </h4>
-</ion-text>
+<ion-accordion-group>
+  <ion-accordion value="first">
+    <!-- Start: Accordion header -->
+    <ion-item button slot="header" lines="full">
+      <ion-label *ngIf="definition.label">
+        {{ definition.label | translate }}
+      </ion-label>
+    </ion-item>
+    <!-- End: Accordion header -->
+    <!-- Start: Accordion content -->
+    <div slot="content">
+      <div>
+        <ng-container *ngTemplateOutlet="mapContent"></ng-container>
+      </div>
+    </div>
+    <!-- End: Accordion content -->
+  </ion-accordion>
+</ion-accordion-group>
+<ion-item-divider style="min-height: 0"></ion-item-divider>
 
-<ion-list>
-  <ion-item *ngFor="let key of $any(definition.keys); trackBy: trackBy">
-    <ion-row class="w100">
-      <ion-col size="6" class="flex align-center">
-        {{ key }}
-      </ion-col>
-      <ion-col size="6" class="p0">
-        <wo-smart-form-item
-          [formDefinition]="formDefinition"
-          [definition]="definition.value"
-          [prop]="childProp(key)"
-          [(state)]="state"
-          (stateChange)="stateChange.emit($event)"
-          [change]="change"
-        ></wo-smart-form-item>
-      </ion-col>
-    </ion-row>
-  </ion-item>
-</ion-list>
+<ng-template #mapContent>
+  <ion-list>
+    <ion-item *ngFor="let key of $any(definition.keys); trackBy: trackBy">
+      <ion-row class="w100">
+        <ion-col size="6" class="flex align-center">
+          {{ key }}
+        </ion-col>
+        <ion-col size="6" class="p0">
+          <wo-smart-form-item
+            [formDefinition]="formDefinition"
+            [definition]="definition.value"
+            [prop]="childProp(key)"
+            [(state)]="state"
+            (stateChange)="stateChange.emit($event)"
+            [change]="change"
+          ></wo-smart-form-item>
+        </ion-col>
+      </ion-row>
+    </ion-item>
+  </ion-list>
+</ng-template>

@@ -21,21 +21,114 @@ export const shoeOrderWizard: EntityFormWizard = {
     icon: 'cube',
   },
   steps: {
+    sizes: {
+      title: 'str.shoeOrder.wizard.sizes.header',
+      route: 'sizes',
+      form: {
+        items: {
+          samples: {
+            label: 'str.samples.common.samples',
+            type: 'multiple',
+            required: true,
+            default: {},
+            children: {
+              type: 'group',
+              children: {
+                sample: {
+                  type: 'entity-select',
+                  label: 'str.sample.common.sample',
+                  entityName: 'sample',
+                  config: {
+                    selection: 'single',
+                  },
+                  required: true,
+                  loadOnSelect: true,
+                },
+                sizes: {
+                  label: 'str.shoeOrder.wizard.sizes.label',
+                  type: 'map',
+                  keys: sizes,
+                  value: {
+                    type: 'number-input',
+                    min: 0,
+                    placeholder: 'str.shoeOrder.wizard.sizes.placeholder',
+                  },
+                },
+                preview: {
+                  type: 'info-box',
+                  label: 'str.shoeOrder.wizard.preview.header',
+                  execute: (state, injector) => {
+                    let totalPairs = 0;
+
+                    for (const amount of Object.values(
+                      state.values['sizes'] || {},
+                    )) {
+                      if (typeof amount === 'number') {
+                        totalPairs += amount;
+                      }
+                    }
+
+                    const translate = injector.get(TranslateService);
+                    let amountsNotSetMessage = '';
+                    if (totalPairs === 0) {
+                      amountsNotSetMessage = translate.instant(
+                        'str.shoeOrder.wizard.preview.sizesNotSet',
+                      );
+                    }
+
+                    const formatter = Intl.NumberFormat();
+                    let costPerPairValue: string | number;
+                    let totalCostValue: string | number;
+
+                    let sample = state.values['sample']?.[0] as ShoeSample;
+                    if (sample) {
+                      sample = new ShoeSample(sample);
+                      const costPerPair =
+                        sample.sampleModel?.calculatePrice() || 0;
+                      costPerPairValue = formatter.format(costPerPair) + ' €';
+                      if (totalPairs !== 0) {
+                        totalCostValue =
+                          formatter.format(costPerPair * totalPairs) + ' €';
+                      } else {
+                        totalCostValue = amountsNotSetMessage;
+                      }
+                    } else {
+                      const sampleNotSetMessage = translate.instant(
+                        'str.shoeOrder.wizard.preview.sampleNotSet',
+                      );
+                      costPerPairValue = sampleNotSetMessage;
+                      totalCostValue = sampleNotSetMessage;
+                    }
+
+                    return {
+                      totalPairs: {
+                        label: 'str.shoeOrder.common.totalPairs',
+                        value: totalPairs
+                          ? formatter.format(totalPairs)
+                          : amountsNotSetMessage,
+                      },
+                      costPerPair: {
+                        label: 'str.common.costPerPair',
+                        value: costPerPairValue,
+                      },
+                      totalCost: {
+                        label: 'str.common.totalCost',
+                        value: totalCostValue,
+                      },
+                    };
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
     base: {
       title: 'str.shoeOrder.wizard.base.header',
       route: 'base',
       form: {
         items: {
-          sample: {
-            type: 'entity-select',
-            label: 'str.sample.common.sample',
-            entityName: 'sample',
-            config: {
-              selection: 'single',
-            },
-            required: true,
-            loadOnSelect: true,
-          },
           dateAsked: {
             type: 'date',
             label: 'str.sample.common.dateAsked',
@@ -50,85 +143,6 @@ export const shoeOrderWizard: EntityFormWizard = {
             type: 'date',
             label: 'str.sample.common.dateDelivery',
             dateType: 'date',
-          },
-        },
-      },
-    },
-    sizes: {
-      title: 'str.shoeOrder.wizard.sizes.header',
-      route: 'sizes',
-      form: {
-        items: {
-          sizes: {
-            label: 'str.shoeOrder.wizard.sizes.label',
-            type: 'map',
-            keys: sizes,
-            value: {
-              type: 'number-input',
-              min: 0,
-              placeholder: 'str.shoeOrder.wizard.sizes.placeholder',
-            },
-          },
-          preview: {
-            type: 'info-box',
-            label: 'str.shoeOrder.wizard.preview.header',
-            execute: (state, injector) => {
-              let totalPairs = 0;
-
-              for (const amount of Object.values(state.values['sizes'] || {})) {
-                if (typeof amount === 'number') {
-                  totalPairs += amount;
-                }
-              }
-
-              const translate = injector.get(TranslateService);
-              let amountsNotSetMessage = '';
-              if (totalPairs === 0) {
-                amountsNotSetMessage = translate.instant(
-                  'str.shoeOrder.wizard.preview.sizesNotSet',
-                );
-              }
-
-              const formatter = Intl.NumberFormat();
-              let costPerPairValue: string | number;
-              let totalCostValue: string | number;
-
-              let sample = state.values['sample']?.[0] as ShoeSample;
-              if (sample) {
-                sample = new ShoeSample(sample);
-                const costPerPair = sample.sampleModel?.calculatePrice() || 0;
-                costPerPairValue = formatter.format(costPerPair) + ' €';
-                if (totalPairs !== 0) {
-                  totalCostValue =
-                    formatter.format(costPerPair * totalPairs) + ' €';
-                } else {
-                  totalCostValue = amountsNotSetMessage;
-                }
-              } else {
-                const sampleNotSetMessage = translate.instant(
-                  'str.shoeOrder.wizard.preview.sampleNotSet',
-                );
-                costPerPairValue = sampleNotSetMessage;
-                totalCostValue = sampleNotSetMessage;
-              }
-
-              return {
-                totalPairs: {
-                  label: 'str.shoeOrder.common.totalPairs',
-                  value: totalPairs
-                    ? formatter.format(totalPairs)
-                    : amountsNotSetMessage,
-                },
-                costPerPair: {
-                  label: 'str.common.costPerPair',
-                  value: costPerPairValue,
-                },
-                totalCost: {
-                  label: 'str.common.totalCost',
-                  value: totalCostValue,
-                },
-              };
-            },
           },
         },
       },

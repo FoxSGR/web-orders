@@ -356,7 +356,7 @@ export class EntityService<
   /**
    * Builds the relations array.
    */
-  private buildRelations(): string[] {
+  buildRelations(): string[] {
     const relations = [];
 
     for (const relation of this.config.relations || []) {

@@ -20,6 +20,7 @@ import * as cells from './cells';
     cells.AdvancedCellComponent,
     cells.BasicCellComponent,
     cells.FlagCellComponent,
+    cells.ListCellComponent,
     cells.ChoiceCellComponent,
     cells.ColorCellComponent,
     cells.PhotoCellComponent,

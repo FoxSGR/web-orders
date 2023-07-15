@@ -19,7 +19,7 @@
     </ion-label>
 
     <!-- Start: Show the selected items -->
-    <div style="margin-left: auto">
+    <div style="margin-left: auto" *ngIf="value">
       <ion-chip
         *ngFor="let entity of value; trackBy: trackById"
         class="m0 mr5"

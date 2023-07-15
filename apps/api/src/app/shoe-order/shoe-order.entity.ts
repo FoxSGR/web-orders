@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 import { DataFactory, Factory } from 'nestjs-seeder';
 
-import { ShoeSizes } from '@web-orders/api-interfaces';
+import { Id } from '@web-orders/api-interfaces';
 import { IShoeOrder } from './shoe-order.types';
 import { OwnedEntity } from '../shared/entity';
 import { commonColumns } from '../shared/entity/common-columns';
@@ -16,7 +16,7 @@ import { ShoeOrderSample } from './shoe-order-sample/shoe-order-sample.entity';
 @Entity()
 export class ShoeOrder implements IShoeOrder {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: Id;
 
   @Factory(faker =>
     DataFactory.createForClass(ShoeOrderSample).generate(

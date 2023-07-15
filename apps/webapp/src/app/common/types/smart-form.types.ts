@@ -61,13 +61,13 @@ export interface SmartFormHeader extends ISmartFormItem<void> {
 
 export interface SmartFormMultiple extends ISmartFormItem<any> {
   type: 'multiple';
-  children: SmartFormItem<any>;
+  children: SmartFormItem;
   default: any;
 }
 
 export interface SmartFormGroup extends ISmartFormItem<any> {
   type: 'group';
-  children: { [key: string]: SmartFormItem<any> };
+  children: { [key: string]: SmartFormItem };
   inline?: boolean;
 }
 

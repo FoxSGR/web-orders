@@ -2,6 +2,7 @@ import {
   AdvancedCellComponent,
   DatePipe,
   inlineFlag,
+  ListCellComponent,
   PhotoCellComponent,
   ShoeOrder,
 } from '../../common';
@@ -48,18 +49,23 @@ export const shoeOrderListConfig: EntityListConfig<ShoeOrder> = {
       width: 50,
     },
     {
-      name: 'str.model.common.model',
-      prop: 'sample.sampleModel.reference',
+      name: 'str.model.common.models',
+      prop: 'samples',
       sortable: true,
       canAutoResize: false,
-      width: 75,
+      width: 100,
+      template: ListCellComponent,
+      summaryTemplate: {
+        titleProp: 'sample.sampleModel.reference',
+        trackByProp: 'sample.id',
+      },
     },
     {
       name: 'str.common.pairs',
       prop: 'totalPairs',
       sortable: true,
       canAutoResize: false,
-      width: 75,
+      width: 100,
     },
     {
       name: 'str.client.common.client',
@@ -69,13 +75,15 @@ export const shoeOrderListConfig: EntityListConfig<ShoeOrder> = {
       summaryTemplate: [
         {
           name: 'str.client.common.client',
-          prop: 'sample.client.name',
-          inline: entity => inlineFlag(entity, 'sample.client.address.country'),
+          prop: 'samples.0.sample.client.name',
+          inline: entity =>
+            inlineFlag(entity, 'samples.0.sample.client.address.country'),
         },
         {
           name: 'str.agent.common.agent',
-          prop: 'sample.agent.name',
-          inline: entity => inlineFlag(entity, 'sample.agent.address.country'),
+          prop: 'samples.0.sample.agent.name',
+          inline: entity =>
+            inlineFlag(entity, 'samples.0.sample.agent.address.country'),
         },
       ],
       template: AdvancedCellComponent,
@@ -88,14 +96,6 @@ export const shoeOrderListConfig: EntityListConfig<ShoeOrder> = {
       pipe: new DatePipe(),
       width: 120,
       canAutoResize: false,
-    },
-    {
-      name: 'str.common.photo',
-      prop: 'sample.sampleModel.photos',
-      sortable: false,
-      canAutoResize: false,
-      template: PhotoCellComponent,
-      width: 150,
     },
   ],
 };

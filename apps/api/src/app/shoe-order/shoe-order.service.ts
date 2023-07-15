@@ -8,7 +8,10 @@ import { ShoeOrderRepository } from './shoe-order.repository';
 import { ShoeSampleService } from '../shoe-sample';
 
 @Injectable()
-export class ShoeOrderService extends EntityService<ShoeOrder> {
+export class ShoeOrderService extends EntityService<
+  ShoeOrder,
+  ShoeOrderRepository
+> {
   constructor(
     private shoeSampleService: ShoeSampleService,
     moduleRef: ModuleRef,
@@ -28,16 +31,18 @@ export class ShoeOrderService extends EntityService<ShoeOrder> {
     await super.mapFoundEntities(entities, params);
 
     for (const order of entities) {
-      console.log(order);
-      if (!order.samples) {
-        continue;
-      }
+      const orderSamples = await this.repository.findOrderSamples(
+        order.id,
+        params.owner,
+        this.shoeSampleService.buildRelations(),
+      );
 
-      for (const sample of order.samples) {
-        await this.shoeSampleService.mapFoundEntities([sample.sample], {
-          owner: params.owner,
-        });
-      }
+      await this.shoeSampleService.mapFoundEntities(
+        orderSamples.map(s => s.sample),
+        { owner: params.owner },
+      );
+
+      order.samples = orderSamples;
     }
   }
 }
