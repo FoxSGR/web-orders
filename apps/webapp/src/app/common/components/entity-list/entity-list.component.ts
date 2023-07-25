@@ -236,6 +236,11 @@ export class EntityListComponent<T extends Entity>
     });
   }
 
+  override ngOnDestroy() {
+    super.ngOnDestroy();
+    this.clearInjectorCache();
+  }
+
   ngAfterViewInit() {
     // update cellTemplates from rendered templates
     for (let i = 0; i < this.templates.length; i++) {
@@ -289,6 +294,8 @@ export class EntityListComponent<T extends Entity>
         if (!loadedPage) {
           return;
         }
+
+        this.clearInjectorCache();
 
         this.page = { ...loadedPage };
         this.page.offset /= this.pageSize;
@@ -591,5 +598,13 @@ export class EntityListComponent<T extends Entity>
       entity?.id,
       { onComplete: () => this.load() },
     );
+  }
+
+  /**
+   * Clears the injector cache.
+   * @private
+   */
+  private clearInjectorCache() {
+    this.injectorCache = {};
   }
 }

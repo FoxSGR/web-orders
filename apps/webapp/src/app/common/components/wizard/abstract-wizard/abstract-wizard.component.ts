@@ -10,6 +10,7 @@ import {
   EntityConfig,
   EntityFormWizard,
   EntityFormWizardStep,
+  EntityType,
   OptionalId,
   SmartFormState,
 } from '../../../types';
@@ -23,6 +24,7 @@ import {
   EntityService,
 } from '../../../services';
 import { SmartFormValidator } from '../../smart-form/smart-form.validator';
+import { EntityConfigRegister } from '../../../entity-config.register';
 
 export type WizardType = 'standalone' | 'routed';
 
@@ -49,6 +51,11 @@ export abstract class AbstractWizardComponent<T extends Entity>
   abstract id: OptionalId;
 
   /**
+   * The steps of the wizard.
+   */
+  steps: EntityFormWizardStep[];
+
+  /**
    * Configuration of the entity type.
    */
   entityConfig: EntityConfig<T>;
@@ -61,7 +68,7 @@ export abstract class AbstractWizardComponent<T extends Entity>
   /**
    * The current step.
    */
-  currentStep: { step: EntityFormWizardStep; key: string };
+  currentStep: { step: EntityFormWizardStep; key: string; index: number };
 
   /**
    * Whether the wizard is loading.
@@ -96,13 +103,15 @@ export abstract class AbstractWizardComponent<T extends Entity>
 
   /**
    * Navigates to a step.
-   * @param step
    * @param key
    */
-  navigate(step: EntityFormWizardStep, key: string) {
+  navigate(key: string) {
+    const step = this.wizard.steps[key];
+    const index = Object.keys(this.wizard.steps).indexOf(key);
     this.currentStep = {
       step,
       key,
+      index,
     };
   }
 
@@ -110,22 +119,22 @@ export abstract class AbstractWizardComponent<T extends Entity>
    * Navigates to the next step.
    */
   nextStep() {
-    const currentIndex = this.currentStepIndex();
-    if (currentIndex === this.steps().length - 1) {
+    const currentIndex = this.currentStep.index;
+    if (currentIndex === this.steps.length - 1) {
       this.complete();
       return;
     }
 
-    const key = Object.keys(this.wizard.steps)[this.currentStepIndex() + 1];
-    this.navigate(this.wizard.steps[key], key);
+    const key = Object.keys(this.wizard.steps)[currentIndex + 1];
+    this.navigate(key);
   }
 
   /**
    * Navigates to the previous step.
    */
   previousStep() {
-    const key = Object.keys(this.wizard.steps)[this.currentStepIndex() - 1];
-    this.navigate(this.wizard.steps[key], key);
+    const key = Object.keys(this.wizard.steps)[this.currentStep.index - 1];
+    this.navigate(key);
   }
 
   /**
@@ -138,26 +147,11 @@ export abstract class AbstractWizardComponent<T extends Entity>
       return 'primary';
     }
 
-    const activeStep = this.currentStepIndex();
-    if (activeStep < stepIndex) {
+    if (this.currentStep.index < stepIndex) {
       return 'medium';
     } else {
       return 'primary';
     }
-  }
-
-  /**
-   * Returns the index of the current step.
-   */
-  currentStepIndex(): number {
-    return this.steps().findIndex(step => this.isCurrentStep(step));
-  }
-
-  /**
-   * Returns the steps of the wizard as an array.
-   */
-  steps(): EntityFormWizardStep[] {
-    return Object.values(this.wizard.steps);
   }
 
   /**
@@ -344,6 +338,16 @@ export abstract class AbstractWizardComponent<T extends Entity>
         message: 'str.wizard.alerts.load.message',
       });
     }
+  }
+
+  /**
+   * Sets the entity config.
+   * @param entityType
+   * @protected
+   */
+  protected setEntityConfig(entityType: EntityType) {
+    this.entityConfig = EntityConfigRegister.getDefinition(entityType);
+    this.steps = Object.values(this.entityConfig.wizardConfig?.steps || {});
   }
 
   private async postSave(state: SmartFormState) {

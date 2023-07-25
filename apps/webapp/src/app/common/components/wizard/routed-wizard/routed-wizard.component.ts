@@ -13,13 +13,8 @@ import {
   WizardType,
 } from '../abstract-wizard/abstract-wizard.component';
 import { Entity } from '../../../models/entity';
-import {
-  EntityFormWizardStep,
-  EntityFormWizardStepData,
-  OptionalId,
-} from '../../../types';
+import { EntityFormWizardStepData, OptionalId } from '../../../types';
 import { padWithSlashes } from '../../../util';
-import { EntityConfigRegister } from '../../../entity-config.register';
 import { HistoryService } from '../../../services';
 
 @Component({
@@ -73,11 +68,11 @@ export class RoutedWizardComponent<T extends Entity>
 
   /**
    * Navigates to a step.
-   * @param step
    * @param key
    */
-  override navigate(step: EntityFormWizardStep, key: string) {
-    super.navigate(step, key);
+  override navigate(key: string) {
+    super.navigate(key);
+    const step = this.wizard.steps[key];
     this.router.navigate([step.route!], {
       relativeTo: this.activatedRoute,
     });
@@ -96,9 +91,7 @@ export class RoutedWizardComponent<T extends Entity>
     );
 
     this.id = routeParams['id'];
-    this.entityConfig = EntityConfigRegister.getDefinition(
-      routeData.entityType,
-    );
+    this.setEntityConfig(routeData.entityType);
 
     this.findCurrentStepByRoute();
     this.cdr.detectChanges();
@@ -144,6 +137,7 @@ export class RoutedWizardComponent<T extends Entity>
         this.currentStep = {
           key,
           step,
+          index: Object.keys(this.wizard.steps).indexOf(key),
         };
         break;
       }

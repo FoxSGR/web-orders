@@ -42,7 +42,6 @@ export class EntityPrintService {
 
     try {
       const html = await this.generateHtml();
-      console.log(html);
 
       const previewFrame = document.createElement(
         'IFRAME',

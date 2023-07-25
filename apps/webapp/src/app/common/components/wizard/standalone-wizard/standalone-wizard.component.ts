@@ -11,7 +11,6 @@ import {
 } from '../abstract-wizard/abstract-wizard.component';
 import { Entity } from '../../../models/entity';
 import { EntityType, OptionalId } from '../../../types';
-import { EntityConfigRegister } from '../../../entity-config.register';
 
 @Component({
   selector: 'wo-standalone-wizard',
@@ -47,7 +46,7 @@ export class StandaloneWizardComponent<T extends Entity>
   @Input()
   set entityType(value: EntityType) {
     if (!this.entityConfig) {
-      this.entityConfig = EntityConfigRegister.getDefinition(value);
+      this.setEntityConfig(value);
     }
   }
   /**
@@ -70,6 +69,7 @@ export class StandaloneWizardComponent<T extends Entity>
     this.currentStep = {
       key: firstStep[0],
       step: firstStep[1],
+      index: 0,
     };
   }
 

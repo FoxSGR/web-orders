@@ -28,7 +28,7 @@
       </div>
 
       <ng-container *ngIf="!loading">
-        <div class="wo-stepper" *ngIf="!loading && steps().length > 1">
+        <div class="wo-stepper" *ngIf="!loading && steps.length > 1">
           <div class="wo-stepper-steps">
             <ng-container
               *ngFor="
@@ -44,9 +44,9 @@
                 <ion-fab-button
                   class="wo-stepper-step-button"
                   [color]="buttonColor(i, step)"
-                  (click)="navigate(step, stepEntry.key)"
+                  (click)="navigate(stepEntry.key)"
                 >
-                  <span *ngIf="i >= currentStepIndex(); else doneStep">
+                  <span *ngIf="i >= currentStep.index; else doneStep">
                     {{ i + 1 }}
                   </span>
                   <ng-template #doneStep>
@@ -66,7 +66,7 @@
               </div>
               <div
                 class="wo-stepper-separator"
-                *ngIf="i !== steps().length - 1"
+                *ngIf="i !== steps.length - 1"
               ></div>
             </ng-container>
           </div>
@@ -89,7 +89,7 @@
       <div class="wo-stepper-footer">
         <div style="margin-right: auto; display: flex; align-items: center">
           <ion-button
-            *ngIf="currentStepIndex() > 0"
+            *ngIf="currentStep.index > 0"
             shape="circle"
             fill="outline"
             (click)="previousStep()"
@@ -111,7 +111,7 @@
 
         <div style="margin-left: auto">
           <ion-button
-            *ngIf="currentStepIndex() < steps().length - 1"
+            *ngIf="currentStep.index < steps.length - 1"
             (click)="complete()"
             fill="clear"
             color="medium"
@@ -123,7 +123,7 @@
           <ion-button shape="circle" (click)="nextStep()" class="big">
             <ion-icon
               [name]="
-                currentStepIndex() === steps().length - 1
+                currentStep.index === steps.length - 1
                   ? 'checkmark'
                   : 'chevron-forward-outline'
               "

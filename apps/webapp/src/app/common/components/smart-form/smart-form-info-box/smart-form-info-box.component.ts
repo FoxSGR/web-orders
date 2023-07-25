@@ -27,7 +27,7 @@ export class SmartFormInfoBoxComponent
       )
       .subscribe(() => this.calculateResult());
 
-    this.calculateResult();
+    setTimeout(() => this.calculateResult(), 5000);
   }
 
   private calculateResult() {

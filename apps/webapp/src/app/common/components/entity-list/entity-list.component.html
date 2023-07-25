@@ -1,6 +1,6 @@
 <!-- Start column template setup -->
 <ng-template
-  *ngFor="let col of config.columns; trackBy: trackByProp"
+  *ngFor="let col of config.columns!; trackBy: trackByProp"
   #templates
   let-row="row"
 >

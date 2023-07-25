@@ -7,7 +7,7 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { cloneDeep, get, set } from 'lodash';
+import { cloneDeep, set } from 'lodash';
 import { Observable } from 'rxjs';
 
 import { SmartForm, SmartFormItem, SmartFormState } from '../../types';
@@ -65,6 +65,12 @@ export class SmartFormAbstractItemComponent<T, S extends SmartFormItem<T>>
    */
   protected defaultValue?: T;
 
+  /**
+   * Prop path that leads to the value of the current item in the state.
+   * @private
+   */
+  private propKeys: string[];
+
   override ngOnInit() {
     super.ngOnInit();
     this.checkValue();
@@ -91,7 +97,19 @@ export class SmartFormAbstractItemComponent<T, S extends SmartFormItem<T>>
    * @protected
    */
   protected getValue() {
-    return get(this.state.values, this.prop);
+    if (!this.propKeys) {
+      this.propKeys = this.prop.split('.');
+    }
+
+    // Optimized lodash get
+    let index = 0;
+    const length = this.propKeys.length;
+
+    let object: any = this.state.values;
+    while (object != null && index < length) {
+      object = object[this.propKeys[index++]];
+    }
+    return index && index == length ? object : undefined;
   }
 
   /**
